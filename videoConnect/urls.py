@@ -1,6 +1,7 @@
 from django.urls import path
-from .views import main
+from .views import main, preview
 
 urlpatterns = [
-    path('', main, name='main'),
+    path('', preview, name='preview'),
+    path('main/<room>', main, name='main'),
 ]

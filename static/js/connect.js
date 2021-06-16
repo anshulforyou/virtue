@@ -1,13 +1,16 @@
-var labelUsername = document.querySelector('#label-username');
-var usernameInput = document.querySelector('#username');
-var btnJoin = document.querySelector('#btn-join');
-var username;
+var username = document.querySelector("#label-username");
+console.log(username);
 
-// console.log('something')
+var loc = window.location;
+var wsStart = 'ws://';
 
-var peerIndex = {};
+if(loc.protocol == 'https:'){
+    wsStart = 'wss://';
+}
 
-var webSocket;
+var endPoint = wsStart + loc.host + loc.pathname+'/';
+
+var peerIndex = {}
 
 function webSocketManager(event){
     var parsedData = JSON.parse(event.data);
@@ -20,7 +23,7 @@ function webSocketManager(event){
 
     var receiver_channel_name = parsedData['keyword']['receiver_channel_name'];
     if(action == 'new-join'){
-        createSender(peerUsername, receiver_channel_name);
+        createOfferer(peerUsername, receiver_channel_name);
         return;
     }
 
@@ -39,48 +42,29 @@ function webSocketManager(event){
     }
 }
 
-btnJoin.addEventListener('click', () => {
-    username = usernameInput.value;
-    console.log('Username: ', username);
-    if (username == ''){
-        return;
-    }
-    usernameInput.value = '';
-    usernameInput.disabled = true;
-    usernameInput.style.visibility = 'hidden';
+console.log('endPoint: ', endPoint);
+var webSocket = new WebSocket(endPoint);
 
-    btnJoin.disabled = true;
-    btnJoin.style.visibility = 'hidden';
+// webSocket.addEventListener('onopen', (e)=>{
+//     var message = {
 
-    var labelUsername = document.querySelector('#label-username');
-    labelUsername.innerHTML = username;
+//     }
+//     webSocket.send()
+// })
 
-    var loc = window.location;
-    var wsStart = 'ws://';
+webSocket.addEventListener('open',(e)=>{
+    console.log('Connection Opened!');
+    sendSignal('new-join', {})
+});
 
-    if(loc.protocol == 'https:'){
-        wsStart = 'wss://';
-    }
+webSocket.addEventListener('message', webSocketManager);
 
-    var endPoint = wsStart + loc.host + loc.pathname;
+webSocket.addEventListener('close', (e)=>{
+    console.log('Connection Closed!');
+});
 
-    console.log('endPoint: ', endPoint);
-    webSocket = new WebSocket(endPoint);
-
-    webSocket.addEventListener('open',(e)=>{
-        console.log('Connection Opened!');
-        sendSignal('new-join', {})
-    });
-
-    webSocket.addEventListener('message', webSocketManager);
-    
-    webSocket.addEventListener('close', (e)=>{
-        console.log('Connection Closed!');
-    });
-    
-    webSocket.addEventListener('error', (e)=>{
-        console.log('Error Occured');
-    });
+webSocket.addEventListener('error', (e)=>{
+    console.log('Error Occured');
 });
 
 var stream = new MediaStream();
@@ -92,7 +76,6 @@ const devices = {
 
 const toggleAudioButton = document.querySelector('#toggle-audio-button');
 const toggleVideoButton = document.querySelector('#toggle-video-button');
-
 
 const video = document.querySelector('#local-video');
 var userMedia = navigator.mediaDevices.getUserMedia(devices)
@@ -139,7 +122,7 @@ function sendSignal(action, keyword){
     webSocket.send(jsonStr);
 }
 
-function createSender(peerUsername, receiver_channel_name){
+function createOfferer(peerUsername, receiver_channel_name){
     var peer = new RTCPeerConnection(null);
     addMediaInputs(peer);
 

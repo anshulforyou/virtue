@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+{% load static %}
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Engage Video Connect</title>
+</head>
+<body>
+    <div class="container">
+        <div id="video-box">
+            <div><video id="local-video" style="float: left;" autoplay playsinline></video></div>
+            <button id = "toggle-audio-button">Mute mic</button>
+            <button id = "toggle-video-button">Video off</button>
+        </div>
+    </div>
+    <h3 id="label-username">Please enter your username and the room that you want to join</h3>
+    {% if error %}
+    <p>{{error}}</p>
+    {% endif %}
+    <div>
+        <form method="POST" action="">
+            {% csrf_token %}
+        <input id="username" name='username' />
+        <input id="room" name="room"/>
+        <button id="btn-join">Join meeting</button>
+        </form>
+    </div>
+</body>
+</html>

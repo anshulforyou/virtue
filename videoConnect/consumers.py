@@ -3,11 +3,11 @@ from channels.generic.websocket import AsyncJsonWebsocketConsumer, AsyncWebsocke
 
 import json
 
-from django.dispatch.dispatcher import receiver 
-
 class VideoConsumer(AsyncWebsocketConsumer):
     async def connect(self):
-        self.room_group_name = 'room101'
+        # self.room_group_name = 'room101'
+        print(self.scope)
+        self.room_group_name = self.scope['url_route']['kwargs']['room']
         
         await self.channel_layer.group_add(
             self.room_group_name,
@@ -26,7 +26,7 @@ class VideoConsumer(AsyncWebsocketConsumer):
     async def receive(self, text_data):
         incomingData = json.loads(text_data)
         action = incomingData['action']
-        
+
         if (action == 'new-offer') or (action == 'new-answer'):
             receiver_channel_name = incomingData['keyword']['receiver_channel_name']
 

@@ -5,12 +5,15 @@
 <head>
     <meta charset="UTF-8">
     <title>Engage Video Connect</title>
+    <!-- <script type="text/javascript" src="{% static 'js/connect.js' %}"></script> -->
 </head>
 <body>
-    <h3 id="label-username">Please enter your username</h3>
+    <!-- <h3 id="label-username">Please enter your username</h3>
     <div>
-        <input id="username"><button id="btn-join">Join meeting</button>
-    </div>
+        <input id="username"/><button id="btn-join">Join meeting</button>
+    </div> -->
+    <h1 id="room-name">{{room}}</h1>
+    <h3 id="label-username">{{username}}</h3>
     <div class="container">
         <div id="video-box">
             <div><video id="local-video" style="float: left;" autoplay playsinline></video></div>
@@ -23,12 +26,11 @@
                 <ul id = "message-list"></ul>
             </div>
             <div>
-                <input id = "message"><button id="send-msg-button">Send message</button>
+                <input id = "message" maxlength="100"/><button id="send-msg-button">Send message</button>
             </div>
             <!-- <button id="btn-share-screen">Share Screen</button> -->
         </div>
     </div>
-
-    <script type="text/javascript" src="{% static 'js/main.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/connect.js' %}"></script>
 </body>
 </html>
