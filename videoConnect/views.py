@@ -1,5 +1,5 @@
 from django.shortcuts import redirect, render
-from .models import Users
+from .models import rooms, userRoomRelationship
 
 # Create your views here.
 
@@ -9,27 +9,38 @@ def main(request, room):
         'username' : username,
         'room':room
     }
+    request.session['authenticated_user']=username
     return render(request, 'videoConnect/main.html', context=context)
 
 def preview(request):
     if request.method == 'POST':
         # myLoginForm = LoginForm(request.POST)
         username = request.POST.get('username')
-        room = request.POST.get('room')
+        roomName = request.POST.get('room')
         try:
-            Users.objects.get(username=username)
-            context = {
-                'error':"Username already taken"
-            }
-            return render(request, 'videoConnect/preview.html', context=context)
+            room = rooms.objects.get(roomName = roomName)
+            rel = userRoomRelationship.objects.filter(room=room, username=username)
+            if len(rel) == 0:
+                userRoomRelationship.objects.create(
+                    room = room,
+                    username = username
+                )
+                return redirect('main/'+roomName+'?&username='+username)
+            else:
+                context = {
+                    'error':'User with this username already exists in this room'
+                }
+                return render(request, 'videoConnect/preview.html', context=context)
         except:
-            Users.objects.create(username=username)
-            # context = {
-            #     'username':username,
-            #     'room':room
-            # }
-            # return render(request, 'videoConnect/main.html', context=context)
-            return redirect('main/'+room+'?&username='+username)
+            room = rooms.objects.create(
+                roomName=roomName,
+                author=username
+            )
+            userRoomRelationship.objects.create(
+                room = room,
+                username = username
+            )
+            return redirect('main/'+roomName+'?&username='+username)
     elif request.method == 'GET':
         context = {}
         return render(request, 'videoConnect/preview.html', context=context)

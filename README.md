@@ -22,3 +22,5 @@ Local description - This description specifies the properties of the local end o
 
 Remote description - The RTCPeerConnection method setRemoteDescription() sets the specified session description as the remote peer's current offer or answer. The description specifies the properties of the remote end of the connection, including the media format. The method takes a single parameter—the session description—and it returns a Promise which is fulfilled once the description has been changed, asynchronously.
 
+# My implementation
+In my engage app, there are meeting rooms where every user has an username. In a particular room, two users cannot have same username.

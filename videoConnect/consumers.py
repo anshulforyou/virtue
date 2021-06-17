@@ -1,5 +1,8 @@
 from channels.exceptions import MessageTooLarge
 from channels.generic.websocket import AsyncJsonWebsocketConsumer, AsyncWebsocketConsumer
+from channels.db import database_sync_to_async
+
+from .models import rooms, userRoomRelationship
 
 import json
 
@@ -8,7 +11,9 @@ class VideoConsumer(AsyncWebsocketConsumer):
         # self.room_group_name = 'room101'
         print(self.scope)
         self.room_group_name = self.scope['url_route']['kwargs']['room']
-        
+        print(self.scope['session']['authenticated_user'])
+        # print(self.scope['user'])
+
         await self.channel_layer.group_add(
             self.room_group_name,
             self.channel_name
@@ -21,7 +26,26 @@ class VideoConsumer(AsyncWebsocketConsumer):
             self.room_group_name,
             self.channel_name
         )
+        # print('disconnet is called')
+        # print(self.scope['user'])
+        username = self.scope['session']['authenticated_user']
+        await self.delete_relationships(username)
+        members = await self.get_members()
+        if members == 0:
+            await self.delete_room()
         print('Call disconnected')
+
+    @database_sync_to_async
+    def delete_room(self):
+        return rooms.objects.get(roomName = self.room_group_name).delete()
+
+    @database_sync_to_async
+    def delete_relationships(self, username):
+        return userRoomRelationship.objects.filter(room__roomName = self.room_group_name, username=username).delete()
+
+    @database_sync_to_async
+    def get_members(self):
+        return userRoomRelationship.objects.filter(room__roomName = self.room_group_name).count()
 
     async def receive(self, text_data):
         incomingData = json.loads(text_data)

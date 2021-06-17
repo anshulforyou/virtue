@@ -1,4 +1,4 @@
-var username = document.querySelector("#label-username");
+var username = document.getElementById('label-username').innerHTML;
 console.log(username);
 
 var loc = window.location;
@@ -177,7 +177,7 @@ function createReceiver(offer, peerUsername, receiver_channel_name){
         peer.channelFormed.addEventListener('open', () => {
             console.log('Connection opened');
         });
-        channelFormed.addEventListener('message', channelOnMessage);
+        peer.channelFormed.addEventListener('message', channelOnMessage);
         peerIndex[peerUsername] = [peer, peer.channelFormed];
     })
 
