@@ -122,6 +122,12 @@ function sendSignal(action, keyword){
     webSocket.send(jsonStr);
 }
 
+var disconnect = document.querySelector('#disconnect-button');
+disconnect.addEventListener('click', () => {
+    console.log('Disconnect button is pressed')
+    sendSignal('close', {});
+})
+
 function createOfferer(peerUsername, receiver_channel_name){
     var peer = new RTCPeerConnection(null);
     addMediaInputs(peer);
@@ -130,11 +136,17 @@ function createOfferer(peerUsername, receiver_channel_name){
     channelFormed.addEventListener('open', () => {
         console.log('Connection opened');
     });
-    channelFormed.addEventListener('message', channelOnMessage);  //This is for text chat messages
+    channelFormed.addEventListener('message', channelOnMessage);
 
     var remoteVideo = createVideo(peerUsername);
     setOnTrack(peer, remoteVideo);
     peerIndex[peerUsername] = [peer, channelFormed];
+
+    // disconnect.addEventListener('click', () => {
+    //     console.log('disconnect offerer is called');
+    //     peer.close();
+    //     removeVideo(remoteVideo);
+    // })
 
     peer.addEventListener('iceconnectionstatechange', () => {
         var iceConnectionState = peer.iceConnectionState;
@@ -172,7 +184,7 @@ function createReceiver(offer, peerUsername, receiver_channel_name){
     var remoteVideo = createVideo(peerUsername);
     setOnTrack(peer, remoteVideo);
 
-    peer.addEventListener('datachannel', e => {
+    peer.addEventListener('datachannel', (e) => {
         peer.channelFormed = e.channel;
         peer.channelFormed.addEventListener('open', () => {
             console.log('Connection opened');
@@ -182,6 +194,12 @@ function createReceiver(offer, peerUsername, receiver_channel_name){
     })
 
     peerIndex[peerUsername] = [peer, peer.channelFormed]
+
+    // disconnect.addEventListener('click', () => {
+    //     console.log('disconnect receiver is called');
+    //     peer.close();
+    //     removeVideo(remoteVideo);
+    // })
 
     peer.addEventListener('iceconnectionstatechange', () => {
         var iceConnectionState = peer.iceConnectionState;
@@ -216,6 +234,8 @@ function createReceiver(offer, peerUsername, receiver_channel_name){
         })
 }
 
+console.log(peerIndex);
+
 function addMediaInputs(peer){
     stream.getTracks().forEach(track => {
         peer.addTrack(track, stream);
@@ -224,7 +244,7 @@ function addMediaInputs(peer){
 }
 
 var messageList = document.querySelector('#message-list');
-function channelOnMessage(event){                             //listing all the messages
+function channelOnMessage(event){
     var message = event.data;
     var li = document.createElement('li');
     li.appendChild(document.createTextNode(message));

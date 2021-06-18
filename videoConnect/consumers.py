@@ -1,5 +1,5 @@
 from channels.exceptions import MessageTooLarge
-from channels.generic.websocket import AsyncJsonWebsocketConsumer, AsyncWebsocketConsumer
+from channels.generic.websocket import AsyncWebsocketConsumer
 from channels.db import database_sync_to_async
 
 from .models import rooms, userRoomRelationship
@@ -9,10 +9,9 @@ import json
 class VideoConsumer(AsyncWebsocketConsumer):
     async def connect(self):
         # self.room_group_name = 'room101'
-        print(self.scope)
         self.room_group_name = self.scope['url_route']['kwargs']['room']
-        print(self.scope['session']['authenticated_user'])
-        # print(self.scope['user'])
+        
+        await self.get_room(self.room_group_name, self.scope['session']['authenticated_user'])
 
         await self.channel_layer.group_add(
             self.room_group_name,
@@ -20,6 +19,13 @@ class VideoConsumer(AsyncWebsocketConsumer):
         )
 
         await self.accept()
+    
+    @database_sync_to_async
+    def get_room(self, roomName, username):
+        room = rooms.objects.get_or_create(roomName=roomName)
+        print(room)
+        userRoomRelationship.objects.get_or_create(room=room[0], username = username)
+        return
 
     async def disconnect(self, code):
         await self.channel_layer.group_discard(
