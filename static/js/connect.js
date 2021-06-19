@@ -77,6 +77,8 @@ const devices = {
 const toggleAudioButton = document.querySelector('#toggle-audio-button');
 const toggleVideoButton = document.querySelector('#toggle-video-button');
 
+console.log(navigator.mediaDevices.enumerateDevices());
+
 const video = document.querySelector('#local-video');
 var userMedia = navigator.mediaDevices.getUserMedia(devices)
     .then(incomingStream =>{

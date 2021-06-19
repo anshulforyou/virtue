@@ -1,4 +1,8 @@
 from django.shortcuts import redirect, render
+from django.core.mail import send_mail
+from django.template.loader import render_to_string
+from django.conf import settings
+
 from .models import rooms, userRoomRelationship
 
 # Create your views here.
@@ -44,3 +48,19 @@ def preview(request):
     elif request.method == 'GET':
         context = {}
         return render(request, 'videoConnect/preview.html', context=context)
+
+def invite(request):
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        context = {
+            'email':email,
+            'link':link
+        }
+        html_template = render_to_string('invite.html', context=context)
+        send_mail(
+            subject="[Engage] "+request.session['authenticated_user']+" invited you to join the meeting",
+            message="",
+            from_email = settings.EMAIL_ADDRESS,
+            recipient_list=[email], html_message=html_template
+        )
+        
