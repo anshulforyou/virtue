@@ -1,4 +1,5 @@
 var username = document.getElementById('label-username').innerHTML;
+var localPeer = undefined;
 console.log(username);
 
 var loc = window.location;
@@ -9,8 +10,25 @@ if(loc.protocol == 'https:'){
 }
 
 var endPoint = wsStart + loc.host + loc.pathname+'/';
-
 var peerIndex = {}
+
+console.log('endPoint: ', endPoint);
+var webSocket = new WebSocket(endPoint);
+
+webSocket.addEventListener('open',(e)=>{
+    console.log('Connection Opened!');
+    sendSignal('new-join', {})
+});
+
+webSocket.addEventListener('message', webSocketManager);
+
+webSocket.addEventListener('close', (e)=>{
+    console.log('Connection Closed!');
+});
+
+webSocket.addEventListener('error', (e)=>{
+    console.log('Error Occured');
+});
 
 function webSocketManager(event){
     var parsedData = JSON.parse(event.data);
@@ -36,36 +54,13 @@ function webSocketManager(event){
     if (action == 'new-answer'){
         var answer = parsedData['keyword']['sdp'];
         var peer = peerIndex[peerUsername][0];
+        console.log(peer);
+        console.log(peerIndex);
         peer.setRemoteDescription(answer);
         return;
 
     }
 }
-
-console.log('endPoint: ', endPoint);
-var webSocket = new WebSocket(endPoint);
-
-// webSocket.addEventListener('onopen', (e)=>{
-//     var message = {
-
-//     }
-//     webSocket.send()
-// })
-
-webSocket.addEventListener('open',(e)=>{
-    console.log('Connection Opened!');
-    sendSignal('new-join', {})
-});
-
-webSocket.addEventListener('message', webSocketManager);
-
-webSocket.addEventListener('close', (e)=>{
-    console.log('Connection Closed!');
-});
-
-webSocket.addEventListener('error', (e)=>{
-    console.log('Error Occured');
-});
 
 var stream = new MediaStream();
 
@@ -77,17 +72,19 @@ const devices = {
 const toggleAudioButton = document.querySelector('#toggle-audio-button');
 const toggleVideoButton = document.querySelector('#toggle-video-button');
 
-console.log(navigator.mediaDevices.enumerateDevices());
+// console.log(navigator.mediaDevices.enumerateDevices());
 
-const video = document.querySelector('#local-video');
+var video = document.querySelector('#local-video');
 var userMedia = navigator.mediaDevices.getUserMedia(devices)
     .then(incomingStream =>{
+        console.log(incomingStream);
         stream = incomingStream;
         video.srcObject = stream;
         video.muted = true; 
 
         var audioTracks = stream.getAudioTracks();
         var videoTracks = stream.getVideoTracks();
+        // var deviceLabel = videoTracks[0]['label'];
 
         audioTracks[0].enabled = true;
         videoTracks[0].enabled = true;
@@ -132,6 +129,7 @@ disconnect.addEventListener('click', () => {
 
 function createOfferer(peerUsername, receiver_channel_name){
     var peer = new RTCPeerConnection(null);
+    localPeer = peer;
     addMediaInputs(peer);
 
     var channelFormed = peer.createDataChannel('channel');
@@ -143,6 +141,8 @@ function createOfferer(peerUsername, receiver_channel_name){
     var remoteVideo = createVideo(peerUsername);
     setOnTrack(peer, remoteVideo);
     peerIndex[peerUsername] = [peer, channelFormed];
+
+    console.log("This is offerer function");
 
     // disconnect.addEventListener('click', () => {
     //     console.log('disconnect offerer is called');
@@ -182,7 +182,8 @@ function createOfferer(peerUsername, receiver_channel_name){
 function createReceiver(offer, peerUsername, receiver_channel_name){
     var peer = new RTCPeerConnection(null);
     addMediaInputs(peer);
-    // console.log(peer);
+    localPeer = peer;
+    console.log(peer);
     var remoteVideo = createVideo(peerUsername);
     setOnTrack(peer, remoteVideo);
 
@@ -196,6 +197,8 @@ function createReceiver(offer, peerUsername, receiver_channel_name){
     })
 
     peerIndex[peerUsername] = [peer, peer.channelFormed]
+
+    console.log("This is receiver function")
 
     // disconnect.addEventListener('click', () => {
     //     console.log('disconnect receiver is called');
@@ -242,6 +245,7 @@ function addMediaInputs(peer){
     stream.getTracks().forEach(track => {
         peer.addTrack(track, stream);
     });
+    console.log('Stream added to peer');
     return;
 }
 
@@ -289,11 +293,14 @@ function createVideo(peerUsername){
 }
 
 function setOnTrack(peer, remoteVideo){
+    console.log("setOnTrack is called");
     var remoteStream = new MediaStream();
+    console.log(remoteStream);
     remoteVideo.srcObject = remoteStream;
     peer.addEventListener('track', async(event) => {
         remoteStream.addTrack(event.track, remoteStream);
     });
+
 }
 
 function removeVideo(video){
@@ -303,7 +310,7 @@ function removeVideo(video){
 
 function getDataChannels(){
     var dataChannels = [];
-    // console.log(peerIndex);
+    console.log(peerIndex);
     for(peerUsername in peerIndex){
         console.log('inside loop');
         console.log(peerUsername);
@@ -312,3 +319,10 @@ function getDataChannels(){
     }
     return dataChannels;
 }
+
+// if (performance.navigation.type == performance.navigation.TYPE_RELOAD) {
+//     console.info( "This page is reloaded" );
+//     location.href="/video";
+// } else {
+//     console.info( "This page is not reloaded");
+// }

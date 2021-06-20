@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Engage Video Connect</title>
-    <!-- <script type="text/javascript" src="{% static 'js/connect.js' %}"></script> -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 <body>
     <!-- <h3 id="label-username">Please enter your username</h3>
@@ -20,6 +20,9 @@
             <button id = "toggle-audio-button">Mute mic</button>
             <button id = "toggle-video-button">Video off</button>
             <a href="/video"><button id = "disconnect-button">Disconnect</button></a>
+            <section id="demos" class="invisible">
+                <button id="multiple-cameras-button">Multiple Cameras Mode</button>
+            </section>
         </div>
         <div id = "chat">
             <h3>Chat</h3>
@@ -32,6 +35,17 @@
             <!-- <button id="btn-share-screen">Share Screen</button> -->
         </div>
     </div>
+    <!-- Require the peer dependencies of face-landmarks-detection. -->
+    <script src="https://unpkg.com/@tensorflow/tfjs-core@2.4.0/dist/tf-core.js"></script>
+    <script src="https://unpkg.com/@tensorflow/tfjs-converter@2.4.0/dist/tf-converter.js"></script>
+
+    <!-- You must explicitly require a TF.js backend if you're not using the tfjs union bundle. -->
+    <script src="https://unpkg.com/@tensorflow/tfjs-backend-webgl@2.4.0/dist/tf-backend-webgl.js"></script>
+    <!-- Alternatively you can use the WASM backend: <script src="https://unpkg.com/@tensorflow/tfjs-backend-wasm@2.4.0/dist/tf-backend-wasm.js"></script> -->
+
+    <!-- Require face-landmarks-detection itself. -->
+    <script src="https://unpkg.com/@tensorflow-models/face-landmarks-detection@0.0.1/dist/face-landmarks-detection.js"></script>
     <script type="text/javascript" src="{% static 'js/connect.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/multipleCameras.js' %}"></script>
 </body>
 </html>
