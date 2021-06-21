@@ -24,3 +24,7 @@ Remote description - The RTCPeerConnection method setRemoteDescription() sets th
 
 # My implementation
 In my engage app, there are meeting rooms where every user has an username. In a particular room, two users cannot have same username.
+
+self.channel_layer.group_send send the message to all the channels(users) in the group
+
+The message sent by send_sdp function in consumer.py is what received by websocketManager

@@ -98,7 +98,21 @@ async function main(deviceLabel, t) {
         if (nose[0]>280 && nose[0]<400){
             console.log("User is facing camera "+t);
             video.srcObject = videoEle.srcObject;
-            // setOnTrack(localPeer, video);
+            var localVideoTrack = videoEle.srcObject.getVideoTracks()[0];
+            console.log(peerIndex);
+
+            if (Object.keys(peerIndex).length>0){
+                for (let x in peerIndex){
+                    var sender = peerIndex[x][0].getSenders().find(function(s){
+                        return s.track.kind == localVideoTrack.kind;
+                    })
+                    console.log('Found sender: ', sender);
+                    sender.replaceTrack(localVideoTrack);
+                    // setOnTrack(peerIndex[x][0], video);
+                    // peerIndex[x][0].replaceTrack(localVideoTrack);
+                    // console.log(peerIndex[x]);
+                }
+            }
             // for (let j =1; j<cameras.length;j++){
             //     if (cameras[j]['deviceId']!=deviceLabel){
             //         var temp = document.getElementById(cameras[j]['deviceId']);

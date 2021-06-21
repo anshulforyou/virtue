@@ -27,7 +27,7 @@ class VideoConsumer(AsyncWebsocketConsumer):
         userRoomRelationship.objects.get_or_create(room=room[0], username = username)
         return
 
-    async def disconnect(self, code):
+    async def disconnect(self, close_code):
         await self.channel_layer.group_discard(
             self.room_group_name,
             self.channel_name

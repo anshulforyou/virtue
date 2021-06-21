@@ -1,5 +1,4 @@
 var username = document.getElementById('label-username').innerHTML;
-var localPeer = undefined;
 console.log(username);
 
 var loc = window.location;
@@ -32,7 +31,7 @@ webSocket.addEventListener('error', (e)=>{
 
 function webSocketManager(event){
     var parsedData = JSON.parse(event.data);
-    var peerUsername = parsedData['peer'];
+    var peerUsername = parsedData['peer'];  //username of the user from which the signal came
     var action = parsedData['action'];
 
     if (username == peerUsername){
@@ -54,8 +53,6 @@ function webSocketManager(event){
     if (action == 'new-answer'){
         var answer = parsedData['keyword']['sdp'];
         var peer = peerIndex[peerUsername][0];
-        console.log(peer);
-        console.log(peerIndex);
         peer.setRemoteDescription(answer);
         return;
 
@@ -129,18 +126,17 @@ disconnect.addEventListener('click', () => {
 
 function createOfferer(peerUsername, receiver_channel_name){
     var peer = new RTCPeerConnection(null);
-    localPeer = peer;
-    addMediaInputs(peer);
+    var videoTrack2 = addLocalInputs(peer);
 
     var channelFormed = peer.createDataChannel('channel');
     channelFormed.addEventListener('open', () => {
         console.log('Connection opened');
     });
-    channelFormed.addEventListener('message', channelOnMessage);
+    channelFormed.addEventListener('message', channelOnMessage);  //For chat messages
 
     var remoteVideo = createVideo(peerUsername);
-    setOnTrack(peer, remoteVideo);
-    peerIndex[peerUsername] = [peer, channelFormed];
+    setOnTrack(peer, remoteVideo);                                //For displaying other peers stream
+    peerIndex[peerUsername] = [peer, channelFormed, videoTrack2];
 
     console.log("This is offerer function");
 
@@ -150,7 +146,7 @@ function createOfferer(peerUsername, receiver_channel_name){
     //     removeVideo(remoteVideo);
     // })
 
-    peer.addEventListener('iceconnectionstatechange', () => {
+    peer.addEventListener('iceconnectionstatechange', () => {     //When peer leaves the room
         var iceConnectionState = peer.iceConnectionState;
         if (iceConnectionState === 'failed' || iceConnectionState === 'disconnected' || iceConnectionState === 'closed'){
             delete peerIndex[peerUsername];
@@ -163,13 +159,13 @@ function createOfferer(peerUsername, receiver_channel_name){
     });
     peer.addEventListener('icecandidate', (event) => {
         if(event.candidate){
-            console.log('New ice candidate: ', JSON.stringify(peer.localDescription));
+            // console.log('New ice candidate: ', JSON.stringify(peer.localDescription));
             return;
         }
 
         sendSignal('new-offer', {
             'sdp':peer.localDescription,
-            'receiver_channel_name':receiver_channel_name
+            'receiver_channel_name':receiver_channel_name       //Because we want to send the signal to only that peer which sent it to us first
         });
     });
     peer.createOffer()
@@ -181,8 +177,7 @@ function createOfferer(peerUsername, receiver_channel_name){
 
 function createReceiver(offer, peerUsername, receiver_channel_name){
     var peer = new RTCPeerConnection(null);
-    addMediaInputs(peer);
-    localPeer = peer;
+    addLocalInputs(peer);
     console.log(peer);
     var remoteVideo = createVideo(peerUsername);
     setOnTrack(peer, remoteVideo);
@@ -196,7 +191,7 @@ function createReceiver(offer, peerUsername, receiver_channel_name){
         peerIndex[peerUsername] = [peer, peer.channelFormed];
     })
 
-    peerIndex[peerUsername] = [peer, peer.channelFormed]
+    peerIndex[peerUsername] = [peer, peer.channelFormed];
 
     console.log("This is receiver function")
 
@@ -219,7 +214,7 @@ function createReceiver(offer, peerUsername, receiver_channel_name){
     });
     peer.addEventListener('icecandidate', (event) => {
         if(event.candidate){
-            console.log('New ice candidate: ', JSON.stringify(peer.localDescription));
+            // console.log('New ice candidate: ', JSON.stringify(peer.localDescription));
             return;
         }
 
@@ -241,7 +236,7 @@ function createReceiver(offer, peerUsername, receiver_channel_name){
 
 console.log(peerIndex);
 
-function addMediaInputs(peer){
+function addLocalInputs(peer){  //Adds the local media tracks to the other peers
     stream.getTracks().forEach(track => {
         peer.addTrack(track, stream);
     });
@@ -295,7 +290,7 @@ function createVideo(peerUsername){
 function setOnTrack(peer, remoteVideo){
     console.log("setOnTrack is called");
     var remoteStream = new MediaStream();
-    console.log(remoteStream);
+    // console.log(remoteStream);
     remoteVideo.srcObject = remoteStream;
     peer.addEventListener('track', async(event) => {
         remoteStream.addTrack(event.track, remoteStream);
