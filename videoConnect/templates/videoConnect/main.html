@@ -4,7 +4,17 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Engage Video Connect</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+      integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+      crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+      integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+      crossorigin="anonymous"></script>
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 <body>
@@ -16,13 +26,21 @@
     <h3 id="label-username">{{username}}</h3>
     <div class="container">
         <div id="video-box">
-            <div><video id="local-video" style="float: left;" autoplay playsinline></video></div>
+            <div>
+                <center>
+                    <video id="local-video" width="480" height="320" autoplay playsinline></video>
+                  </center>
+                  <center>
+                    <canvas hidden id="blur-canvas"></canvas>
+                  </center>
+            </div>
             <button id = "toggle-audio-button">Mute mic</button>
             <button id = "toggle-video-button">Video off</button>
             <a href="/video"><button id = "disconnect-button">Disconnect</button></a>
             <section id="demos" class="invisible">
                 <button id="multiple-cameras-button">Multiple Cameras Mode</button>
             </section>
+            <button id = "toggle-blur-mode">Blur Video</button>
         </div>
         <div id = "chat">
             <h3>Chat</h3>
@@ -43,9 +61,19 @@
     <script src="https://unpkg.com/@tensorflow/tfjs-backend-webgl@2.4.0/dist/tf-backend-webgl.js"></script>
     <!-- Alternatively you can use the WASM backend: <script src="https://unpkg.com/@tensorflow/tfjs-backend-wasm@2.4.0/dist/tf-backend-wasm.js"></script> -->
 
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/body-pix@2.0"></script>
+
     <!-- Require face-landmarks-detection itself. -->
     <script src="https://unpkg.com/@tensorflow-models/face-landmarks-detection@0.0.1/dist/face-landmarks-detection.js"></script>
+    
     <script type="text/javascript" src="{% static 'js/connect.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/multipleCameras.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/blur.js' %}"></script>
+    <style>
+        video {
+          -webkit-transform: scaleX(-1);
+          transform: scaleX(-1);
+        }
+      </style>
 </body>
 </html>

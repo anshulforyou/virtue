@@ -71,13 +71,13 @@ const toggleVideoButton = document.querySelector('#toggle-video-button');
 
 // console.log(navigator.mediaDevices.enumerateDevices());
 
-var video = document.querySelector('#local-video');
+var localVideo = document.getElementById('local-video');
 var userMedia = navigator.mediaDevices.getUserMedia(devices)
     .then(incomingStream =>{
         console.log(incomingStream);
         stream = incomingStream;
-        video.srcObject = stream;
-        video.muted = true; 
+        localVideo.srcObject = stream;
+        localVideo.muted = true; 
 
         var audioTracks = stream.getAudioTracks();
         var videoTracks = stream.getVideoTracks();
@@ -126,7 +126,7 @@ disconnect.addEventListener('click', () => {
 
 function createOfferer(peerUsername, receiver_channel_name){
     var peer = new RTCPeerConnection(null);
-    var videoTrack2 = addLocalInputs(peer);
+    addLocalInputs(peer);
 
     var channelFormed = peer.createDataChannel('channel');
     channelFormed.addEventListener('open', () => {
@@ -136,7 +136,7 @@ function createOfferer(peerUsername, receiver_channel_name){
 
     var remoteVideo = createVideo(peerUsername);
     setOnTrack(peer, remoteVideo);                                //For displaying other peers stream
-    peerIndex[peerUsername] = [peer, channelFormed, videoTrack2];
+    peerIndex[peerUsername] = [peer, channelFormed];
 
     console.log("This is offerer function");
 

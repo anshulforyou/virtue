@@ -64,3 +64,5 @@ def invite(request):
             recipient_list=[email], html_message=html_template
         )
         
+def test(request):
+    return render(request, 'videoConnect/testBlur.html')
