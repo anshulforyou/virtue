@@ -1,10 +1,7 @@
 const blurBtn = document.getElementById('toggle-blur-mode');
 const canvas = document.getElementById('blur-canvas');
 
-// const ctx = canvas.getContext('2d');
-
 options = {
-    //   architecture:'ResNet50',
       multiplier: 0.75,
       stride: 32,
       quantBytes: 4
@@ -23,6 +20,20 @@ blurBtn.addEventListener('click', e=>{
         // localVideo.play = true;
         canvas.hidden = false;
         // loadBodyPix();
+        var tempStream = canvas.captureStream();
+        var tempLocalTracks = tempStream.getVideoTracks()[0];
+        console.log(tempLocalTracks);
+        console.log(peerIndex);
+        if (Object.keys(peerIndex).length>0){
+            for (let x in peerIndex){
+                var sender = peerIndex[x][0].getSenders().find(function(s){
+                    console.log(s);
+                    return s.track.kind == tempLocalTracks.kind;
+                })
+                console.log('Found sender: ', sender);
+                sender.replaceTrack(tempLocalTracks);
+            }
+        }
         perform(net);
 
     }else{
@@ -35,27 +46,6 @@ localVideo.onplaying = () => {
     canvas.height = localVideo.videoHeight;
     canvas.width = localVideo.videoWidth;
 };
-
-// function loadBodyPix() {
-//     options = {
-//     //   architecture:'ResNet50',
-//       multiplier: 0.75,
-//       stride: 32,
-//       quantBytes: 4
-//     }
-//     bodyPix.load(options)
-//       .then(net => {
-        // navigator.mediaDevices.getUserMedia(devices)
-        //     .then(incomingStream => {
-        //         localVideo.srcObject = incomingStream;
-        //         localVideo.onloadeddata = (event) =>{
-        //             perform(net);
-        //         }
-        //     })
-            
-//       })
-//       .catch(err => console.log(err))
-// }
 
 async function perform(net) {
 
@@ -72,9 +62,5 @@ async function perform(net) {
             canvas, localVideo, segmentation, backgroundBlurAmount,
             edgeBlurAmount, flipHorizontal
         );
-        // console.log(canvas.captureStream());
-        // localVideo.onloadeddata = (event) =>{
-        //     perform(net);
-        // }
     }
 }
