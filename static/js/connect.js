@@ -77,7 +77,7 @@ var userMedia = navigator.mediaDevices.getUserMedia(devices)
         console.log(incomingStream);
         stream = incomingStream;
         localVideo.srcObject = stream;
-        localVideo.muted = true; 
+        // localVideo.muted = true; 
 
         var audioTracks = stream.getAudioTracks();
         var videoTracks = stream.getVideoTracks();

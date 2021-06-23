@@ -19,19 +19,11 @@ bodyPix.load(options).then(function(loadedModel){
 blurBtn.addEventListener('click', e=>{
     if (canvas.hidden){
         // localVideo.width = 0;
-        // localVideo.hidden = true;
-        localVideo.style.display = 'None';
-        localVideo.play = true;
+        localVideo.hidden = true;
+        // localVideo.play = true;
         canvas.hidden = false;
         // loadBodyPix();
-        navigator.mediaDevices.getUserMedia(devices)
-            .then(incomingStream => {
-                localVideo.srcObject = incomingStream;
-                localVideo.onloadeddata = (event) =>{
-                    perform(net);
-                }
-            })
-        // perform(net);
+        perform(net);
 
     }else{
         localVideo.hidden=false;
@@ -69,16 +61,20 @@ async function perform(net) {
 
     while(!canvas.hidden){
         const segmentation = await net.segmentPerson(localVideo);
-        console.log(segmentation);
+        // console.log(segmentation);
 
         const backgroundBlurAmount = 6;
         const edgeBlurAmount = 2;
         const flipHorizontal = true;
         // console.log(canvas.height);
 
-        await bodyPix.drawBokehEffect(
+        bodyPix.drawBokehEffect(
             canvas, localVideo, segmentation, backgroundBlurAmount,
             edgeBlurAmount, flipHorizontal
         );
+        // console.log(canvas.captureStream());
+        // localVideo.onloadeddata = (event) =>{
+        //     perform(net);
+        // }
     }
 }
