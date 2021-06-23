@@ -1,52 +1,96 @@
 body {
-    font-family: helvetica, arial, sans-serif;
-    margin: 2em;
-    color: #3D3D3D;
-  }
+  height: 100%;
+  width: 100%;
+  font-family: helvetica, arial, sans-serif;
+  color: #3D3D3D;
+}
   
-  h1 {
-    font-style: italic;
-    color: #FF6F00;
-  }
-  
-  /* video {
-    display: block;
-  } */
-  
-  section {
-    opacity: 1;
-    transition: opacity 500ms ease-in-out;
-  }
-  
-  .removed {
-  display: none;
-  }
-  
-  .invisible {
-  opacity: 0.2;
-  }
-  
-  .camView {
-  position: relative;
-  float: left;
-  width: calc(100% - 20px);
+h1 {
+  font-style: italic;
+  color: #FF6F00;
+}
+
+#local-video{
+  position: absolute;
+  border-radius: 10px;
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  z-index: -1;
+}
+
+video{
+  border-radius: 10px;
+  min-width: 200px;
+}
+
+.video-buttons{
+  position: absolute;
+  bottom: 0;
+  left:50%;
+}
+
+.sidepanel {
+  height: 100%; /* Specify a height */
+  width: 0; /* 0 width - change this with JavaScript */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Stay on top */
+  top: 0;
+  right: 0;
+  background-color: #111; /* Black*/
+  overflow-x: hidden; /* Disable horizontal scroll */
+  padding-top: 60px; /* Place content 60px from the top */
+  transition: 0.5s; /* 0.5 second transition effect to slide in the sidepanel */
+}
+
+.sidepanel h3{
+  color: #f1f1f1;
+  display: inline-block;
+  position: absolute;
+  top: 0;
   margin: 10px;
+}
+
+/* The sidepanel links */
+.sidepanel a {
+  padding: 8px 8px 8px 8px;
+  text-decoration: none;
+  font-size: 25px;
+  color: #818181;
+  display: block;
+  transition: 0.3s;
+}
+
+/* When you mouse over the navigation links, change their color */
+.sidepanel a:hover {
+  color: #f1f1f1;
+}
+
+/* Position and style the close button (top right corner) */
+.sidepanel .closebtn {
+  margin: 6px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  font-size: 36px;
+  /* margin-left: 50px; */
+}
+
+/* Style the button that is used to open the sidepanel */
+.openbtn {
+  font-size: 20px;
   cursor: pointer;
-  }
-  
-  .camView p {
-  position: absolute;
-  padding: 5px;
-  background-color: rgba(255, 111, 0, 0.85);
-  color: #FFF;
-  border: 1px dashed rgba(255, 255, 255, 0.7);
-  z-index: 2;
-  font-size: 12px;
-  }
-  
-  .highlighter {
-  background: rgba(0, 255, 0, 0.25);
-  border: 1px dashed #fff;
-  z-index: 1;
-  position: absolute;
-  }
+  background-color: #111;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+}
+
+.openbtn:hover {
+  background-color: #444;
+}
+
+.send-message{
+  position: fixed;
+  bottom: 0;
+}

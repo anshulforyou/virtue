@@ -1,0 +1,26 @@
+#video-box{
+    width: 400px;
+    height: 300px;
+    margin-left: auto;
+    margin-right: auto;
+    position: relative;
+}
+
+#local-video{
+    position: absolute;
+    border-radius: 10px;
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    z-index: -1;
+}
+
+#blur-canvas{
+    position: absolute;
+}
+
+.video-buttons{
+    position: absolute;
+    padding-left: 30%;
+    padding-top: 60%;
+}

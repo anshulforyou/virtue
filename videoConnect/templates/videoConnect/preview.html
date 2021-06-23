@@ -4,27 +4,63 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Engage Video Connect</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+    integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+    integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+    crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="{% static 'css/semantic.min.css' %}">
+    <script
+    src="https://code.jquery.com/jquery-3.1.1.min.js"
+    integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+    crossorigin="anonymous"></script>
+    <script type="text/javascript" src="{% static 'js/semantic.min.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'css/preview.css' %}">
 </head>
 <body>
-    <div class="container">
-        <div id="video-box">
-            <div><video id="local-video" style="float: left;" autoplay playsinline></video></div>
-            <button id = "toggle-audio-button">Mute mic</button>
-            <button id = "toggle-video-button">Video off</button>
+    <div class="container" style="margin-top: 5%;">
+        <div class="row">
+            <div class="col-12">
+            <div id="video-box">
+                    <div>
+                        <video id="local-video" autoplay playsinline muted></video>
+                        <canvas id='blur-canvas'></canvas>
+                    </div>
+                    <div style="margin-top: 10px;" class="video-buttons">
+                        <button id = "toggle-audio-button" class="circular ui icon button">Mute mic</button>
+                        <button id = "toggle-video-button" class="circular ui icon button">Video off</button>
+                    </div>
+            </div>
+            </div>
         </div>
     </div>
-    <h3 id="label-username">Please enter your username and the room that you want to join</h3>
-    {% if error %}
-    <p>{{error}}</p>
-    {% endif %}
-    <div>
-        <form method="POST" action="">
-            {% csrf_token %}
-        <input id="username" name='username' placeholder="Username"/>
-        <input id="room" name="room" placeholder="Room"/>
-        <button id="btn-join">Join meeting</button>
-        </form>
-    </div>
+    <center style="margin-top:2%; padding-bottom: 5%;">
+        <!-- <h3 id="label-username">Please enter your username and room name that you want to join</h3> -->
+        <div class="col-6">
+            <form method="POST" action="" class="ui form">
+                {% csrf_token %}
+            <div class="two fields">
+                <div class="field">
+                    <label class="float-left">Username</label>
+                    <input id="username" name='username' placeholder="Username"/>
+                </div>
+                <div class="field">
+                    <label class="float-left">Room Name</label>
+                    <input id="room" name="room" placeholder="Room"/>
+                </div>
+            </div>
+                <div><button id="btn-join" class="circular ui icon button">Join Virtue</button></div>
+            </form>
+            </div>
+        </div>
+        {% if error %}
+        <p>{{error}}</p>
+        {% endif %}
+    </center>
+    <script type="text/javascript" src="{% static 'js/preview.js' %}"></script>
 </body>
 </html>

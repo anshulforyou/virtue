@@ -1,12 +1,11 @@
 // import { setOnTrack, video, peerIndex, username } from "./connect";
 
-const demosSection = document.getElementById('demos');
 var multipleCamerasButton = document.querySelector('#multiple-cameras-button')
 var model = undefined;
 
 faceLandmarksDetection.load(faceLandmarksDetection.SupportedPackages.mediapipeFacemesh).then(function(loadedModel){
     model = loadedModel;
-    demosSection.classList.remove('invisible');
+    multipleCamerasButton.hidden = false;
 })
 
 var mediaDevices = navigator.mediaDevices.enumerateDevices();

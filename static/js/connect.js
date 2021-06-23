@@ -1,4 +1,4 @@
-var username = document.getElementById('label-username').innerHTML;
+var username = JSON.parse(document.getElementById('passed').textContent);
 console.log(username);
 
 var loc = window.location;
@@ -89,10 +89,10 @@ var userMedia = navigator.mediaDevices.getUserMedia(devices)
         toggleAudioButton.addEventListener('click', () => {
             audioTracks[0].enabled = !audioTracks[0].enabled;
             if (audioTracks[0].enabled){
-                toggleAudioButton.innerHTML = 'Audio Mute';
+                toggleAudioButton.innerHTML = 'Mute';
                 return;
             }
-            toggleAudioButton.innerHTML = 'Audio Unmute';
+            toggleAudioButton.innerHTML = 'Unmute';
         });
 
         toggleVideoButton.addEventListener('click', () => {
