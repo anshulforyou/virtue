@@ -21,6 +21,21 @@ const devices = {
     'audio':true
 };
 
+if(typeof(Storage)!=='undefined'){
+    try{
+        localVideo.muted = sessionStorage.getItem('audioMuted');
+        localVideo.hidden = sessionStorage.getItem('videoVisible');
+        console.log('value');
+    }
+    catch(error){
+        console.log('something');
+        sessionStorage.setItem('audioMuted', false);
+        sessionStorage.setItem('videoVisible', true);
+    }
+}else{
+    console.log('Browser is not supporting some features of the application');
+}
+
 const toggleAudioButton = document.querySelector('#toggle-audio-button');
 const toggleVideoButton = document.querySelector('#toggle-video-button');
 
@@ -323,9 +338,9 @@ function getDataChannels(){
     return dataChannels;
 }
 
-// if (performance.navigation.type == performance.navigation.TYPE_RELOAD) {
-//     console.info( "This page is reloaded" );
-//     location.href="/video";
-// } else {
-//     console.info( "This page is not reloaded");
-// }
+if (performance.navigation.type == performance.navigation.TYPE_RELOAD) {
+    console.info( "This page is reloaded" );
+    location.href="/video";
+} else {
+    console.info( "This page is not reloaded");
+}

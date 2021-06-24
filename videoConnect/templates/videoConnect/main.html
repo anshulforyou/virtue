@@ -26,6 +26,7 @@
                     <button id = "toggle-audio-button" class="circular ui icon button">Mute</button>
                     <button id = "toggle-video-button" class="circular ui icon button">Video off</button>
                     <a href="/video"><button id = "disconnect-button" class="circular ui icon button">Disconnect</button></a>
+                    <button id = "btn-share-screen" class="circular ui icon button">Share Screen</button>
                     <button id = "multiple-cameras-button" class="circular ui icon button">Multiple Cameras Mode</button>
                     <button id = "toggle-blur-mode" class="circular ui icon button">Blur Video</button>
                 </div>
@@ -42,7 +43,6 @@
             <div class='field send-message'>
                 <input id = "message" maxlength="100" style="width: 70%;"/><button id="send-msg-button" class="ui icon button">Send</button>
             </div>
-            <!-- <button id="btn-share-screen">Share Screen</button> -->
         </div>
     </div>
     <!-- Require the peer dependencies of face-landmarks-detection. -->
@@ -64,11 +64,5 @@
     <script type="text/javascript" src="{% static 'js/multipleCameras.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/blur.js' %}"></script>
     
-    <style>
-        video {
-          -webkit-transform: scaleX(-1);
-          transform: scaleX(-1);
-        }
-      </style>
 </body>
 </html>
