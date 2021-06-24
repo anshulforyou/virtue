@@ -38,6 +38,22 @@ blurBtn.addEventListener('click', e=>{
 
     }else{
         localVideo.hidden=false;
+        navigator.mediaDevices.getUserMedia(devices)
+            .then(incomingStream =>{
+                localVideo.srcObject = incomingStream;
+                var tempLocalTracks = incomingStream.getVideoTracks()[0];
+                console.log(incomingStream);
+                if (Object.keys(peerIndex).length>0){
+                    for (let x in peerIndex){
+                        var sender = peerIndex[x][0].getSenders().find(function(s){
+                            console.log(s);
+                            return s.track.kind == tempLocalTracks.kind;
+                        })
+                        console.log('Found sender: ', sender);
+                        sender.replaceTrack(tempLocalTracks);
+                    }
+                }
+            })
         canvas.hidden=true;
     }
 })

@@ -78,16 +78,22 @@ video{
 
 /* Style the button that is used to open the sidepanel */
 .openbtn {
-  font-size: 20px;
-  cursor: pointer;
-  background-color: #111;
+  /* font-size: 20px; */
+  /* cursor: pointer; */
   color: white;
-  padding: 10px 15px;
-  border: none;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  /* padding: 10px 15px; */
+  /* border: none; */
 }
 
 .openbtn:hover {
   background-color: #444;
+}
+
+.messages{
+  color: white;
 }
 
 .send-message{

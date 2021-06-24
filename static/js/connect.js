@@ -12,52 +12,7 @@ var endPoint = wsStart + loc.host + loc.pathname+'/';
 var peerIndex = {}
 
 console.log('endPoint: ', endPoint);
-var webSocket = new WebSocket(endPoint);
-
-webSocket.addEventListener('open',(e)=>{
-    console.log('Connection Opened!');
-    sendSignal('new-join', {})
-});
-
-webSocket.addEventListener('message', webSocketManager);
-
-webSocket.addEventListener('close', (e)=>{
-    console.log('Connection Closed!');
-});
-
-webSocket.addEventListener('error', (e)=>{
-    console.log('Error Occured');
-});
-
-function webSocketManager(event){
-    var parsedData = JSON.parse(event.data);
-    var peerUsername = parsedData['peer'];  //username of the user from which the signal came
-    var action = parsedData['action'];
-
-    if (username == peerUsername){
-        return;
-    }
-
-    var receiver_channel_name = parsedData['keyword']['receiver_channel_name'];
-    if(action == 'new-join'){
-        createOfferer(peerUsername, receiver_channel_name);
-        return;
-    }
-
-    if (action == 'new-offer'){
-        var offer = parsedData['keyword']['sdp'];
-        createReceiver(offer, peerUsername, receiver_channel_name);
-        return;
-    }
-
-    if (action == 'new-answer'){
-        var answer = parsedData['keyword']['sdp'];
-        var peer = peerIndex[peerUsername][0];
-        peer.setRemoteDescription(answer);
-        return;
-
-    }
-}
+var webSocket;
 
 var stream = new MediaStream();
 
@@ -72,6 +27,7 @@ const toggleVideoButton = document.querySelector('#toggle-video-button');
 // console.log(navigator.mediaDevices.enumerateDevices());
 
 var localVideo = document.getElementById('local-video');
+
 var userMedia = navigator.mediaDevices.getUserMedia(devices)
     .then(incomingStream =>{
         console.log(incomingStream);
@@ -103,10 +59,64 @@ var userMedia = navigator.mediaDevices.getUserMedia(devices)
             }
             toggleVideoButton.innerHTML = 'Video Unmute';
         });
+
+        webSocket = new WebSocket(endPoint);
+        console.log('here');
+        console.log(webSocket);
+
+        webSocket.addEventListener('open',(e)=>{
+            console.log('Connection Opened!');
+            sendSignal('new-join', {})
+        });
+
+        webSocket.addEventListener('message', webSocketManager);
+
+        webSocket.addEventListener('close', (e)=>{
+            console.log('Connection Closed!');
+        });
+
+        webSocket.addEventListener('error', (e)=>{
+            console.log('Error Occured');
+        });
     })
     .catch(error =>{
         console.log('Error accessing audio or video device', error);
     });
+
+function webSocketManager(event){
+    var parsedData = JSON.parse(event.data);
+    var peerUsername = parsedData['peer'];  //username of the user from which the signal came
+    var action = parsedData['action'];
+    console.log(action);
+    console.log(peerUsername);
+
+    if (username == peerUsername){
+        console.log("Function is returned from here");
+        return;
+    }
+
+    var receiver_channel_name = parsedData['keyword']['receiver_channel_name'];
+    if(action == 'new-join'){
+        createOfferer(peerUsername, receiver_channel_name);
+        return;
+    }
+
+    if (action == 'new-offer'){
+        var offer = parsedData['keyword']['sdp'];
+        createReceiver(offer, peerUsername, receiver_channel_name);
+        return;
+    }
+
+    if (action == 'new-answer'){
+        var answer = parsedData['keyword']['sdp'];
+        var peer = peerIndex[peerUsername][0];
+        var temp = document.getElementById(peerUsername+'-video');
+        setOnTrack(peer, temp);
+        peer.setRemoteDescription(answer);
+        return;
+
+    }
+}
 
 function sendSignal(action, keyword){
     var jsonStr = JSON.stringify({
@@ -114,7 +124,6 @@ function sendSignal(action, keyword){
         'action':action,
         'keyword':keyword,
     });
-    // console.log(jsonStr);
     webSocket.send(jsonStr);
 }
 
@@ -238,10 +247,20 @@ console.log(peerIndex);
 
 function addLocalInputs(peer){  //Adds the local media tracks to the other peers
     stream.getTracks().forEach(track => {
+        console.log(track);
         peer.addTrack(track, stream);
     });
     console.log('Stream added to peer');
     return;
+}
+
+function setOnTrack(peer, remoteVideo){
+    console.log("setOnTrack is called");
+    var remoteStream = new MediaStream();
+    remoteVideo.srcObject = remoteStream;
+    peer.addEventListener('track', async(event) => {
+        remoteStream.addTrack(event.track, remoteStream);
+    });
 }
 
 var messageList = document.querySelector('#message-list');
@@ -285,17 +304,6 @@ function createVideo(peerUsername){
     videoWrapper.appendChild(remoteVideo);
 
     return remoteVideo;
-}
-
-function setOnTrack(peer, remoteVideo){
-    console.log("setOnTrack is called");
-    var remoteStream = new MediaStream();
-    // console.log(remoteStream);
-    remoteVideo.srcObject = remoteStream;
-    peer.addEventListener('track', async(event) => {
-        remoteStream.addTrack(event.track, remoteStream);
-    });
-
 }
 
 function removeVideo(video){
