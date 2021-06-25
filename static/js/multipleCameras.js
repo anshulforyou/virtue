@@ -27,7 +27,25 @@ function getUserMediaSupported() {
 }
 
 if (getUserMediaSupported()) {
-    multipleCamerasButton.addEventListener('click', enableCam);
+    multipleCamerasButton.addEventListener('click',(e) =>{
+        if (multipleCamerasButton.innerHTML == 'Multiple Cameras Mode'){
+            multipleCamerasButton.innerHTML = 'Turn off';
+            enableCam(e);
+        }else if(multipleCamerasButton.innerHTML == 'Turn off'){
+            multipleCamerasButton.innerHTML = 'Multiple Cameras Mode';
+            localVideo.srcObject = localStream;
+            var localVideoTrack2 = localStream.getVideoTracks()[0];
+            if (Object.keys(peerIndex).length>0){
+                for (let x in peerIndex){
+                    var sender = peerIndex[x][0].getSenders().find(function(s){
+                        return s.track.kind == localVideoTrack2.kind;
+                    })
+                    console.log('Found sender: ', sender);
+                    sender.replaceTrack(localVideoTrack2);
+                }
+            }
+        }
+    });
 } else {
     console.warn('getUserMedia() is not supported by your browser');
 }
@@ -39,6 +57,7 @@ async function createFaceDetect(label){
     remoteVideo.autoplay = true;
     remoteVideo.playsInline = true;
     remoteVideo.style.width = 0;
+    remoteVideo.style.height = 0;
     
     var videoWrapper = document.createElement('div');
     videoContainer.appendChild(videoWrapper);
@@ -52,9 +71,6 @@ async function enableCam(event) {
     if (!model) {
       return;
     }
-    
-    // Hide the button once clicked.
-    event.target.classList.add('removed');  
     
     for (let i=0;i<cameras.length;i++){
         videoElement = await createFaceDetect(cameras[i]['deviceId']);
@@ -96,7 +112,8 @@ async function main(deviceLabel, t) {
         console.log("Camera: "+t+" :"+nose);
         if (nose[0]>280 && nose[0]<400){
             console.log("User is facing camera "+t);
-            video.srcObject = videoEle.srcObject;
+            localVideo.srcObject = videoEle.srcObject;
+            broadcastingStream = videoEle.srcObject;
             var localVideoTrack = videoEle.srcObject.getVideoTracks()[0];
             console.log(peerIndex);
 
@@ -107,26 +124,14 @@ async function main(deviceLabel, t) {
                     })
                     console.log('Found sender: ', sender);
                     sender.replaceTrack(localVideoTrack);
-                    // setOnTrack(peerIndex[x][0], video);
-                    // peerIndex[x][0].replaceTrack(localVideoTrack);
-                    // console.log(peerIndex[x]);
                 }
             }
-            // for (let j =1; j<cameras.length;j++){
-            //     if (cameras[j]['deviceId']!=deviceLabel){
-            //         var temp = document.getElementById(cameras[j]['deviceId']);
-            //         console.log(video);
-            //         video.srcObject = temp.srcObject;
-            //         console.log(video);
-            //         // setOnTrack(peerIndex[username][0], video);
-            //         // temp.style.width = 0;
-            //     }
-            // }
-            // videoEle.style.width = "calc(100% - 20px)";
         }
       }
     }
-    setTimeout(() => {main(deviceLabel, t);}, 5000)
+    if (multipleCamerasButton.innerHTML == 'Turn off'){
+        setTimeout(() => {main(deviceLabel, t);}, 5000)
+    }
   }
 
 async function addPoints([x1, y1, z1], [x2, y2, z2], [x3, y3, z3], [x4, y4, z4], [x5, y5, z5]){
