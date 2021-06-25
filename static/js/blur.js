@@ -22,6 +22,7 @@ blurBtn.addEventListener('click', e=>{
         // loadBodyPix();
         var tempStream = canvas.captureStream();
         var tempLocalTracks = tempStream.getVideoTracks()[0];
+        broadcastingStream = tempStream;
         console.log(tempLocalTracks);
         console.log(peerIndex);
         if (Object.keys(peerIndex).length>0){
@@ -42,6 +43,7 @@ blurBtn.addEventListener('click', e=>{
             .then(incomingStream =>{
                 localVideo.srcObject = incomingStream;
                 var tempLocalTracks = incomingStream.getVideoTracks()[0];
+                broadcastingStream = incomingStream;
                 console.log(incomingStream);
                 if (Object.keys(peerIndex).length>0){
                     for (let x in peerIndex){
@@ -71,7 +73,7 @@ async function perform(net) {
 
         const backgroundBlurAmount = 6;
         const edgeBlurAmount = 2;
-        const flipHorizontal = true;
+        const flipHorizontal = false;
         // console.log(canvas.height);
 
         bodyPix.drawBokehEffect(

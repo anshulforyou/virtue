@@ -14,7 +14,8 @@ var peerIndex = {}
 console.log('endPoint: ', endPoint);
 var webSocket;
 
-var stream = new MediaStream();
+var localStream = new MediaStream();
+var broadcastingStream = new MediaStream();
 
 const devices = {
     'video':true,
@@ -46,12 +47,13 @@ var localVideo = document.getElementById('local-video');
 var userMedia = navigator.mediaDevices.getUserMedia(devices)
     .then(incomingStream =>{
         console.log(incomingStream);
-        stream = incomingStream;
-        localVideo.srcObject = stream;
+        localStream = incomingStream;
+        broadcastingStream = incomingStream;
+        localVideo.srcObject = localStream;
         // localVideo.muted = true; 
 
-        var audioTracks = stream.getAudioTracks();
-        var videoTracks = stream.getVideoTracks();
+        var audioTracks = localStream.getAudioTracks();
+        var videoTracks = localStream.getVideoTracks();
         // var deviceLabel = videoTracks[0]['label'];
 
         audioTracks[0].enabled = true;
@@ -261,9 +263,9 @@ function createReceiver(offer, peerUsername, receiver_channel_name){
 console.log(peerIndex);
 
 function addLocalInputs(peer){  //Adds the local media tracks to the other peers
-    stream.getTracks().forEach(track => {
+    broadcastingStream.getTracks().forEach(track => {
         console.log(track);
-        peer.addTrack(track, stream);
+        peer.addTrack(track, broadcastingStream);
     });
     console.log('Stream added to peer');
     return;
