@@ -6,7 +6,8 @@ body {
 }
 
 #video-box{
-  display: flex;
+  display: grid;
+  grid-template-columns: auto auto auto;
 }
 
 #local-video{
