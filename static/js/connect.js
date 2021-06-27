@@ -340,9 +340,9 @@ function getDataChannels(){
     return dataChannels;
 }
 
-if (performance.navigation.type == performance.navigation.TYPE_RELOAD) {
-    console.info( "This page is reloaded" );
-    location.href="/video";
-} else {
-    console.info( "This page is not reloaded");
-}
+// if (performance.navigation.type == performance.navigation.TYPE_RELOAD) {
+//     console.info( "This page is reloaded" );
+//     location.href="/video";
+// } else {
+//     console.info( "This page is not reloaded");
+// }

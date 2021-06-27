@@ -1,3 +1,8 @@
+.row{
+    height: 100vh;
+    width: 100vw;
+}
+
 #video-box{
     width: 400px;
     height: 300px;
@@ -25,23 +30,20 @@
     padding-top: 60%;
 }
 
-#ml4{
-    display: block;
-    height: 100vh;
-    width: 100vw;
-    background-color: #1a1a1a;
-}
-
-.ml4 {
-    position: relative;
-    font-weight: 900;
-    font-size: 4.5em;
-  }
-.ml4 .letters {
+.ml15 {
     position: absolute;
-    margin: auto;
-    left: 45vw;
-    top: 45vh;
-    opacity: 0;
-    color: white;
+    top:40vh;
+    /* left: 0; */
+    right: 0;
+    bottom: 0;
+    margin-left: 20px;
+    font-weight: 800;
+    font-size: 3.8em;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+}
+  
+.ml15 .word {
+    display: inline-block;
+    line-height: 1em;
 }

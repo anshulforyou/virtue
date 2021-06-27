@@ -7,6 +7,38 @@ faceLandmarksDetection.load(faceLandmarksDetection.SupportedPackages.mediapipeFa
     model = loadedModel;
     multipleCamerasButton.hidden = false;
 })
+var blurBackground = document.querySelector('.blur-background')
+var textWrapperGod = document.querySelector('.gods-eye');
+function godEyeAnime(){
+    blurBackground.hidden = false;
+    textWrapperGod.innerHTML = textWrapperGod.textContent.replace(/\S/g, "<span class='letter' style='opacity:0'>$&</span>");
+
+    setTimeout(()=>{
+        anime.timeline({loop: false})
+        .add({
+            targets: '.gods-eye .letter',
+            translateY: [100,0],
+            translateZ: 0,
+            opacity: [0,1],
+            easing: "easeOutExpo",
+            duration: 800,
+            delay: (el, i) => 300 + 30 * i
+        }).add({
+            targets: '.gods-eye .letter',
+            translateY: [0,-100],
+            opacity: [1,0],
+            easing: "easeInExpo",
+            duration: 1000,
+            delay: (el, i) => 100 + 30 * i
+        });
+    },1000);
+    textWrapperGod.hidden = false;
+    setTimeout(()=>{
+        blurBackground.hidden=true;
+        textWrapperGod.hidden=true;
+        textWrapperGod.innerHTML="God\'s eye on"
+    },5000);
+}
 
 var mediaDevices = navigator.mediaDevices.enumerateDevices();
 var cameras = [];
@@ -26,13 +58,31 @@ function getUserMediaSupported() {
       navigator.mediaDevices.getUserMedia);
 }
 
+$(function(){
+$('#multiple-cameras-button').popover({
+    // title:"Something",
+    container:"body",
+    trigger:'manual',
+    content:"<h4>Please connect multiple cameras to use God's Eye</h4>",
+    html:true,
+    placement:"top"
+});
+})
+
 if (getUserMediaSupported()) {
     multipleCamerasButton.addEventListener('click',(e) =>{
-        if (multipleCamerasButton.innerHTML == 'Multiple Cameras Mode'){
-            multipleCamerasButton.innerHTML = 'Turn off';
-            enableCam(e);
+        if (multipleCamerasButton.innerHTML == "God\'s eye"){
+            if(cameras.length>1){
+                multipleCamerasButton.innerHTML = 'Turn off';
+                godEyeAnime();
+                enableCam(e);
+            }else{
+                console.log('else block executed');
+                $('#multiple-cameras-button').popover('show');
+                setTimeout(()=>{$('#multiple-cameras-button').popover('hide');}, 2000)
+            }
         }else if(multipleCamerasButton.innerHTML == 'Turn off'){
-            multipleCamerasButton.innerHTML = 'Multiple Cameras Mode';
+            multipleCamerasButton.innerHTML = "God\'s eye";
             localVideo.srcObject = localStream;
             var localVideoTrack2 = localStream.getVideoTracks()[0];
             if (Object.keys(peerIndex).length>0){
@@ -71,7 +121,6 @@ async function enableCam(event) {
     if (!model) {
       return;
     }
-    
     for (let i=0;i<cameras.length;i++){
         videoElement = await createFaceDetect(cameras[i]['deviceId']);
         console.log(videoElement);
