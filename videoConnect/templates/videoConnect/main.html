@@ -20,12 +20,14 @@
 
     <script type="text/javascript" src="{% static 'js/semantic.min.js' %}"></script>
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/2.0.2/anime.min.js"></script>
 </head>
 <body>
     <div id='main-screen' hidden>
-        <div id="video-box">
-            <div>
-                <video id="local-video" class="video-style" width="480" height="320" autoplay playsinline></video>
+        <div id="video-box" style="
+            grid-template-columns: repeat(1, 1fr);">
+            <div id="inner">
+                <video id="local-video" class="video-style" height="480px" width="620px" autoplay playsinline></video>
                 <canvas hidden id="blur-canvas"></canvas>
             </div>
             <div class="video-buttons">
@@ -73,10 +75,11 @@
     <!-- Alternatively you can use the WASM backend: <script src="https://unpkg.com/@tensorflow/tfjs-backend-wasm@2.4.0/dist/tf-backend-wasm.js"></script> -->
 
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/body-pix@2.0"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/body-pix@2.2.0/dist/body-pix.min.js"></script> -->
 
     <!-- Require face-landmarks-detection itself. -->
     <script src="https://unpkg.com/@tensorflow-models/face-landmarks-detection@0.0.1/dist/face-landmarks-detection.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/2.0.2/anime.min.js"></script>
+    
     <script type="text/javascript" src="{% static 'js/animation.js' %}"></script>
     {{ username|json_script:"passed"}}
     <script type="text/javascript" src="{% static 'js/connect.js' %}"></script>

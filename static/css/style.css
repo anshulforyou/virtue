@@ -5,34 +5,71 @@ body {
   color: #3D3D3D;
 }
 
-#main-screen{
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
+html{
+  height: 100%;
 }
+
+/* #main-screen{
+  display: grid;
+  grid-template-columns: auto auto auto;
+} */
 
 #video-box{
+  /* display: grid;
+  grid-template-columns: repeat(3, 1fr); */
+  /* -ms-grid-columns: (1fr)[3];
+            grid-template-columns: repeat(1, 1fr);
+            -ms-grid-rows: (1fr)[2];
+            grid-template-rows: repeat(1, 1fr);   */
+  height: 100%;
+  display: -ms-grid;
   display: grid;
-  grid-template-columns: 60% 20%;
+  grid-gap: 10px;
 }
 
-#local-video{
-  /* position: absolute; */
+#video-box > #inner{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  text-align: center;
+}
+
+/* .video-style{
+  background-color: #eee;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  width: 100%;
+  text-align: center;
+} */
+
+/* #local-video{
+  position: absolute;
   border-radius: 10px;
   height: 100%;
   width: 100%;
   object-fit: cover;
   z-index: -1;
-}
+} */
 
 video{
   border-radius: 10px;
-  min-width: 300px;
+  /* min-width: 30vw; */
+  /* min-height: 30vh; */
 }
 
 .video-buttons{
   position: absolute;
   bottom: 0;
   left:50%;
+  z-index: 10000;
 }
 
 .sidepanel {

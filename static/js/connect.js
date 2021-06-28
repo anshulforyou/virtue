@@ -315,17 +315,38 @@ function createVideo(peerUsername){
     remoteVideo.id = peerUsername + '-video';
     remoteVideo.autoplay = true;
     remoteVideo.playsInline = true;
-    
+
     var videoWrapper = document.createElement('div');
+    videoWrapper.id = 'inner';
     videoContainer.appendChild(videoWrapper);
     videoWrapper.appendChild(remoteVideo);
+
+    var innerElements = document.querySelectorAll('#inner').length;
+    var columns = innerElements % 3;
+    if (columns ==0)columns = 3;
+    var rows = Math.floor(innerElements / 3)+1;
+    console.log(columns);
+    console.log(rows);
+    videoContainer.style.gridTemplateColumns = 'repeat('+columns+', 1fr)';
+    videoContainer.style.gridTemplateRows = 'repeat('+rows+', 1fr)';
+    remoteVideo.height = Math.floor(100/rows)*screen.height/100;
+    remoteVideo.width = Math.floor(100/columns)*screen.width/100;
 
     return remoteVideo;
 }
 
 function removeVideo(video){
+    var videoContainer = document.querySelector('#video-box');
     var videoWrapper = video.parentNode;
     videoWrapper.parentNode.removeChild(videoWrapper);
+    var innerElements = document.querySelectorAll('#inner').length;
+    var columns = innerElements % 3;
+    if (columns ==0)columns = 3;
+    var rows = Math.floor(innerElements / 3)+1;
+    videoContainer.style.gridTemplateColumns = 'repeat('+columns+', 1fr)';
+    videoContainer.style.gridTemplateRows = 'repeat('+rows+', 1fr)';
+    remoteVideo.height = Math.floor(100/rows)*screen.height/100;
+    remoteVideo.width = Math.floor(100/columns)*screen.width/100;
 }
 
 function getDataChannels(){

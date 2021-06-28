@@ -16,6 +16,7 @@ bodyPix.load(options).then(function(loadedModel){
 var textWrapperBlur = document.querySelector('.blur-mode');
 function blurMode(){
     // container.hidden = true;
+    console.log('Blur animation on')
     blurBackground.hidden = false;
     textWrapperBlur.innerHTML = textWrapperBlur.textContent.replace(/\S/g, "<span class='letter' style='opacity:0'>$&</span>");
     setTimeout(()=>{
@@ -48,11 +49,8 @@ function blurMode(){
 blurBtn.addEventListener('click', e=>{
     if (canvas.hidden){
         blurMode();
-        // localVideo.width = 0;
         localVideo.hidden = true;
-        // localVideo.play = true;
         canvas.hidden = false;
-        // loadBodyPix();
         var tempStream = canvas.captureStream();
         var tempLocalTracks = tempStream.getVideoTracks()[0];
         broadcastingStream = tempStream;
@@ -93,22 +91,19 @@ blurBtn.addEventListener('click', e=>{
     }
 })
 
-localVideo.onplaying = () => {
-    canvas.height = localVideo.videoHeight;
-    canvas.width = localVideo.videoWidth;
-};
+// localVideo.onplaying = () => {
+//     canvas.height = localVideo.videoHeight;
+//     canvas.width = localVideo.videoWidth;
+// };
 
 async function perform(net) {
 
     while(!canvas.hidden){
         const segmentation = await net.segmentPerson(localVideo);
-        // console.log(segmentation);
 
         const backgroundBlurAmount = 6;
         const edgeBlurAmount = 2;
         const flipHorizontal = false;
-        // console.log(canvas.height);
-
         bodyPix.drawBokehEffect(
             canvas, localVideo, segmentation, backgroundBlurAmount,
             edgeBlurAmount, flipHorizontal
