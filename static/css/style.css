@@ -5,9 +5,14 @@ body {
   color: #3D3D3D;
 }
 
+#main-screen{
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+
 #video-box{
   display: grid;
-  grid-template-columns: auto auto auto;
+  grid-template-columns: 60% 20%;
 }
 
 #local-video{
