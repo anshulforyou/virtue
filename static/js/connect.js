@@ -315,6 +315,7 @@ function createVideo(peerUsername){
     remoteVideo.id = peerUsername + '-video';
     remoteVideo.autoplay = true;
     remoteVideo.playsInline = true;
+    remoteVideo.className = 'video-style';
 
     var videoWrapper = document.createElement('div');
     videoWrapper.id = 'inner';
@@ -324,13 +325,16 @@ function createVideo(peerUsername){
     var innerElements = document.querySelectorAll('#inner').length;
     var columns = innerElements % 3;
     if (columns ==0)columns = 3;
-    var rows = Math.floor(innerElements / 3)+1;
+    var rows = Math.ceil(innerElements / 3);
     console.log(columns);
     console.log(rows);
     videoContainer.style.gridTemplateColumns = 'repeat('+columns+', 1fr)';
     videoContainer.style.gridTemplateRows = 'repeat('+rows+', 1fr)';
-    remoteVideo.height = Math.floor(100/rows)*screen.height/100;
-    remoteVideo.width = Math.floor(100/columns)*screen.width/100;
+    var allVideos = document.querySelectorAll('.video-style');
+    for (x in allVideos){
+        allVideos[x].height = Math.floor(100/rows)*screen.height/100;
+        allVideos[x].width = Math.floor(100/columns)*screen.width/100;
+    }
 
     return remoteVideo;
 }
@@ -342,11 +346,16 @@ function removeVideo(video){
     var innerElements = document.querySelectorAll('#inner').length;
     var columns = innerElements % 3;
     if (columns ==0)columns = 3;
-    var rows = Math.floor(innerElements / 3)+1;
+    var rows = Math.ceil(innerElements / 3);
+    console.log(columns);
+    console.log(rows);
     videoContainer.style.gridTemplateColumns = 'repeat('+columns+', 1fr)';
     videoContainer.style.gridTemplateRows = 'repeat('+rows+', 1fr)';
-    remoteVideo.height = Math.floor(100/rows)*screen.height/100;
-    remoteVideo.width = Math.floor(100/columns)*screen.width/100;
+    var allVideos = document.querySelectorAll('.video-style');
+    for (x in allVideos){
+        allVideos[x].height = Math.floor(100/rows)*screen.height/100;
+        allVideos[x].width = Math.floor(100/columns)*screen.width/100;
+    }
 }
 
 function getDataChannels(){
