@@ -44,21 +44,23 @@ def preview(request):
                 room = room,
                 username = username
             )
-            return redirect('main/'+roomName+'?&username='+username)
+            return redirect('room/'+roomName+'?&username='+username)
     elif request.method == 'GET':
-        context = {}
+        room = request.GET.get('room')
+        context = {'room':room}
         return render(request, 'videoConnect/preview.html', context=context)
 
 def invite(request):
     if request.method == 'POST':
         email = request.POST.get('email')
+        room = request.POST.get('room')
         context = {
             'email':email,
-            'link':link
+            'link':'/video?&room='+room
         }
         html_template = render_to_string('invite.html', context=context)
         send_mail(
-            subject="[Engage] "+request.session['authenticated_user']+" invited you to join the meeting",
+            subject="[Virtue] "+request.session['authenticated_user']+" invited you to join the meeting",
             message="",
             from_email = settings.EMAIL_ADDRESS,
             recipient_list=[email], html_message=html_template

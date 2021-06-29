@@ -27,7 +27,7 @@
         <div id="video-box" style="
             grid-template-columns: repeat(1, 1fr);">
             <div id="inner">
-                <video id="local-video" class="video-style" height="480px" width="620px" autoplay playsinline></video>
+                <video id="local-video" class="video-style" height="480px" width="620px" autoplay playsinline muted></video>
                 <canvas hidden id="blur-canvas"></canvas>
             </div>
             <div class="video-buttons">
@@ -38,6 +38,7 @@
                     <button id = "btn-share-screen" class="circular ui icon button">Share Screen</button>
                     <button type="button" id = "multiple-cameras-button" class="circular ui icon button">God's eye</button>
                     <button id = "toggle-blur-mode" class="circular ui icon button">Blur Video</button>
+                    <button id = "invite-button" class="circular ui icon button">Invite</button>
                 </div>
             </div>
         </div>
@@ -66,6 +67,30 @@
         <h1 class="ml13 blur-mode" style="text-align: center;" hidden>Blur mode on</h1>
         <p hidden>Virtue will automatically detect the camera you are looking into and will send your stream from it.</p>
     </section>
+    <div id="myModal" class="modal">
+
+        <!-- Modal content -->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Invite people</h2>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form class="ui form success" id='invitation-form'>
+                    {% csrf_token %}
+                    <div class="field">
+                        <label>Email</label>
+                        <input type="email" id='email' name = "email" placeholder="Email">
+                    </div>
+                    <div class="ui success message" hidden>
+                        <div class="header">Invitation Sent!</div>
+                        <p>We have sent the invitation on this email. You can expect the guests anytime.</p>
+                    </div>
+                    <button class="ui submit button">Invite</button>
+                </form>
+            </div>
+        </div>
+      </div>
     <!-- Require the peer dependencies of face-landmarks-detection. -->
     <script src="https://unpkg.com/@tensorflow/tfjs-core@2.4.0/dist/tf-core.js"></script>
     <script src="https://unpkg.com/@tensorflow/tfjs-converter@2.4.0/dist/tf-converter.js"></script>
@@ -79,7 +104,7 @@
 
     <!-- Require face-landmarks-detection itself. -->
     <script src="https://unpkg.com/@tensorflow-models/face-landmarks-detection@0.0.1/dist/face-landmarks-detection.js"></script>
-    
+    {{ room|json_script:"roomname"}}
     <script type="text/javascript" src="{% static 'js/animation.js' %}"></script>
     {{ username|json_script:"passed"}}
     <script type="text/javascript" src="{% static 'js/connect.js' %}"></script>

@@ -35,7 +35,7 @@
             <div class="col-12">
             <div id="video-box">
                     <div>
-                        <video id="local-video" autoplay playsinline muted></video>
+                        <video id="local-video" autoplay playsinline></video>
                         <canvas id='blur-canvas'></canvas>
                     </div>
                     <div style="margin-top: 10px;" class="video-buttons">
@@ -57,7 +57,11 @@
                 </div>
                 <div class="field">
                     <label class="float-left">Room Name</label>
+                    {% if room %}
+                    <input id="room" name="room" placeholder={{room}}/>
+                    {% else %}
                     <input id="room" name="room" placeholder="Room"/>
+                    {% endif %}
                 </div>
             </div>
             <div><button id="btn-join" class="circular ui icon button">Join Virtue</button></div>

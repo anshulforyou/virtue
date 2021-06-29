@@ -353,8 +353,13 @@ function removeVideo(video){
     videoContainer.style.gridTemplateRows = 'repeat('+rows+', 1fr)';
     var allVideos = document.querySelectorAll('.video-style');
     for (x in allVideos){
-        allVideos[x].height = Math.floor(100/rows)*screen.height/100;
-        allVideos[x].width = Math.floor(100/columns)*screen.width/100;
+        if (innerElements == 1){
+            allVideos[x].height = 480;
+            allVideos[x].width = 620;
+        }else{
+            allVideos[x].height = Math.floor(100/rows)*screen.height/100;
+            allVideos[x].width = Math.floor(100/columns)*screen.width/100;
+        }
     }
 }
 

@@ -18,6 +18,7 @@ function blurMode(){
     // container.hidden = true;
     console.log('Blur animation on')
     blurBackground.hidden = false;
+    textWrapperBlur.hidden = false;
     textWrapperBlur.innerHTML = textWrapperBlur.textContent.replace(/\S/g, "<span class='letter' style='opacity:0'>$&</span>");
     setTimeout(()=>{
         anime.timeline({loop: false})
@@ -34,11 +35,10 @@ function blurMode(){
             translateY: [0,-100],
             opacity: [1,0],
             easing: "easeInExpo",
-            duration: 1000,
+            duration: 700,
             delay: (el, i) => 100 + 30 * i
         })
     }, 1000);
-    textWrapperBlur.hidden = false;
     setTimeout(()=>{
         blurBackground.hidden=true;
         textWrapperBlur.hidden=true;
@@ -49,6 +49,8 @@ function blurMode(){
 blurBtn.addEventListener('click', e=>{
     if (canvas.hidden){
         blurMode();
+        canvas.height = localVideo.height;
+        canvas.width = localVideo.width;
         localVideo.hidden = true;
         canvas.hidden = false;
         var tempStream = canvas.captureStream();
@@ -103,7 +105,7 @@ async function perform(net) {
 
         const backgroundBlurAmount = 6;
         const edgeBlurAmount = 2;
-        const flipHorizontal = false;
+        const flipHorizontal = true;
         bodyPix.drawBokehEffect(
             canvas, localVideo, segmentation, backgroundBlurAmount,
             edgeBlurAmount, flipHorizontal

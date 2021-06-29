@@ -57,3 +57,51 @@ setTimeout(()=>{
     xd.hidden=true;
     container.hidden=false;
 },5000)
+
+var modal = document.getElementById("myModal");
+ 
+var btn = document.getElementById("invite-button");
+
+var span = document.getElementsByClassName("close")[0];
+
+btn.onclick = function() {
+  modal.style.display = "block";
+}
+
+span.onclick = function() {
+  modal.style.display = "none";
+}
+
+window.onclick = function(event) {
+  if (event.target == modal) {
+    modal.style.display = "none";
+  }
+}
+
+var roomname = JSON.parse(document.getElementById('roomname').textContent);
+console.log(roomname);
+
+var invitationForm = document.getElementById('invitation-form');
+invitationForm.addEventListener('submit', function(event){
+    event.preventDefault();
+    invitePeople();
+});
+
+function invitePeople(){
+    console.log("invite people executed")
+    const XHR = new XMLHttpRequest();
+    var FD = new FormData(invitationForm);
+    FD.append('room', roomname);
+    for ( var pair of FD.entries()){
+        console.log(pair);
+    }
+    var success = document.querySelector('.success');
+    XHR.addEventListener("load", function(event){
+        success.hidden = false;
+    })
+    XHR.addEventListener("error", function(event){
+        console.log(event);
+    })
+    XHR.open("POST", "invite");
+    XHR.send(FD);
+}
