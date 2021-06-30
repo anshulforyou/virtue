@@ -22,21 +22,6 @@ const devices = {
     'audio':true
 };
 
-if(typeof(Storage)!=='undefined'){
-    try{
-        localVideo.muted = sessionStorage.getItem('audioMuted');
-        localVideo.hidden = sessionStorage.getItem('videoVisible');
-        console.log('value');
-    }
-    catch(error){
-        console.log('something');
-        sessionStorage.setItem('audioMuted', false);
-        sessionStorage.setItem('videoVisible', true);
-    }
-}else{
-    console.log('Browser is not supporting some features of the application');
-}
-
 const toggleAudioButton = document.querySelector('#toggle-audio-button');
 const toggleVideoButton = document.querySelector('#toggle-video-button');
 
@@ -56,8 +41,26 @@ var userMedia = navigator.mediaDevices.getUserMedia(devices)
         var videoTracks = localStream.getVideoTracks();
         // var deviceLabel = videoTracks[0]['label'];
 
-        audioTracks[0].enabled = true;
-        videoTracks[0].enabled = true;
+        // audioTracks[0].enabled = true;
+        // videoTracks[0].enabled = true;
+
+        if(typeof(Storage)!=='undefined'){
+            var tempAudio = sessionStorage.getItem('audioOn');
+            if (tempAudio == 'true') audioTracks[0].enabled = true;
+            else audioTracks[0].enabled = false;
+            
+            if (audioTracks[0].enabled) toggleAudioButton.innerHTML = "Mute";
+            else toggleAudioButton.innerHTML = "Unmute";
+            
+            var tempVideo = sessionStorage.getItem('videoVisible');
+            if (tempVideo == 'true') videoTracks[0].enabled = true;
+            else videoTracks[0].enabled = false;
+            
+            if (videoTracks[0].enabled)toggleVideoButton.innerHTML = "Video Off";
+            else toggleVideoButton.innerHTML = "Video On";
+        }else{
+            console.log('Browser is not supporting some features of the application');
+        }
 
         toggleAudioButton.addEventListener('click', () => {
             audioTracks[0].enabled = !audioTracks[0].enabled;
@@ -71,10 +74,10 @@ var userMedia = navigator.mediaDevices.getUserMedia(devices)
         toggleVideoButton.addEventListener('click', () => {
             videoTracks[0].enabled = !videoTracks[0].enabled;
             if (videoTracks[0].enabled){
-                toggleVideoButton.innerHTML = 'Video Mute';
+                toggleVideoButton.innerHTML = 'Video On';
                 return;
             }
-            toggleVideoButton.innerHTML = 'Video Unmute';
+            toggleVideoButton.innerHTML = 'Video Off';
         });
 
         webSocket = new WebSocket(endPoint);

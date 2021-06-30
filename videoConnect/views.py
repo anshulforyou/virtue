@@ -55,7 +55,8 @@ def invite(request):
         email = request.POST.get('email')
         room = request.POST.get('room')
         context = {
-            'email':email,
+            'room':room,
+            'username':request.session['authenticated_user'],
             'link':'/video?&room='+room
         }
         html_template = render_to_string('invite.html', context=context)

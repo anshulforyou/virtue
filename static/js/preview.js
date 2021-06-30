@@ -4,19 +4,24 @@ var micButton = document.getElementById('toggle-audio-button');
 var cameraButton = document.getElementById('toggle-video-button');
 
 if(typeof(Storage)!=='undefined'){
-    try{
-        localVideo.muted = sessionStorage.getItem('audioMuted');
-        localVideo.hidden = sessionStorage.getItem('videoVisible');
-        console.log('value');
-    }
-    catch(error){
-        console.log('something');
-        sessionStorage.setItem('audioMuted', false);
-        sessionStorage.setItem('videoVisible', true);
-    }
+    // try{
+    //     localVideo.muted = sessionStorage.getItem('audioMuted');
+    //     localVideo.hidden = sessionStorage.getItem('videoVisible');
+    //     console.log('value');
+    // }
+    // catch(error){
+    //     console.log('something');
+    //     sessionStorage.setItem('audioMuted', false);
+    //     sessionStorage.setItem('videoVisible', true);
+    // }
+    sessionStorage.setItem('audioOn', true);
+    sessionStorage.setItem('videoVisible', true);
 }else{
     console.log('Browser is not supporting some features of the application');
 }
+
+// sessionStorage.setItem('audioMuted', false);
+// sessionStorage.setItem('videoVisible', true);
 
 cameraButton.addEventListener('click', () => {
     if (localVideo.hidden){
@@ -33,11 +38,11 @@ cameraButton.addEventListener('click', () => {
 micButton.addEventListener('click', () => {
     if (localVideo.muted){
         localVideo.muted = false;
-        sessionStorage.setItem('audioMuted', false);
+        sessionStorage.setItem('audioOn', true);
         micButton.innerHTML = 'Mute';
     }else{
         localVideo.muted = true;
-        sessionStorage.setItem('audioMuted', true);
+        sessionStorage.setItem('audioOn', false);
         micButton.innerHTML = 'Unmute';
     }
 })
