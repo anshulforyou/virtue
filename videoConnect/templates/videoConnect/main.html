@@ -16,10 +16,10 @@
     <!-- JavaScript Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="{% static 'css/semantic.min.css' %}">
 
     <script type="text/javascript" src="{% static 'js/semantic.min.js' %}"></script>
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/2.0.2/anime.min.js"></script>
 </head>
 <body>
@@ -27,31 +27,34 @@
         <div id="video-box" style="
             grid-template-columns: repeat(1, 1fr);">
             <div id="inner">
-                <video id="local-video" class="video-style" height="480px" width="620px" autoplay playsinline></video>
+                <video id="local-video" class="video-style" height="480px" width="780px" autoplay playsinline></video>
                 <canvas hidden id="blur-canvas"></canvas>
             </div>
-            <div class="video-buttons">
-                <div style="position: relative;left: -50%;">
-                    <button id = "toggle-audio-button" class="circular ui icon button">Mute</button>
-                    <button id = "toggle-video-button" class="circular ui icon button">Video off</button>
-                    <a href="/video"><button id = "disconnect-button" class="circular ui icon button btn-danger">Disconnect</button></a>
-                    <button id = "btn-share-screen" class="circular ui icon button">Share Screen</button>
-                    <button type="button" id = "multiple-cameras-button" class="circular ui icon button">God's eye</button>
-                    <button id = "toggle-blur-mode" class="circular ui icon button">Blur Video</button>
-                    <button id = "invite-button" class="circular ui icon button">Invite</button>
-                </div>
+        </div>
+        <div class="video-buttons">
+            <div>
+                <button id = "toggle-audio-button" class="circular ui icon button">Mute</button>
+                <button id = "toggle-video-button" class="circular ui icon button">Video off</button>
+                <a href="/video"><button id = "disconnect-button" class="circular ui icon button btn-danger">Disconnect</button></a>
+                <button id = "btn-share-screen" class="circular ui icon button">Share Screen</button>
+                <button type="button" id = "multiple-cameras-button" class="circular ui icon button">God's eye</button>
+                <button id = "toggle-blur-mode" class="circular ui icon button">Blur Video</button>
+                <button id = "invite-button" class="circular ui icon button">Invite</button>
             </div>
         </div>
         <button class="openbtn circular ui icon button" onclick="openNav()">Chat</button>
         <div id = "chat" class='sidepanel'>
             <h3>Chat Messages</h3>
             <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+            
             <div id = "messages">
                 <ul id = "message-list"></ul>
             </div>
-        
+            
             <div class='field send-message'>
-                <input id = "message" maxlength="100" style="width: 70%;"/><button id="send-msg-button" class="ui icon button">Send</button>
+                <input id = "message" maxlength="100"/><button id="send-msg-button"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right-circle-fill" viewBox="0 0 16 16">
+                    <path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0zM4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H4.5z"/>
+                  </svg></button>
             </div>
         </div>
     </div>
@@ -70,7 +73,7 @@
     <div id="myModal" class="modal">
 
         <!-- Modal content -->
-        <div class="modal-content">
+        <div class="modal-content modal-lg">
             <div class="modal-header">
                 <h2 class="modal-title">Invite people</h2>
                 <span class="close">&times;</span>

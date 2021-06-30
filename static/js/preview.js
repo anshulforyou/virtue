@@ -23,40 +23,39 @@ if(typeof(Storage)!=='undefined'){
 // sessionStorage.setItem('audioMuted', false);
 // sessionStorage.setItem('videoVisible', true);
 
-cameraButton.addEventListener('click', () => {
-    if (localVideo.hidden){
-        localVideo.hidden = false;
-        sessionStorage.setItem('videoVisible',true);
-        cameraButton.innerHTML = 'Video off';
-    }else{
-        localVideo.hidden = true;
-        sessionStorage.setItem('videoVisible',false);
-        cameraButton.innerHTML = 'Video on';
-    }
-})
-
-micButton.addEventListener('click', () => {
-    if (localVideo.muted){
-        localVideo.muted = false;
-        sessionStorage.setItem('audioOn', true);
-        micButton.innerHTML = 'Mute';
-    }else{
-        localVideo.muted = true;
-        sessionStorage.setItem('audioOn', false);
-        micButton.innerHTML = 'Unmute';
-    }
-})
-
-
 const devices = {
     'video':true,
-    // 'audio':true
+    'audio':true
 };
 
 navigator.mediaDevices.getUserMedia(devices)
     .then(incomingStream =>{
         console.log(incomingStream);
         localVideo.srcObject = incomingStream;
+        var audioTracks = incomingStream.getAudioTracks();
+        var videoTracks = incomingStream.getVideoTracks();
+
+        cameraButton.addEventListener('click', () => {
+            videoTracks[0].enabled = !videoTracks[0].enabled;
+            if (videoTracks[0].enabled){
+                cameraButton.innerHTML = 'Video off';
+                sessionStorage.setItem('videoVisible', true);
+                return;
+            }
+            cameraButton.innerHTML = 'Video on';
+            sessionStorage.setItem('videoVisible', false);
+        })
+
+        micButton.addEventListener('click', () => {
+            audioTracks[0].enabled = !audioTracks[0].enabled;
+            if (audioTracks[0].enabled){
+                micButton.innerHTML = 'Mute';
+                sessionStorage.setItem('audioOn', true);
+                return;
+            }
+            micButton.innerHTML = 'Unmute';
+            sessionStorage.setItem('audioOn', false);
+        })
     })
 
 localVideo.onplaying = () => {
