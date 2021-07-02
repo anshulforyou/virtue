@@ -1,5 +1,5 @@
 aioredis==1.3.1
-asgiref @ file:///tmp/build/80754af9/asgiref_1617740417847/work
+asgiref
 async-timeout==3.0.1
 attrs==21.2.0
 autobahn==21.3.1
@@ -11,21 +11,21 @@ channels-redis==3.2.0
 constantly==15.1.0
 cryptography==3.4.7
 daphne==3.0.2
-Django @ file:///tmp/build/80754af9/django_1622711766781/work
+Django
 hiredis==2.0.0
 hyperlink==21.0.0
 idna==3.2
 incremental==21.3.0
 msgpack==1.0.2
-psycopg2 @ file:///C:/ci/psycopg2_1612298766762/work
+psycopg2
 pyasn1==0.4.8
 pyasn1-modules==0.2.8
 pycparser==2.20
 pyOpenSSL==20.0.1
-pytz @ file:///tmp/build/80754af9/pytz_1612215392582/work
+pytz
 service-identity==21.1.0
 six==1.16.0
-sqlparse @ file:///tmp/build/80754af9/sqlparse_1602184451250/work
+sqlparse
 Twisted==21.2.0
 twisted-iocpsupport==1.0.1
 txaio==21.2.1
