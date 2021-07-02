@@ -153,8 +153,17 @@ disconnect.addEventListener('click', () => {
     sendSignal('close', {});
 })
 
+var servers = {
+    config : {
+        iceServers:[
+            {urls:'stun:stun.l.google.com:19302'},
+            {urls: 'turn:65.2.87.14:3478?transport=tcp', credential:'anshul@123', username:'virtue'}
+        ]
+    }
+}
+
 function createOfferer(peerUsername, receiver_channel_name){
-    var peer = new RTCPeerConnection(null);
+    var peer = new RTCPeerConnection(servers);
     addLocalInputs(peer);
 
     var channelFormed = peer.createDataChannel('channel');
@@ -205,7 +214,7 @@ function createOfferer(peerUsername, receiver_channel_name){
 }
 
 function createReceiver(offer, peerUsername, receiver_channel_name){
-    var peer = new RTCPeerConnection(null);
+    var peer = new RTCPeerConnection(servers);
     addLocalInputs(peer);
     console.log(peer);
     var remoteVideo = createVideo(peerUsername);
@@ -326,20 +335,69 @@ function createVideo(peerUsername){
     videoWrapper.appendChild(remoteVideo);
 
     var innerElements = document.querySelectorAll('#inner').length;
-    var columns = innerElements % 3;
-    if (columns ==0)columns = 3;
-    var rows = Math.ceil(innerElements / 3);
-    console.log(columns);
-    console.log(rows);
+    var layout = decideLayout(innerElements);
+    var columns = layout[1];
+    var rows = layout[0];
+    var extras = layout[2];
     videoContainer.style.gridTemplateColumns = 'repeat('+columns+', 1fr)';
     videoContainer.style.gridTemplateRows = 'repeat('+rows+', 1fr)';
     var allVideos = document.querySelectorAll('.video-style');
-    for (x in allVideos){
-        allVideos[x].height = Math.floor(100/rows)*screen.height/100;
-        allVideos[x].width = Math.floor(100/columns)*screen.width/100;
+    for (var x = 0;x<allVideos.length; x++){
+        allVideos[x].height = Math.floor(100/(rows+1))*screen.height/100;
+        allVideos[x].width = Math.floor(100/columns)*(screen.width-screen.width*0.1)/100;
+        if(innerElements>2){
+            var ab = allVideos[x].parentElement;
+            ab.style.setProperty('grid-area', 'initial');
+        }
     }
-
+    for(var x = allVideos.length - extras; x<allVideos.length; x++){
+        if (extras==1){
+            if (rows==2){
+                var ab = allVideos[x].parentElement;
+                ab.style.gridArea = "2 / 1 / span 1 / span 2";
+            }else if (rows==3){
+                var ab = allVideos[x].parentElement;
+                ab.style.gridArea = "3 / 1/ span 1/ span 3";
+            }
+        }else if(extras == 2){
+            if(rows ==2){
+                var ab = allVideos[x].parentElement;
+                if ( x == allVideos.length-2)ab.style.gridArea = "2/1/span 1/ span 2";
+                else ab.style.gridArea = "2/2/span 1/span 2";
+            }else if(rows == 3){
+                var ab = allVideos[x].parentElement;
+                if ( x == allVideos.length-2) ab.style.gridArea = "3/1/span 1/ span 2";
+                else ab.style.gridArea = "3/2/span 1/ span 2";
+            }
+        }
+    }
     return remoteVideo;
+}
+
+function decideLayout(n){
+    maxParticipants = 9;
+    rows = 3;
+    columns = 3;
+    extras = 0;
+    if (n<=maxParticipants){
+        if(n==1){
+            rows=1
+            columns=1
+        }
+        else if(n==2){
+            rows =1;
+            columns =2;
+        }else if(n<=4 && n>2){
+            rows = 2;
+            columns = 2;
+            extras = 4-n;
+        }else if(n<=9){
+            rows=3;
+            columns=3;
+            extras = 9-n;
+        }
+    }
+    return [rows, columns, extras];
 }
 
 function removeVideo(video){
@@ -347,23 +405,57 @@ function removeVideo(video){
     var videoWrapper = video.parentNode;
     videoWrapper.parentNode.removeChild(videoWrapper);
     var innerElements = document.querySelectorAll('#inner').length;
-    var columns = innerElements % 3;
-    if (columns ==0)columns = 3;
-    var rows = Math.ceil(innerElements / 3);
-    console.log(columns);
-    console.log(rows);
+    var layout = decideLayout(innerElements);
+    var columns = layout[1];
+    var rows = layout[0];
+    var extras = layout[2];
     videoContainer.style.gridTemplateColumns = 'repeat('+columns+', 1fr)';
     videoContainer.style.gridTemplateRows = 'repeat('+rows+', 1fr)';
     var allVideos = document.querySelectorAll('.video-style');
-    for (x in allVideos){
-        if (innerElements == 1){
-            allVideos[x].height = 480;
-            allVideos[x].width = 620;
-        }else{
-            allVideos[x].height = Math.floor(100/rows)*screen.height/100;
-            allVideos[x].width = Math.floor(100/columns)*screen.width/100;
+    for ( var x =0; x< allVideos.length;x++){
+        allVideos[x].height = Math.floor(100/(rows+1))*screen.height/100;
+        allVideos[x].width = Math.floor(100/columns)*(screen.width-screen.width*0.1)/100;
+        var ab = allVideos[x].parentElement;
+        ab.style.setProperty('grid-area', 'initial');
+    }
+    for(var x = allVideos.length - extras; x<allVideos.length; x++){
+        if (extras==1){
+            if (rows==2){
+                var ab = allVideos[x].parentElement;
+                ab.style.gridArea = "2 / 1 / span 1 / span 2";
+            }else if (rows==3){
+                var ab = allVideos[x].parentElement;
+                ab.style.gridArea = "3 / 1 / span 1 / span 3";
+            }
+        }else if(extras == 2){
+            if(rows ==2){
+                var ab = allVideos[x].parentElement;
+                if ( x == allVideos.length-2)ab.style.gridArea = "2/1/span 1/ span 2";
+                else ab.style.gridArea = "2/2/span 1/span 2";
+            }else if(rows == 3){
+                var ab = allVideos[x].parentElement;
+                if ( x == allVideos.length-2) ab.style.gridArea = "3/1/span 1/ span 2";
+                else ab.style.gridArea = "3/2/span 1/ span 2";
+            }
         }
     }
+    // var columns = innerElements % 3;
+    // if (columns ==0)columns = 3;
+    // var rows = Math.ceil(innerElements / 3);
+    // console.log(columns);
+    // console.log(rows);
+    // videoContainer.style.gridTemplateColumns = 'repeat('+columns+', 1fr)';
+    // videoContainer.style.gridTemplateRows = 'repeat('+rows+', 1fr)';
+    // var allVideos = document.querySelectorAll('.video-style');
+    // for (x in allVideos){
+    //     if (innerElements == 1){
+    //         // allVideos[x].height = 480;
+    //         allVideos[x].width = 780;
+    //     }else{
+    //         // allVideos[x].height = Math.floor(100/rows)*screen.height/100;
+    //         allVideos[x].width = Math.floor(100/columns)*screen.width/100;
+    //     }
+    // }
 }
 
 function getDataChannels(){

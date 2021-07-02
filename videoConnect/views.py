@@ -29,7 +29,7 @@ def preview(request):
                     room = room,
                     username = username
                 )
-                return redirect('main/'+roomName+'?&username='+username)
+                return redirect('room/'+roomName+'?&username='+username)
             else:
                 context = {
                     'error':'User with this username already exists in this room'
@@ -51,18 +51,23 @@ def preview(request):
         return render(request, 'videoConnect/preview.html', context=context)
 
 def invite(request):
-    if request.method == 'POST':
-        email = request.POST.get('email')
-        room = request.POST.get('room')
-        context = {
-            'room':room,
-            'username':request.session['authenticated_user'],
-            'link':'/video?&room='+room
-        }
-        html_template = render_to_string('invite.html', context=context)
-        send_mail(
-            subject="[Virtue] "+request.session['authenticated_user']+" invited you to join the meeting",
-            message="",
-            from_email = settings.EMAIL_ADDRESS,
-            recipient_list=[email], html_message=html_template
-        )
+    print("hello")
+    # if request.method == 'POST':
+    email = request.POST.get('email')
+    room = request.POST.get('room')
+    print(email)
+    print(room)
+    context = {
+        'room':room,
+        'username':request.session['authenticated_user'],
+        'link':'/video?&room='+room
+    }
+    html_template = render_to_string('email/invite.html', context=context)
+    print(html_template)
+    send_mail(
+        subject="[Virtue] "+request.session['authenticated_user']+" invited you to join the meeting",
+        message="",
+        from_email = settings.EMAIL_ADDRESS,
+        recipient_list=[email], html_message=html_template
+    )
+    return 10

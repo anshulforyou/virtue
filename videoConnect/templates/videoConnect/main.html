@@ -25,9 +25,11 @@
 <body>
     <div id='main-screen' hidden>
         <div id="video-box" style="
-            grid-template-columns: repeat(1, 1fr);">
+            grid-template-columns: repeat(1, 1fr);
+            grid-template-rows: repeat(1, 1fr);
+            height: 90%;">
             <div id="inner">
-                <video id="local-video" class="video-style" height="480px" width="780px" autoplay playsinline></video>
+                <video id="local-video" class="video-style" autoplay playsinline></video>
                 <canvas hidden id="blur-canvas"></canvas>
             </div>
         </div>
@@ -85,7 +87,7 @@
                         <label>Email</label>
                         <input type="email" id='email' name = "email" placeholder="Email">
                     </div>
-                    <div class="ui success message" hidden>
+                    <div id="modal-success" class="ui success message" hidden>
                         <div class="header">Invitation Sent!</div>
                         <p>We have sent the invitation on this email. You can expect the guests anytime.</p>
                     </div>

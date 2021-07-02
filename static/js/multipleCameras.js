@@ -22,7 +22,7 @@ function godEyeAnime(){
             opacity: [0,1],
             easing: "easeOutExpo",
             duration: 800,
-            delay: (el, i) => 300 + 30 * i
+            // delay: (el, i) => 300 + 30 * i
         }).add({
             targets: '.gods-eye .letter',
             translateY: [0,-100],
@@ -110,10 +110,18 @@ async function createFaceDetect(label){
     remoteVideo.style.height = 0;
     
     var videoWrapper = document.createElement('div');
+    videoWrapper.style.width = 0;
     videoContainer.appendChild(videoWrapper);
     videoWrapper.appendChild(remoteVideo);
 
     return remoteVideo;
+}
+
+function removeCamera(){
+    for (var x =0;x<cameras.length;x++){
+        var cam = document.getElementById(cameras[x]['deviceId']);
+        cam.parentElement.remove();
+    }
 }
 
 async function enableCam(event) {
@@ -123,7 +131,7 @@ async function enableCam(event) {
     }
     for (let i=0;i<cameras.length;i++){
         videoElement = await createFaceDetect(cameras[i]['deviceId']);
-        console.log(videoElement);
+        // console.log(videoElement);
         await navigator.mediaDevices.getUserMedia({
             video:{
                 deviceId : {exact:cameras[i]['deviceId']}
@@ -131,7 +139,7 @@ async function enableCam(event) {
         })
         .then(function(stream){
             videoElement.srcObject = stream;
-            console.log(videoElement);
+            // console.log(videoElement);
             // videoElement.addEventListener('loadeddata', main(cameras[i]['deviceId']));
             videoElement.onloadeddata = (event) =>{
                 main(cameras[i]['deviceId'], i);
@@ -156,30 +164,34 @@ async function main(deviceLabel, t) {
       for (let i = 0; i < predictions.length; i++) {
         const keypoints = predictions[i].scaledMesh;
         
-        console.log("Camera: "+t);
+        // console.log("Camera: "+t);
         const nose = await addPoints(keypoints[6], keypoints[197], keypoints[195], keypoints[5], keypoints[4]);
-        console.log("Camera: "+t+" :"+nose);
+        // console.log("Camera: "+t+" :"+nose);
         if (nose[0]>280 && nose[0]<400){
-            console.log("User is facing camera "+t);
-            localVideo.srcObject = videoEle.srcObject;
-            broadcastingStream = videoEle.srcObject;
-            var localVideoTrack = videoEle.srcObject.getVideoTracks()[0];
-            console.log(peerIndex);
+            // console.log("User is facing camera "+t);
+            if(localVideo.srcObject!=videoEle.srcObject){
+                localVideo.srcObject = videoEle.srcObject;
+                broadcastingStream = videoEle.srcObject;
+                var localVideoTrack = videoEle.srcObject.getVideoTracks()[0];
+                // console.log(peerIndex);
 
-            if (Object.keys(peerIndex).length>0){
-                for (let x in peerIndex){
-                    var sender = peerIndex[x][0].getSenders().find(function(s){
-                        return s.track.kind == localVideoTrack.kind;
-                    })
-                    console.log('Found sender: ', sender);
-                    sender.replaceTrack(localVideoTrack);
+                if (Object.keys(peerIndex).length>0){
+                    for (let x in peerIndex){
+                        var sender = peerIndex[x][0].getSenders().find(function(s){
+                            return s.track.kind == localVideoTrack.kind;
+                        })
+                        // console.log('Found sender: ', sender);
+                        sender.replaceTrack(localVideoTrack);
+                    }
                 }
             }
         }
       }
     }
     if (multipleCamerasButton.innerHTML == 'Turn off'){
-        setTimeout(() => {main(deviceLabel, t);}, 5000)
+        setTimeout(() => {main(deviceLabel, t);}, 3000)
+    }else{
+        removeCamera();
     }
   }
 

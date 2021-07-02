@@ -95,9 +95,10 @@ function invitePeople(){
     for ( var pair of FD.entries()){
         console.log(pair);
     }
-    var success = document.querySelector('.success');
+    var success = document.getElementById("modal-success");
     XHR.addEventListener("load", function(event){
         success.hidden = false;
+        console.log(event)
     })
     XHR.addEventListener("error", function(event){
         console.log(event);
