@@ -28,3 +28,13 @@ In my engage app, there are meeting rooms where every user has an username. In a
 self.channel_layer.group_send send the message to all the channels(users) in the group
 
 The message sent by send_sdp function in consumer.py is what received by websocketManager
+
+# error on aws
+
+    - cat /var/log/gunicorn/gunicorn.err.log
+    - cat /var/log/gunicorn/gunicorn.out.log
+
+# On changes to code How to update AWS
+
+    $ sudo service nginx restart
+    $ sudo supervisorctl reload

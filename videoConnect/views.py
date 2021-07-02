@@ -60,7 +60,7 @@ def invite(request):
     context = {
         'room':room,
         'username':request.session['authenticated_user'],
-        'link':'/video?&room='+room
+        'link':'/?&room='+room
     }
     html_template = render_to_string('email/invite.html', context=context)
     print(html_template)
