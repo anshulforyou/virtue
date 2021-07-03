@@ -10,7 +10,7 @@ class VideoConsumer(AsyncWebsocketConsumer):
     async def connect(self):
         # self.room_group_name = 'room101'
         self.room_group_name = self.scope['url_route']['kwargs']['room']
-        
+        print(self.room_group_name)
         await self.get_room(self.room_group_name, self.scope['session']['authenticated_user'])
 
         await self.channel_layer.group_add(
