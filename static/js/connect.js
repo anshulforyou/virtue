@@ -8,7 +8,7 @@ if(loc.protocol == 'https:'){
     wsStart = 'wss://';
 }
 
-var endPoint = wsStart + loc.host + loc.pathname+'/';
+var endPoint = wsStart + loc.host+":8001" + loc.pathname+'/';
 var peerIndex = {}
 
 console.log('endPoint: ', endPoint);
