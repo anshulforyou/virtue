@@ -71,9 +71,9 @@ $('#multiple-cameras-button').popover({
 
 if (getUserMediaSupported()) {
     multipleCamerasButton.addEventListener('click',(e) =>{
-        if (multipleCamerasButton.innerHTML == "God\'s eye"){
+        if (multipleCamerasButton.innerHTML == "<i class='bi bi-eye-fill'></i>"){
             if(cameras.length>1){
-                multipleCamerasButton.innerHTML = 'Turn off';
+                multipleCamerasButton.innerHTML = "<i class='bi bi-eye-slash-fill'></i>";
                 godEyeAnime();
                 enableCam(e);
             }else{
@@ -81,8 +81,8 @@ if (getUserMediaSupported()) {
                 $('#multiple-cameras-button').popover('show');
                 setTimeout(()=>{$('#multiple-cameras-button').popover('hide');}, 2000)
             }
-        }else if(multipleCamerasButton.innerHTML == 'Turn off'){
-            multipleCamerasButton.innerHTML = "God\'s eye";
+        }else if(multipleCamerasButton.innerHTML == "<i class='bi bi-eye-slash-fill'></i>"){
+            multipleCamerasButton.innerHTML = "<i class='bi bi-eye-fill'></i>";
             localVideo.srcObject = localStream;
             var localVideoTrack2 = localStream.getVideoTracks()[0];
             if (Object.keys(peerIndex).length>0){

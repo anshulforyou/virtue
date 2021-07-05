@@ -28,7 +28,8 @@ const toggleVideoButton = document.querySelector('#toggle-video-button');
 // console.log(navigator.mediaDevices.enumerateDevices());
 
 var localVideo = document.getElementById('local-video');
-
+localVideo.width = screen.width*0.8;
+localVideo.height = screen.height*0.7;
 var userMedia = navigator.mediaDevices.getUserMedia(devices)
     .then(incomingStream =>{
         console.log(incomingStream);
@@ -49,15 +50,15 @@ var userMedia = navigator.mediaDevices.getUserMedia(devices)
             if (tempAudio == 'true') audioTracks[0].enabled = true;
             else audioTracks[0].enabled = false;
             
-            if (audioTracks[0].enabled) toggleAudioButton.innerHTML = "Mute";
-            else toggleAudioButton.innerHTML = "Unmute";
+            if (audioTracks[0].enabled) toggleAudioButton.innerHTML = "<i class='microphone slash icon'></i>";
+            else toggleAudioButton.innerHTML = "<i class='microphone icon'></i>";
             
             var tempVideo = sessionStorage.getItem('videoVisible');
             if (tempVideo == 'true') videoTracks[0].enabled = true;
             else videoTracks[0].enabled = false;
             
-            if (videoTracks[0].enabled)toggleVideoButton.innerHTML = "Video Off";
-            else toggleVideoButton.innerHTML = "Video On";
+            if (videoTracks[0].enabled)toggleVideoButton.innerHTML = "<i class='video slash icon'></i>";
+            else toggleVideoButton.innerHTML = "<i class='video icon'></i>";
         }else{
             console.log('Browser is not supporting some features of the application');
         }
@@ -65,19 +66,19 @@ var userMedia = navigator.mediaDevices.getUserMedia(devices)
         toggleAudioButton.addEventListener('click', () => {
             audioTracks[0].enabled = !audioTracks[0].enabled;
             if (audioTracks[0].enabled){
-                toggleAudioButton.innerHTML = 'Mute';
+                toggleAudioButton.innerHTML = "<i class='microphone slash icon'></i>";
                 return;
             }
-            toggleAudioButton.innerHTML = 'Unmute';
+            toggleAudioButton.innerHTML = "<i class='microphone mic'></i>";
         });
 
         toggleVideoButton.addEventListener('click', () => {
             videoTracks[0].enabled = !videoTracks[0].enabled;
             if (videoTracks[0].enabled){
-                toggleVideoButton.innerHTML = 'Video On';
+                toggleVideoButton.innerHTML = "<i class='video slash icon'></i>";
                 return;
             }
-            toggleVideoButton.innerHTML = 'Video Off';
+            toggleVideoButton.innerHTML = "<i class='video icon'></i>";
         });
 
         webSocket = new WebSocket(endPoint);
@@ -345,6 +346,8 @@ function createVideo(peerUsername){
     for (var x = 0;x<allVideos.length; x++){
         allVideos[x].height = Math.floor(100/(rows+1))*screen.height/100;
         allVideos[x].width = Math.floor(100/columns)*(screen.width-screen.width*0.1)/100;
+        console.log(allVideos[x].width);
+        console.log(allVideos[x].height);
         if(innerElements>2){
             var ab = allVideos[x].parentElement;
             ab.style.setProperty('grid-area', 'initial');

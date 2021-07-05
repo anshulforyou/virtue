@@ -71,16 +71,31 @@ html{
   transform: scaleX(-1);
 }
 
+.buttons-layout{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
 .video-buttons{
   position: absolute;
   bottom: 0;
-  width: 100%;
+  width: 70%;
   /* height: 15%; */
-  /* background-color: #e8c3b9; */
+  background-color: #a5b1cb;
   text-align: center;
   /* padding-top: 30px; */
-  padding-bottom: 1%;
+  /* padding-bottom: 1%; */
+  padding:10px;
+  margin-bottom: 10px;
   z-index: 100;
+  border-radius: 10px;
+}
+
+.button-div{
+  display: inline-block;
+  margin: 0 10px 0 10px;
+  font-family: 'Lato', sans-serif;
 }
 
 .sidepanel {

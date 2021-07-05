@@ -9,7 +9,7 @@
 
     <!-- CSS only -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
     crossorigin="anonymous"></script>
 
@@ -17,10 +17,18 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
-    <link rel="stylesheet" href="{% static 'css/semantic.min.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" integrity="sha512-8bHTC73gkZ7rZ7vpqUQThUDhqcNFyYi2xgDgPDHc+GXVGHXq+xPjynxIopALmOPqzo9JZj0k6OqqewdGO3EsrQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- <link rel="stylesheet" href="{% static 'css/semantic.min.css' %}"> -->
 
-    <script type="text/javascript" src="{% static 'js/semantic.min.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js" integrity="sha512-dqw6X88iGgZlTsONxZK9ePmJEFrmHwpuMrsUChjAw1mRUhUITE5QU9pkcSox+ynfLhL15Sv2al5A0LVyDCmtUw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/components/icon.min.css" integrity="sha512-8Tb+T7SKUFQWOPIQCaLDWWe1K/SY8hvHl7brOH8Nz5z1VT8fnf8B+9neoUzmFY3OzkWMMs3OjrwZALgB1oXFBg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- <script type="text/javascript" src="{% static 'js/semantic.min.js' %}"></script> -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/2.0.2/anime.min.js"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@700&display=swap" rel="stylesheet">
+
 </head>
 <body>
     <div id='main-screen' hidden>
@@ -33,18 +41,44 @@
                 <canvas hidden id="blur-canvas"></canvas>
             </div>
         </div>
+        <div class="buttons-layout">
         <div class="video-buttons">
             <div>
-                <button id = "toggle-audio-button" class="circular ui icon button">Mute</button>
-                <button id = "toggle-video-button" class="circular ui icon button">Video off</button>
-                <a href="/"><button id = "disconnect-button" class="circular ui icon button btn-danger">Disconnect</button></a>
-                <button id = "btn-share-screen" class="circular ui icon button">Share Screen</button>
-                <button type="button" id = "multiple-cameras-button" class="circular ui icon button">God's eye</button>
-                <button id = "toggle-blur-mode" class="circular ui icon button">Blur Video</button>
-                <button id = "invite-button" class="circular ui icon button">Invite</button>
+                <div class="button-div">
+                    <button id = "toggle-audio-button" class="circular ui icon button"><i class="microphone icon"></i></button>
+                    <p>Mic</p>
+                </div>
+                <div class="button-div">
+                    <button id = "toggle-video-button" class="circular ui icon button"><i class="bi bi-camera-video"></i></button>
+                    <p>Cam</p>
+                </div>
+                <div class="button-div">
+                    <a href="/"><button id = "disconnect-button" class="circular ui icon button"><i class="bi bi-x-square-fill"></i></button></a>
+                    <p>Leave</p>
+                </div>
+                <div class="button-div">
+                    <button id = "btn-share-screen" class="circular ui icon button"><i class="bi bi-display-fill"></i></button>
+                    <p>Share</p>
+                </div>
+                <div class="button-div">
+                    <button type="button" id = "multiple-cameras-button" class="circular ui icon button"><i class="bi bi-eye-fill"></i></button>
+                    <p>God's Eye</p>
+                </div>
+                <div class="button-div">
+                    <button id = "toggle-blur-mode" class="circular ui icon button"><svg width="20" height="18" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="esA2k"><g transform="translate(3 3)"><path d="M6.65 0L0 6.65V4.53L4.53 0H6.65ZM0 0V1.74L1.74 0H0ZM13.17 3.42L16.59 0H14.47L12.05 2.42C12.46 2.7 12.84 3.04 13.17 3.42ZM4.42 10.04L2.5 11.97C3.38 11.56 4.28 11.22 5.21 10.98C4.91 10.7 4.65 10.38 4.42 10.04ZM14.5 7.04L18 3.54V1.41L14.2 5.21C14.39 5.77 14.5 6.37 14.5 6.99C14.5 7.01 14.5 7.02 14.5 7.04ZM10.04 1.6L11.64 0H9.52L7.9 1.61C8.26 1.54 8.62 1.5 9 1.5C9.35 1.5 9.7 1.54 10.04 1.6ZM3.61 5.9L0 9.51V11.63L3.6 8.03C3.54 7.7 3.5 7.35 3.5 7C3.5 6.62 3.54 6.26 3.61 5.9ZM17.73 13.7L18 13.44V11.32L16.7 12.62C17.11 12.92 17.45 13.29 17.73 13.7ZM18 8.49V6.36L13.24 11.12C13.77 11.27 14.3 11.45 14.82 11.66L18 8.49ZM5 7C5 4.79 6.79 3 9 3C11.21 3 13 4.79 13 7C13 9.21 11.21 11 9 11C6.79 11 5 9.21 5 7ZM7 7C7 8.1 7.9 9 9 9C10.1 9 11 8.1 11 7C11 5.9 10.1 5 9 5C7.9 5 7 5.9 7 7ZM17 16.22V18H1V16.22C1 15.1 1.61 14.07 2.61 13.56C4.29 12.7 6.47 12 9 12C11.53 12 13.71 12.7 15.39 13.56C16.39 14.07 17 15.1 17 16.22ZM14.98 16C14.92 15.71 14.74 15.47 14.48 15.34C13.29 14.73 11.37 14 9 14C6.63 14 4.71 14.73 3.52 15.34C3.26 15.47 3.08 15.72 3.02 16H14.98Z"></path></g></svg></button>
+                    <p>Blur</p>
+                </div>
+                <div class="button-div">
+                    <button id = "invite-button" class="circular ui icon button"><i class="bi bi-person-plus-fill"></i></button>
+                    <p>Invite</p>
+                </div>
             </div>
         </div>
-        <button class="openbtn circular ui icon button" onclick="openNav()">Chat</button>
+        </div>
+        <div class="button-div">
+            <button class="openbtn circular ui icon button" onclick="openNav()"><i class="bi bi-chat-square-quote-fill"></i></button>
+            <p>Chat</p>
+        </div>
         <div id = "chat" class='sidepanel'>
             <h3>Chat Messages</h3>
             <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>

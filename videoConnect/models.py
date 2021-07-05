@@ -27,3 +27,7 @@ class userRoomRelationship(models.Model):
     class Meta:
         unique_together = ('room', 'username')
         ordering = ['-dateCreated']
+
+class messageUserRelationship(models.Model):
+    room = models.ForeignKey(rooms, on_delete=models.CASCADE)
+    

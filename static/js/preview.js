@@ -25,7 +25,7 @@ if(typeof(Storage)!=='undefined'){
 
 const devices = {
     'video':true,
-    'audio':true
+    // 'audio':true
 };
 
 navigator.mediaDevices.getUserMedia(devices)
