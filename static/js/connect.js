@@ -1,5 +1,5 @@
-var username = JSON.parse(document.getElementById('passed').textContent);
-console.log(username);
+var email = JSON.parse(document.getElementById('passed').textContent);
+console.log(email);
 
 var loc = window.location;
 var wsStart = 'ws://';
@@ -8,7 +8,7 @@ if(loc.protocol == 'https:'){
     wsStart = 'wss://';
 }
 
-var endPoint = wsStart + loc.host+":8001" + loc.pathname+'/';
+var endPoint = wsStart + loc.host +"room/"+roomsecret+'/';
 var peerIndex = {}
 
 console.log('endPoint: ', endPoint);
@@ -106,32 +106,32 @@ var userMedia = navigator.mediaDevices.getUserMedia(devices)
 
 function webSocketManager(event){
     var parsedData = JSON.parse(event.data);
-    var peerUsername = parsedData['peer'];  //username of the user from which the signal came
+    var peerEmail = parsedData['peer'];  //email of the user from which the signal came
     var action = parsedData['action'];
     console.log(action);
-    console.log(peerUsername);
+    console.log(peerEmail);
 
-    if (username == peerUsername){
+    if (email == peerEmail){
         console.log("Function is returned from here");
         return;
     }
 
     var receiver_channel_name = parsedData['keyword']['receiver_channel_name'];
     if(action == 'new-join'){
-        createOfferer(peerUsername, receiver_channel_name);
+        createOfferer(peerEmail, receiver_channel_name);
         return;
     }
 
     if (action == 'new-offer'){
         var offer = parsedData['keyword']['sdp'];
-        createReceiver(offer, peerUsername, receiver_channel_name);
+        createReceiver(offer, peerEmail, receiver_channel_name);
         return;
     }
 
     if (action == 'new-answer'){
         var answer = parsedData['keyword']['sdp'];
-        var peer = peerIndex[peerUsername][0];
-        var temp = document.getElementById(peerUsername+'-video');
+        var peer = peerIndex[peerEmail][0];
+        var temp = document.getElementById(peerEmail+'-video');
         setOnTrack(peer, temp);
         peer.setRemoteDescription(answer);
         return;
@@ -141,7 +141,7 @@ function webSocketManager(event){
 
 function sendSignal(action, keyword){
     var jsonStr = JSON.stringify({
-        'peer':username,
+        'peer':email,
         'action':action,
         'keyword':keyword,
     });
@@ -163,7 +163,7 @@ var servers = {
     }
 }
 
-function createOfferer(peerUsername, receiver_channel_name){
+function createOfferer(peerEmail, receiver_channel_name){
     var peer = new RTCPeerConnection(servers);
     addLocalInputs(peer);
 
@@ -173,9 +173,9 @@ function createOfferer(peerUsername, receiver_channel_name){
     });
     channelFormed.addEventListener('message', channelOnMessage);  //For chat messages
 
-    var remoteVideo = createVideo(peerUsername);
+    var remoteVideo = createVideo(peerEmail);
     setOnTrack(peer, remoteVideo);                                //For displaying other peers stream
-    peerIndex[peerUsername] = [peer, channelFormed];
+    peerIndex[peerEmail] = [peer, channelFormed];
 
     console.log("This is offerer function");
 
@@ -188,7 +188,7 @@ function createOfferer(peerUsername, receiver_channel_name){
     peer.addEventListener('iceconnectionstatechange', () => {     //When peer leaves the room
         var iceConnectionState = peer.iceConnectionState;
         if (iceConnectionState === 'failed' || iceConnectionState === 'disconnected' || iceConnectionState === 'closed'){
-            delete peerIndex[peerUsername];
+            delete peerIndex[peerEmail];
             if(iceConnectionState != 'closed'){
                 peer.close();
             }
@@ -214,11 +214,11 @@ function createOfferer(peerUsername, receiver_channel_name){
         })
 }
 
-function createReceiver(offer, peerUsername, receiver_channel_name){
+function createReceiver(offer, peerEmail, receiver_channel_name){
     var peer = new RTCPeerConnection(servers);
     addLocalInputs(peer);
     console.log(peer);
-    var remoteVideo = createVideo(peerUsername);
+    var remoteVideo = createVideo(peerEmail);
     setOnTrack(peer, remoteVideo);
 
     peer.addEventListener('datachannel', (e) => {
@@ -227,10 +227,10 @@ function createReceiver(offer, peerUsername, receiver_channel_name){
             console.log('Connection opened');
         });
         peer.channelFormed.addEventListener('message', channelOnMessage);
-        peerIndex[peerUsername] = [peer, peer.channelFormed];
+        peerIndex[peerEmail] = [peer, peer.channelFormed];
     })
 
-    peerIndex[peerUsername] = [peer, peer.channelFormed];
+    peerIndex[peerEmail] = [peer, peer.channelFormed];
 
     console.log("This is receiver function")
 
@@ -243,7 +243,7 @@ function createReceiver(offer, peerUsername, receiver_channel_name){
     peer.addEventListener('iceconnectionstatechange', () => {
         var iceConnectionState = peer.iceConnectionState;
         if (iceConnectionState === 'failed' || iceConnectionState === 'disconnected' || iceConnectionState === 'closed'){
-            delete peerIndex[peerUsername];
+            delete peerIndex[peerEmail];
             if(iceConnectionState != 'closed'){
                 peer.close();
             }
@@ -264,7 +264,7 @@ function createReceiver(offer, peerUsername, receiver_channel_name){
     });
     peer.setRemoteDescription(offer)
         .then(()=>{
-            console.log("Remote description set successfully", peerUsername);
+            console.log("Remote description set successfully", peerEmail);
             return;
         })
         .then(a => {
@@ -309,23 +309,41 @@ sendMsgButton.addEventListener('click', sendMsgOnClick);
 function sendMsgOnClick(){
     console.log('send msg on click is called');
     var message = messageInput.value;
+    storemsg(message);
     console.log(message);
     var li = document.createElement('li');
     li.appendChild(document.createTextNode('Me: '+message));
     messageList.appendChild(li);
 
     var dataChannels = getDataChannels();
-    message = username+": "+message;
+    message = nameUser+": "+message;
     for (i in dataChannels){
         dataChannels[i].send(message);
     }
     messageInput.value = '';
 }
 
-function createVideo(peerUsername){
+function storemsg(message){
+    const XHR = new XMLHttpRequest();
+    var FD = new FormData();
+    FD.append('message', message);
+    FD.append('email', email);
+    // var success = document.getElementById("modal-success");
+    XHR.addEventListener("load", function(event){
+        // nameModal.hidden = true;
+        console.log(event)
+    })
+    XHR.addEventListener("error", function(event){
+        console.log(event);
+    })
+    XHR.open("POST", "storemsg");
+    XHR.send(FD);
+}
+
+function createVideo(peerEmail){
     var videoContainer = document.querySelector('#video-box');
     var remoteVideo = document.createElement('video');
-    remoteVideo.id = peerUsername + '-video';
+    remoteVideo.id = peerEmail + '-video';
     remoteVideo.autoplay = true;
     remoteVideo.playsInline = true;
     remoteVideo.className = 'video-style';
@@ -464,10 +482,10 @@ function removeVideo(video){
 function getDataChannels(){
     var dataChannels = [];
     console.log(peerIndex);
-    for(peerUsername in peerIndex){
+    for(peerEmail in peerIndex){
         console.log('inside loop');
-        console.log(peerUsername);
-        var dataChannel = peerIndex[peerUsername][1];
+        console.log(peerEmail);
+        var dataChannel = peerIndex[peerEmail][1];
         dataChannels.push(dataChannel);
     }
     return dataChannels;

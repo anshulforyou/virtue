@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+{% load static %}
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Virtue</title>
+
+    <!-- CSS only -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+    crossorigin="anonymous"></script>
+
+    <!-- JavaScript Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="{% static 'css/chat.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" integrity="sha512-8bHTC73gkZ7rZ7vpqUQThUDhqcNFyYi2xgDgPDHc+GXVGHXq+xPjynxIopALmOPqzo9JZj0k6OqqewdGO3EsrQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- <link rel="stylesheet" href="{% static 'css/semantic.min.css' %}"> -->
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js" integrity="sha512-dqw6X88iGgZlTsONxZK9ePmJEFrmHwpuMrsUChjAw1mRUhUITE5QU9pkcSox+ynfLhL15Sv2al5A0LVyDCmtUw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/components/icon.min.css" integrity="sha512-8Tb+T7SKUFQWOPIQCaLDWWe1K/SY8hvHl7brOH8Nz5z1VT8fnf8B+9neoUzmFY3OzkWMMs3OjrwZALgB1oXFBg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- <script type="text/javascript" src="{% static 'js/semantic.min.js' %}"></script> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/2.0.2/anime.min.js"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@700&display=swap" rel="stylesheet">
+
+</head>
+<body>
+    <div class="container-fluid h-100">
+        <div class="row justify-content-center h-100">
+            <div class="col-md-4 col-xl-3 chat"><div class="card mb-sm-3 mb-md-0 contacts_card">
+                <div class="card-header">
+                    <span>VIRTUE</span>
+                    <button onclick="create_meeting()"><span>Create Room</span></button>
+                </div>
+                <div class="card-body contacts_body">
+                    <ui class="contacts">
+                    {% for i in details %}
+                    <li id = "{{i.secret}}-name">
+                        <button id = "{{i.secret}}" onclick="connect(this.id)">
+                            <div class="d-flex bd-highlight">
+                                <div class="user_info">
+                                    <span>{{i.roomName}}</span>
+                                    <p>created by {{i.author}}</p>
+                                </div>
+                            </div>
+                        </button>
+                    </li>
+                    {% endfor %}
+                    </ui>
+                </div>
+            </div></div>
+            <div class="col-md-8 col-xl-6 chat">
+                {% for i in details %}
+                <div id='{{i.secret}}-chat' hidden class="card chat-card">
+                    <div class="card-header msg_head">
+                        <div class="d-flex bd-highlight">
+                            <div class="user_info">
+                                <span>Chat</span>
+                                <!-- <p>1767 Messages</p> -->
+                            </div>
+                            <div class="video_cam">
+                                <a href="/join/{{i.secret}}">Join Call</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div id='{{i.secret}}-msg-box' class="card-body msg_card_body">
+                        {% for x in i.messages %}
+                        <div class="d-flex justify-content-start mb-4">
+                            <div class="name-user">
+                                {% if x.email == email %}
+                                    Me:
+                                {% else %}
+                                    {{x.name}}:
+                                {% endif %}
+                            </div>
+                            <div class="msg-container">
+                                {{x.message}}
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div> 
+                    <div class="card-footer">
+                        <div class="input-group">
+                            <div class="input-group-append">
+                                <span class="input-group-text attach_btn"><i class="fas fa-paperclip"></i></span>
+                            </div>
+                            <textarea name="" id='{{i.secret}}-text_area' class="form-control type_msg" placeholder="Type your message..."></textarea>
+                            <div class="input-group-append">
+                                <p hidden id="csrf">{{csrf_token}}</p>
+                                <span id='{{i.secret}}-send_btn' class="input-group-text send_btn"><i class="fas fa-location-arrow"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <div id="nameModal" hidden class="modal">
+
+        <!-- Modal content -->
+        <div class="modal-content modal-lg">
+            <div class="modal-body">
+                <form class="ui form" id='name-form'>
+                    {% csrf_token %}
+                    <div class="field">
+                        <label>Name</label>
+                        <input type="name" id='name' name = "name" placeholder="Name">
+                    </div>
+                    <button class="ui submit button">Submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div id="roomModal" hidden class="modal">
+
+        <!-- Modal content -->
+        <div class="modal-content modal-lg">
+            <div class="modal-body">
+                <form class="ui form" id='room-form'>
+                    {% csrf_token %}
+                    <div class="field">
+                        <label>Room Name</label>
+                        <input id='roomname' name = "roomname" placeholder="Room Name">
+                    </div>
+                    <button class="ui submit button">Submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    {% if nameUser %}
+    {{nameUser|json_script:"nameUser"}}
+    {% endif %}
+    {{ email|json_script:"passed"}}                  
+    <script type="text/javascript" src="{% static 'js/chat.js' %}"></script>
+</body>
+</html>

@@ -78,7 +78,7 @@ window.onclick = function(event) {
   }
 }
 
-var roomname = JSON.parse(document.getElementById('roomname').textContent);
+var roomsecret = JSON.parse(document.getElementById('roomname').textContent);
 console.log(roomname);
 
 var invitationForm = document.getElementById('invitation-form');

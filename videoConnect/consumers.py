@@ -2,7 +2,7 @@ from channels.exceptions import MessageTooLarge
 from channels.generic.websocket import AsyncWebsocketConsumer
 from channels.db import database_sync_to_async
 
-from .models import rooms, userRoomRelationship
+from .models import rooms, userRoomRelationship, users
 
 import json
 
@@ -21,10 +21,11 @@ class VideoConsumer(AsyncWebsocketConsumer):
         await self.accept()
     
     @database_sync_to_async
-    def get_room(self, roomName, username):
-        room = rooms.objects.get_or_create(roomName=roomName)
+    def get_room(self, roomName, email):
+        room = rooms.objects.get_or_create(roomName = roomName)
+        user = users.objects.get(email = email)
         print(room)
-        userRoomRelationship.objects.get_or_create(room=room[0], username = username)
+        userRoomRelationship.objects.get_or_create(room=room[0], user = user)
         return
 
     async def disconnect(self, close_code):
@@ -34,8 +35,8 @@ class VideoConsumer(AsyncWebsocketConsumer):
         )
         # print('disconnet is called')
         # print(self.scope['user'])
-        username = self.scope['session']['authenticated_user']
-        await self.delete_relationships(username)
+        email = self.scope['session']['authenticated_user']
+        await self.update_relationships(email)
         members = await self.get_members()
         if members == 0:
             await self.delete_room()
@@ -43,11 +44,15 @@ class VideoConsumer(AsyncWebsocketConsumer):
 
     @database_sync_to_async
     def delete_room(self):
-        return rooms.objects.get(roomName = self.room_group_name).delete()
+        room = rooms.objects.get(roomName = self.room_group_name)
+        room.isActive = False
+        return
 
     @database_sync_to_async
-    def delete_relationships(self, username):
-        return userRoomRelationship.objects.filter(room__roomName = self.room_group_name, username=username).delete()
+    def update_relationships(self, email):
+        rel = userRoomRelationship.objects.get(room__roomName = self.room_group_name, user__email=email)
+        rel.inCall = False
+        rel.save()
 
     @database_sync_to_async
     def get_members(self):

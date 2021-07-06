@@ -130,6 +130,22 @@
             </div>
         </div>
       </div>
+      <!-- <div id="nameModal" hidden class="modal"> -->
+
+        <!-- Modal content -->
+        <!-- <div class="modal-content modal-lg">
+            <div class="modal-body">
+                <form class="ui form" id='name-form'>
+                    {% csrf_token %}
+                    <div class="field">
+                        <label>Name</label>
+                        <input type="name" id='name' name = "name" placeholder="Name">
+                    </div>
+                    <button class="ui submit button">Submit</button>
+                </form>
+            </div>
+        </div>
+    </div> -->
     <!-- Require the peer dependencies of face-landmarks-detection. -->
     <script src="https://unpkg.com/@tensorflow/tfjs-core@2.4.0/dist/tf-core.js"></script>
     <script src="https://unpkg.com/@tensorflow/tfjs-converter@2.4.0/dist/tf-converter.js"></script>
@@ -145,9 +161,10 @@
     <script src="https://unpkg.com/@tensorflow-models/face-landmarks-detection@0.0.1/dist/face-landmarks-detection.js"></script>
     {{ room|json_script:"roomname"}}
     <script type="text/javascript" src="{% static 'js/animation.js' %}"></script>
-    {{ username|json_script:"passed"}}
+    {{ email|json_script:"passed"}}
+    
     <script type="text/javascript" src="{% static 'js/connect.js' %}"></script>
-    <script type="text/javascript" src="{% static 'js/chat.js'%}"></script>
+    <script type="text/javascript" src="{% static 'js/screenshare.js'%}"></script>
     <script type="text/javascript" src="{% static 'js/multipleCameras.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/blur.js' %}"></script>
     

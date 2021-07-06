@@ -50,21 +50,12 @@
         <div class="col-6">
             <form id="preview-form" method="POST" action="" class="ui form">
                 {% csrf_token %}
-            <div class="two fields">
+            <!-- <div class="two fields"> -->
                 <div class="field">
-                    <label class="float-left">Username</label>
-                    <input id="username" name='username' placeholder="Username"/>
+                    <label class="float-left">Email</label>
+                    <input id="email" name='email' placeholder="Email"/>
                 </div>
-                <div class="field">
-                    <label class="float-left">Room Name</label>
-                    {% if room %}
-                    <input id="room" name="room" placeholder={{room}}/>
-                    {% else %}
-                    <input id="room" name="room" placeholder="Room"/>
-                    {% endif %}
-                </div>
-            </div>
-            <div><button id="btn-join" class="circular ui icon button">Join Virtue</button></div>
+            <div><button id="btn-join" class="circular ui icon button">Enter Virtue</button></div>
             </form>
         </div>
         {% if error %}
