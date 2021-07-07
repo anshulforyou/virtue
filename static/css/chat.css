@@ -13,7 +13,7 @@ body,html{
 .card{
     height: 500px;
     border-radius: 15px !important;
-    background-color: rgba(0,0,0,0.4) !important;
+    background-color: rgba(0,0,0,0.6) !important;
 }
 .contacts_body{
     padding:  0.75rem 0 !important;
@@ -27,6 +27,11 @@ body,html{
     border-radius: 15px 15px 0 0 !important;
     border-bottom: 0 !important;
 }
+.card-header span{
+    font-size: 30px;
+    display: inline-block;
+    padding-top: 7px;
+}
 .card-footer{
 border-radius: 0 0 15px 15px !important;
     border-top: 0 !important;
@@ -34,7 +39,7 @@ border-radius: 0 0 15px 15px !important;
 .container{
     align-content: center;
 }
-.search{
+/* .search{
     border-radius: 15px 0 0 15px !important;
     background-color: rgba(0,0,0,0.3) !important;
     border:0 !important;
@@ -43,13 +48,14 @@ border-radius: 0 0 15px 15px !important;
 .search:focus{
      box-shadow:none !important;
    outline:0px !important;
-}
+} */
 .type_msg{
-    background-color: rgba(0,0,0,0.3) !important;
+    background-color: white;
     border:0 !important;
-    color:white !important;
-    height: 60px !important;
+    color:black;
+    /* height: 60px !important; */
     overflow-y: auto;
+    border-radius: 10px;
 }
     .type_msg:focus{
      box-shadow:none !important;
@@ -120,21 +126,44 @@ right: 0.4em;
 border:1.5px solid white;
 }
 .offline{
-background-color: #c23616 !important;
+    background-color: #c23616 !important;
 }
+.user_info_header{
+    margin-top: auto;
+    margin-bottom: auto;
+    /* margin-left: 15px; */
+}
+.user_info_header span{
+    font-size: 20px;
+    color:black;
+}
+.user_info_header p{
+    font-size: 10px;
+    color: rgba(255,255,255,0.6);
+}
+    
 .user_info{
-margin-top: auto;
-margin-bottom: auto;
-margin-left: 15px;
+    margin-top: auto;
+    margin-bottom: auto;
+/* margin-left: 15px; */
 }
 .user_info span{
-font-size: 20px;
-color: white;
+    font-size: 30px;
+    color:white;
 }
 .user_info p{
-font-size: 10px;
-color: rgba(255,255,255,0.6);
+    font-size: 10px;
+    color: rgba(255,255,255,0.6);
 }
+
+.room_join_button{
+    margin-top: 7px !important;
+    position: absolute;
+    right: 0;
+    top: 0;
+    margin-right: 15px !important;
+}
+
 .video_cam{
 margin-left: 50px;
 margin-top: 5px;
@@ -217,6 +246,41 @@ padding-right: 10px;
 cursor: pointer;
 background-color: rgba(0,0,0,0.2);
 }
+
+.list-button{
+    width: 100% !important;
+}
+
+.list-button .user_info span{
+    color: rgba(0,0,0,.6);
+}
+
+.list-button .user_info p{
+    color: rgba(0,0,0,.6);
+}
+
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  }
+  
+  /* Modal Content/Box */
+  .modal-content {
+    background-color: #fefefe;
+    margin: 15% auto; /* 15% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; /* Could be more or less, depending on screen size */
+  }
+
 @media(max-width: 576px){
 .contacts_card{
 margin-bottom: 15px !important;

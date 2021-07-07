@@ -15,6 +15,7 @@ function create_meeting(){
 
 roomForm = document.getElementById('room-form')
 roomForm.addEventListener('submit', function(event){
+    event.preventDefault();
     var FD = new FormData(roomForm);
     var roomName = FD.get('roomname')
     console.log(roomName)
@@ -60,6 +61,9 @@ var peerIndex = {}
 console.log(endPoint);
 
 websockets = []
+
+firstButton = document.querySelector('.list-button');
+connect(firstButton.id);
 
 function connect(secret){
     temp_endPoint = endPoint + '/'+secret+'/';
@@ -124,15 +128,22 @@ function webSocketOnMessage(event, secret){
     // var content = message[1];
 
     var div1 = document.createElement('div');
-    div1.className ='d-flex justify-content-start mb-4';
     var div2 = document.createElement('div');
-    div2.className = 'name-user';
-    div2.innerHTML = name+": ";
-    div1.appendChild(div2);
     var div3 = document.createElement('div');
-    div3.className = 'msg-container';
-    div3.innerHTML = content;
-    div1.appendChild(div3);
+    if(message['email']==email){
+        div1.className ='d-flex justify-content-start mb-4';
+        div2.className = 'msg_cotainer_send';
+    }else{
+        div1.className ='d-flex justify-content-end mb-4';
+        div2.className = 'msg_cotainer';
+    }
+    
+    div2.innerHTML = content;
+    div1.appendChild(div2);
+    
+    // div3.className = 'msg-container';
+    // div3.innerHTML = content;
+    // div1.appendChild(div3);
     messageBox.appendChild(div1);
 }
 

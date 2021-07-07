@@ -8,7 +8,7 @@ if(loc.protocol == 'https:'){
     wsStart = 'wss://';
 }
 
-var endPoint = wsStart + loc.host +"room/"+roomsecret+'/';
+var endPoint = wsStart + loc.host +"/room/"+roomsecret+'/';
 var peerIndex = {}
 
 console.log('endPoint: ', endPoint);

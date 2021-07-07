@@ -147,15 +147,21 @@ html{
   /* margin-left: 50px; */
 }
 
+.open-chat-button{
+  float: right;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
 /* Style the button that is used to open the sidepanel */
 .openbtn {
   /* font-size: 20px; */
   /* cursor: pointer; */
   color: white;
-  position: absolute;
+  /* position: absolute;
   bottom: 0;
-  right: 0;
-  margin-right: 10px !important; 
+  right: 0; */
+  /* margin-right: 10px !important;  */
   margin-bottom: 1% !important;
   z-index: 100;
   /* padding: 10px 15px; */
