@@ -71,9 +71,12 @@ $('#multiple-cameras-button').popover({
 
 if (getUserMediaSupported()) {
     multipleCamerasButton.addEventListener('click',(e) =>{
-        if (multipleCamerasButton.innerHTML == "<i class='bi bi-eye-fill'></i>"){
+        console.log('button clicked')
+        console.log(multipleCamerasButton.firstChild);
+        if (multipleCamerasButton.innerHTML == '<i class="bi bi-eye-fill"></i>'){
+            console.log('entered')
             if(cameras.length>1){
-                multipleCamerasButton.innerHTML = "<i class='bi bi-eye-slash-fill'></i>";
+                multipleCamerasButton.innerHTML = '<i class="bi bi-eye-slash-fill"></i>';
                 godEyeAnime();
                 enableCam(e);
             }else{
@@ -81,8 +84,8 @@ if (getUserMediaSupported()) {
                 $('#multiple-cameras-button').popover('show');
                 setTimeout(()=>{$('#multiple-cameras-button').popover('hide');}, 2000)
             }
-        }else if(multipleCamerasButton.innerHTML == "<i class='bi bi-eye-slash-fill'></i>"){
-            multipleCamerasButton.innerHTML = "<i class='bi bi-eye-fill'></i>";
+        }else if(multipleCamerasButton.innerHTML == '<i class="bi bi-eye-slash-fill"></i>'){
+            multipleCamerasButton.innerHTML = '<i class="bi bi-eye-fill"></i>';
             localVideo.srcObject = localStream;
             var localVideoTrack2 = localStream.getVideoTracks()[0];
             if (Object.keys(peerIndex).length>0){
@@ -152,9 +155,8 @@ async function enableCam(event) {
 }
 
 async function main(deviceLabel, t) {
-
     var videoEle = document.getElementById(deviceLabel);
-
+    // console.log(videoEle);
     const predictions = await model.estimateFaces({
         input: videoEle
     });
@@ -188,7 +190,7 @@ async function main(deviceLabel, t) {
         }
       }
     }
-    if (multipleCamerasButton.innerHTML == 'Turn off'){
+    if (multipleCamerasButton.innerHTML == '<i class="bi bi-eye-slash-fill"></i>'){
         setTimeout(() => {main(deviceLabel, t);}, 3000)
     }else{
         removeCamera();
