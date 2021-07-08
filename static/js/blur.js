@@ -28,7 +28,7 @@ function blurMode(){
             translateZ: 0,
             opacity: [0,1],
             easing: "easeOutExpo",
-            duration: 800,
+            duration: 1000,
             delay: (el, i) => 300 + 30 * i
         }).add({
             targets: '.blur-mode .letter',
@@ -50,6 +50,7 @@ blurBtn.addEventListener('click', e=>{
     if (canvas.hidden){
         blurMode();
         canvas.height = localVideo.height;
+        // localVideo.width = localVideo.width*0.87;
         canvas.width = localVideo.width;
         localVideo.hidden = true;
         canvas.hidden = false;
@@ -71,6 +72,7 @@ blurBtn.addEventListener('click', e=>{
         perform(net);
 
     }else{
+        // localVideo.style.width="100%";
         localVideo.hidden=false;
         navigator.mediaDevices.getUserMedia(devices)
             .then(incomingStream =>{

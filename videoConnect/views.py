@@ -19,23 +19,62 @@ def createSecret(length):
 def join_meeting(request, room):
     email = request.GET.get('email')
     user = users.objects.get(email = email)
+    roomObj = rooms.objects.get(secret = room)
+    messageRel = messageUserRelationship.objects.filter(room = roomObj)
+    messages = []
+    for i in messageRel:
+        messages.append({
+            'message':i.message,
+            'name':i.user.name,
+            'email':i.user.email
+        })
     if user.name == None:
         context = {
             'email':email,
             'name':None,
-            'room':room
+            'room':room,
+            'messages':messages
         }
     else:
         context = {
             'email':email,
             'name':user.name,
-            'room':room
+            'room':room,
+            'messages':messages
         }
     request.session['authenticated_user']=email
     return render(request, 'videoConnect/main.html', context=context)
 
+def inviteFriends(emails, userEmail, roomsecret):
+    emails = emails.split(",")
+    room = rooms.objects.get(secret = roomsecret)
+    for i in emails:
+        user = users.objects.get_or_create(email=i)[0]
+        userRel = userRoomRelationship.objects.get_or_create(
+            room = room,
+            user = user,
+            inCall = False
+        )
+        # print(userRel)
+        if not userRel[1]:
+            context = {
+                'room':room,
+                'email':userEmail,
+                'link':'http://127.0.0.1:8000/join/'+room.secret+"?&email="+i
+            }
+            html_template = render_to_string('email/invite.html', context=context)
+            # print(html_template)
+            send_mail(
+                subject="[Virtue] "+userEmail+" invited you to join the meeting",
+                message="",
+                from_email = settings.EMAIL_ADDRESS,
+                recipient_list=[i], html_message=html_template
+            )
+    return
+
 def create_meeting(request, email):
     roomName = request.GET.get('roomname')
+    friendEmails = request.GET.get('emails')
     print(roomName)
     user = users.objects.get(email = email)
     secret = createSecret(30)
@@ -50,6 +89,7 @@ def create_meeting(request, email):
         user = user,
         inCall = True
     )
+    inviteFriends(friendEmails, email, secret)
     context = {
         'email':email,
         'room':secret,
@@ -64,32 +104,6 @@ def preview(request):
         email = request.POST.get('email')
         return redirect('chat/'+email)
 
-        # try:
-        #     room = rooms.objects.get(roomName = roomName)
-        #     rel = userRoomRelationship.objects.filter(room=room, user = user, inCall = True)
-        #     if len(rel) == 0:
-        #         userRoomRelationship.objects.create(
-        #             room = room,
-        #             user = user,
-        #             inCall = True
-        #         )
-        #         return redirect('room/'+roomName+'?&email='+email)
-        #     else:
-        #         context = {
-        #             'error':'User with this email already exists in this room'
-        #         }
-        #         return render(request, 'videoConnect/preview.html', context=context)
-        # except:
-        #     room = rooms.objects.create(
-        #         roomName=roomName,
-        #         author=user
-        #     )
-        #     userRoomRelationship.objects.create(
-        #         room = room,
-        #         user = user,
-        #         inCall = True
-        #     )
-        #     return redirect('room/'+roomName+'?&email='+email)
     elif request.method == 'GET':
         room = request.GET.get('room')
         context = {'room':room}
@@ -100,29 +114,7 @@ def invite(request):
     if request.method == 'POST':
         emails = request.POST.get('email')
         roomsecret = request.POST.get('room')
-        emails = emails.split(",")
-        print(emails)
-        room = rooms.objects.get(secret = roomsecret)
-        for i in emails:
-            user = users.objects.get_or_create(email=i)[0]
-            userRoomRelationship.objects.get_or_create(
-                room = room,
-                user = user,
-                inCall = False
-            )
-            context = {
-                'room':room,
-                'email':request.session['authenticated_user'],
-                'link':'http://127.0.0.1:8000/join/'+room.secret+"?&email="+i
-            }
-            html_template = render_to_string('email/invite.html', context=context)
-            # print(html_template)
-            send_mail(
-                subject="[Virtue] "+request.session['authenticated_user']+" invited you to join the meeting",
-                message="",
-                from_email = settings.EMAIL_ADDRESS,
-                recipient_list=[i], html_message=html_template
-            )
+        inviteFriends(emails, request.session['authenticated_user'], roomsecret)
         return JsonResponse(
             {
                 'message':'Email sent'

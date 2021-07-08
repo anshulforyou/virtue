@@ -317,6 +317,7 @@ function sendMsgOnClick(){
     storemsg(message);
     console.log(message);
     var div1 = document.createElement('div');
+    var div2 = document.createElement('div');
     div1.className ='d-flex justify-content-start mb-4';
     div2.className = 'msg_cotainer_send';
     div2.innerHTML = message;

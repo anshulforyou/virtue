@@ -153,9 +153,9 @@
             <div class="modal-body">
                 <form class="ui form" id='name-form'>
                     {% csrf_token %}
-                    <div class="field">
+                    <div class="required field">
                         <label>Name</label>
-                        <input type="name" id='name' name = "name" placeholder="Name">
+                        <input id='name' name = "name" placeholder="Name">
                     </div>
                     <button class="ui submit button">Submit</button>
                 </form>
@@ -163,15 +163,23 @@
         </div>
     </div>
     <div id="roomModal" hidden class="modal">
-
+        
         <!-- Modal content -->
         <div class="modal-content modal-lg">
+            <div class="modal-header">
+                <h2 class="modal-title">Create a new room</h2>
+                <span class="close">&times;</span>
+            </div>
             <div class="modal-body">
                 <form class="ui form" id='room-form'>
                     {% csrf_token %}
-                    <div class="field">
+                    <div class="required field">
                         <label>Room Name</label>
                         <input id='roomname' name = "roomname" placeholder="Room Name">
+                    </div>
+                    <div class="field">
+                        <label>Invite Friends (Please enter comma separated emails)</label>
+                        <input id='invite-friends' name="invite-friends" placeholder="Emails">
                     </div>
                     <button class="ui submit button">Submit</button>
                 </form>

@@ -35,8 +35,7 @@
         <div id="video-box" style="
             grid-template-columns: repeat(1, 1fr);
             grid-template-rows: repeat(1, 1fr);
-            height: 85%;
-            padding-top: calc(2%);
+            grid-gap: 10px;
             ">
             <div id="inner">
                 <video id="local-video" class="video-style" autoplay playsinline></video>
@@ -88,6 +87,21 @@
             <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
             
             <div id = "messages">
+                {% for i in messages%}
+                {% if i.email == email %}
+                <div class="d-flex justify-content-start mb-4">
+                    <div class="msg_cotainer_send">
+                        {{i.message}}
+                    </div>
+                </div>
+                {% else %}
+                <div class="d-flex justify-content-end mb-4">
+                    <div class="msg_cotainer">
+                        {{i.message}}
+                    </div>
+                </div>
+                {% endif %}
+                {% endfor%}
             </div>
             
             <div class='field send-message'>
@@ -115,16 +129,18 @@
         <!-- Modal content -->
         <div class="modal-content modal-lg">
             <div class="modal-header">
-                <h2 class="modal-title">Invite people</h2>
+                <div>
+                    <h2 class="modal-title">Invite people</h2>
+                    <p>If you want to invite multiple people, please enter comma separated values.</p>
+                </div>
                 <span class="close">&times;</span>
-                <p>If you want to invite multiple people, please enter comma separated values.</p>
             </div>
             <div class="modal-body">
                 <form class="ui form success" id='invitation-form'>
                     {% csrf_token %}
                     <div class="field">
                         <label>Emails</label>
-                        <input type="name" id='email' name = "email" placeholder="Email">
+                        <input id='email' name = "email" placeholder="Email">
                     </div>
                     <div id="modal-success" class="ui success message" hidden>
                         <div class="header">Invitation Sent!</div>
@@ -157,10 +173,11 @@
 
     <!-- You must explicitly require a TF.js backend if you're not using the tfjs union bundle. -->
     <script src="https://unpkg.com/@tensorflow/tfjs-backend-webgl@2.4.0/dist/tf-backend-webgl.js"></script>
-    <!-- Alternatively you can use the WASM backend: <script src="https://unpkg.com/@tensorflow/tfjs-backend-wasm@2.4.0/dist/tf-backend-wasm.js"></script> -->
+    <!-- Alternatively you can use the WASM backend:  -->
+    <!-- <script src="https://unpkg.com/@tensorflow/tfjs-backend-wasm@2.4.0/dist/tf-backend-wasm.js"></script> -->
 
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/body-pix@2.0"></script>
-    <!-- <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/body-pix@2.2.0/dist/body-pix.min.js"></script> -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/body-pix@2.0"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/body-pix@2.2.0/dist/body-pix.min.js"></script>
 
     <!-- Require face-landmarks-detection itself. -->
     <script src="https://unpkg.com/@tensorflow-models/face-landmarks-detection@0.0.1/dist/face-landmarks-detection.js"></script>

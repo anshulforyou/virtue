@@ -18,8 +18,9 @@ roomForm.addEventListener('submit', function(event){
     event.preventDefault();
     var FD = new FormData(roomForm);
     var roomName = FD.get('roomname')
+    var emails = FD.get('invite-friends')
     console.log(roomName)
-    window.location.href = 'http://127.0.0.1:8000/create/'+email+"?roomname="+roomName
+    window.location.href = 'http://127.0.0.1:8000/create/'+email+"?roomname="+roomName+"&emails="+emails
 })
 
 try{
@@ -67,8 +68,10 @@ connect(firstButton.id);
 
 function connect(secret){
     temp_endPoint = endPoint + '/'+secret+'/';
+    console.log(temp_endPoint);
     for (i in websockets)websockets[i].close();
     var webSocket = new WebSocket(temp_endPoint);
+    console.log(webSocket);
     websockets.push(webSocket);
     webSocket.addEventListener('open',(e)=>{
         console.log('Connection Opened!');
@@ -117,11 +120,6 @@ function webSocketOnMessage(event, secret){
     var messageBox = document.getElementById(secret+'-msg-box');
     var message = JSON.parse(event.data);
     console.log(message);
-    if (message['email']==email){
-        var name = "me: "
-    }else{
-        var name = message['message'].split(":")[0]+": "
-    }
     var content = message['message'].split(":")[1]
     console.log(message);
     // var name = message[0];

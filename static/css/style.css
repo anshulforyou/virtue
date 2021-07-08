@@ -23,9 +23,10 @@ html{
             grid-template-columns: repeat(1, 1fr);
             -ms-grid-rows: (1fr)[2];
             grid-template-rows: repeat(1, 1fr);   */
-  height: 100%;
   display: -ms-grid;
   display: grid;
+  height: 82%;
+  padding-top: calc(2%);
   /* grid-gap: 10px; */
 }
 
@@ -150,8 +151,10 @@ html{
 }
 
 .open-chat-button{
-  float: right;
-  margin-bottom: 10px;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  margin-bottom: calc(1.5%);
   text-align: center;
 }
 
@@ -278,8 +281,10 @@ html{
   z-index: 5000;
 }
 
-.blur-canvas{
-  border-radius: 20px;
+#blur-canvas{
+  border-radius: 10px;
+  object-fit: cover;
+  max-height: 87%;
 }
 
 .modal {
