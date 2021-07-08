@@ -30,16 +30,39 @@
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@700&display=swap" rel="stylesheet">
 
 </head>
-<body>
+<body style="background-color: #f3f6ff;">
     <div class="container-fluid h-100">
-        <div class="row justify-content-center h-100">
-            <div class="col-md-4 col-xl-3 chat"><div class="card mb-sm-3 mb-md-0 contacts_card">
-                <div class="card-header">
-                    <span style="color: white;">VIRTUE</span>
-                    <button class="ui animated button" style="float: right;" onclick="create_meeting()">
+        <div class="row justify-content-center h-100" style="align-items: center; height: 90%;">
+            <div class="col-10" style="height: 90%;">
+            <div class="logo">
+            <div class="row justify-content-center h-100">
+            <div class="col-1 logo-style">
+                <span class="logo-word">V</span>
+                <span class="logo-word">I</span>
+                <span class="logo-word">R</span>
+                <span class="logo-word">T</span>
+                <span class="logo-word">U</span>
+                <span class="logo-word">E</span>
+            </div>
+            <div class="col-3 chat"><div class="card mb-sm-3 mb-md-0 contacts_card">
+                <div class="create-meeting" onclick="create_meeting()">
+                    <div class="icon-box">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" style="margin-top: 10px;" class="bi bi-plus-lg" viewBox="0 0 16 16">
+                            <path d="M8 0a1 1 0 0 1 1 1v6h6a1 1 0 1 1 0 2H9v6a1 1 0 1 1-2 0V9H1a1 1 0 0 1 0-2h6V1a1 1 0 0 1 1-1z"/>
+                          </svg>
+                    </div>
+                    <span>Create Room</span>
+                    <!-- <button class="ui animated button" style="float: right;" onclick="create_meeting()">
                         <div class="visible content">Create Room</div>
                         <div class="hidden content">Join Virtue</div>
-                    </button>
+                    </button> -->
+                </div>
+                <div class="card-header">
+                    <span style="color: black;">Chat</span>
+                    <!-- <button class="ui animated button" style="float: right;" onclick="create_meeting()">
+                        <div class="visible content">Create Room</div>
+                        <div class="hidden content">Join Virtue</div>
+                    </button> -->
                 </div>
                 <div class="card-body contacts_body">
                     <ui class="contacts">
@@ -48,8 +71,11 @@
                         <button  class="ui button list-button" id = "{{i.secret}}" onclick="connect(this.id)">
                             <div class="d-flex bd-highlight">
                                 <div class="user_info_header">
-                                    <span>{{i.roomName}}</span>
-                                    <p>created by {{i.author}}</p>
+                                    <div class="contact-circle">{{i.roomName.0}}{{i.roomName.1}}</div>
+                                    <div style="display: inline-block; vertical-align: middle;">
+                                        <span>{{i.roomName}}</span>
+                                        <p>created by {{i.author}}</p>
+                                    </div>
                                 </div>
                             </div>
                         </button>
@@ -57,18 +83,31 @@
                     {% endfor %}
                     </ui>
                 </div>
-            </div></div>
-            <div class="col-md-8 col-xl-6 chat">
+            </div>
+            </div>
+            <div class="col-7 chat">
                 {% for i in details %}
                 <div id='{{i.secret}}-chat' hidden class="card chat-card">
                     <div class="card-header msg_head">
                         <div class="d-flex bd-highlight">
                             <div class="user_info">
-                                <span>Chat</span>
+                                <div class="contact-circle">{{i.roomName.0}}{{i.roomName.1}}</div>
+                                <div style="display: inline-block; vertical-align: middle;">
+                                    <span>{{i.roomName}}</span>
+                                    <div>
+                                        {% if i.isActive %}
+                                        <img height="10px" src="https://img.icons8.com/emoji/48/000000/green-circle-emoji.png"/>
+                                        <p>Active</p>
+                                        {% else %}
+                                        <img height="10px" src="https://img.icons8.com/emoji/48/000000/red-circle-emoji.png"/>
+                                        <p>Inactive</p>
+                                        {% endif %}
+                                    </div>
                                 <!-- <p>1767 Messages</p> -->
+                                </div>
                             </div>
                             <div class="video_cam">
-                                <a class="ui button room_join_button" href="/join/{{i.secret}}">Join Room</a>
+                                <a style="margin: auto;" class="ui button room_join_button" href="/join/{{i.secret}}?&email={{email}}">Join Room</a>
                             </div>
                         </div>
                     </div>
@@ -103,6 +142,8 @@
                 </div>
                 {% endfor %}
             </div>
+            </div>
+        </div>
         </div>
     </div>
     <div id="nameModal" hidden class="modal">

@@ -1,7 +1,7 @@
 var email = JSON.parse(document.getElementById('passed').textContent);
 console.log(email);
+var nameUser = JSON.parse(document.getElementById('nameUser').textContent);
 
-var loc = window.location;
 var wsStart = 'ws://';
 
 if(loc.protocol == 'https:'){
@@ -57,8 +57,8 @@ var userMedia = navigator.mediaDevices.getUserMedia(devices)
             if (tempVideo == 'true') videoTracks[0].enabled = true;
             else videoTracks[0].enabled = false;
             
-            if (videoTracks[0].enabled)toggleVideoButton.innerHTML = "<i class='video slash icon'></i>";
-            else toggleVideoButton.innerHTML = "<i class='video icon'></i>";
+            if (videoTracks[0].enabled)toggleVideoButton.innerHTML = "<i class='bi bi-camera-video-off-fill'></i>";
+            else toggleVideoButton.innerHTML = "<i class='bi bi-camera-video-fill'></i>";
         }else{
             console.log('Browser is not supporting some features of the application');
         }
@@ -69,16 +69,16 @@ var userMedia = navigator.mediaDevices.getUserMedia(devices)
                 toggleAudioButton.innerHTML = "<i class='microphone slash icon'></i>";
                 return;
             }
-            toggleAudioButton.innerHTML = "<i class='microphone mic'></i>";
+            toggleAudioButton.innerHTML = "<i class='microphone icon'></i>";
         });
 
         toggleVideoButton.addEventListener('click', () => {
             videoTracks[0].enabled = !videoTracks[0].enabled;
             if (videoTracks[0].enabled){
-                toggleVideoButton.innerHTML = "<i class='video slash icon'></i>";
+                toggleVideoButton.innerHTML = "<i class='bi bi-camera-video-off-fill'></i>";
                 return;
             }
-            toggleVideoButton.innerHTML = "<i class='video icon'></i>";
+            toggleVideoButton.innerHTML = "<i class='bi bi-camera-video-fill'></i>";
         });
 
         webSocket = new WebSocket(endPoint);
@@ -293,12 +293,17 @@ function setOnTrack(peer, remoteVideo){
     });
 }
 
-var messageList = document.querySelector('#message-list');
+var messageList = document.getElementById('messages');
 function channelOnMessage(event){
     var message = event.data;
-    var li = document.createElement('li');
-    li.appendChild(document.createTextNode(message));
-    messageList.appendChild(li);
+    var div1 = document.createElement('div');
+    div1.className ='d-flex justify-content-end mb-4';
+    div2.className = 'msg_cotainer';
+    div2.innerHTML = message;
+    div1.appendChild(div2);
+    // var li = document.createElement('li');
+    // li.appendChild(document.createTextNode(message));
+    // messageList.appendChild(li);
 }
 
 var sendMsgButton = document.querySelector('#send-msg-button');
@@ -311,9 +316,13 @@ function sendMsgOnClick(){
     var message = messageInput.value;
     storemsg(message);
     console.log(message);
-    var li = document.createElement('li');
-    li.appendChild(document.createTextNode('Me: '+message));
-    messageList.appendChild(li);
+    var div1 = document.createElement('div');
+    div1.className ='d-flex justify-content-start mb-4';
+    div2.className = 'msg_cotainer_send';
+    div2.innerHTML = message;
+    div1.appendChild(div2);
+    // li.appendChild(document.createTextNode('Me: '+message));
+    messageList.appendChild(div1);
 
     var dataChannels = getDataChannels();
     message = nameUser+": "+message;
@@ -326,8 +335,11 @@ function sendMsgOnClick(){
 function storemsg(message){
     const XHR = new XMLHttpRequest();
     var FD = new FormData();
+    var csrf = document.getElementById('csrf').innerHTML;
     FD.append('message', message);
     FD.append('email', email);
+    FD.append('roomsecret', roomsecret);
+    FD.append('csrfmiddlewaretoken', csrf);
     // var success = document.getElementById("modal-success");
     XHR.addEventListener("load", function(event){
         // nameModal.hidden = true;
@@ -336,11 +348,14 @@ function storemsg(message){
     XHR.addEventListener("error", function(event){
         console.log(event);
     })
-    XHR.open("POST", "storemsg");
+    var url = loc.protocol+'//'+ loc.host+"/room/storemsg";
+    console.log(url);
+    XHR.open("POST", url);
     XHR.send(FD);
 }
 
 function createVideo(peerEmail){
+    console.log("create video is called")
     var videoContainer = document.querySelector('#video-box');
     var remoteVideo = document.createElement('video');
     remoteVideo.id = peerEmail + '-video';
@@ -358,6 +373,7 @@ function createVideo(peerEmail){
     var columns = layout[1];
     var rows = layout[0];
     var extras = layout[2];
+    console.log(rows);
     videoContainer.style.gridTemplateColumns = 'repeat('+columns+', 1fr)';
     videoContainer.style.gridTemplateRows = 'repeat('+rows+', 1fr)';
     var allVideos = document.querySelectorAll('.video-style');
@@ -422,6 +438,7 @@ function decideLayout(n){
 }
 
 function removeVideo(video){
+    console.log("Remove video is called")
     var videoContainer = document.querySelector('#video-box');
     var videoWrapper = video.parentNode;
     videoWrapper.parentNode.removeChild(videoWrapper);
@@ -430,11 +447,17 @@ function removeVideo(video){
     var columns = layout[1];
     var rows = layout[0];
     var extras = layout[2];
+    console.log(rows);
+    console.log(screen.height);
     videoContainer.style.gridTemplateColumns = 'repeat('+columns+', 1fr)';
     videoContainer.style.gridTemplateRows = 'repeat('+rows+', 1fr)';
     var allVideos = document.querySelectorAll('.video-style');
     for ( var x =0; x< allVideos.length;x++){
-        allVideos[x].height = Math.floor(100/(rows+1))*screen.height/100;
+        if (allVideos.length==1){
+            allVideos[x].height = screen.height*08;
+        }else{
+            allVideos[x].height = Math.floor(100/(rows+1))*screen.height/100;
+        }
         allVideos[x].width = Math.floor(100/columns)*(screen.width-screen.width*0.1)/100;
         var ab = allVideos[x].parentElement;
         ab.style.setProperty('grid-area', 'initial');
@@ -491,9 +514,9 @@ function getDataChannels(){
     return dataChannels;
 }
 
-// if (performance.navigation.type == performance.navigation.TYPE_RELOAD) {
-//     console.info( "This page is reloaded" );
-//     location.href="/video";
-// } else {
-//     console.info( "This page is not reloaded");
-// }
+if (performance.navigation.type == performance.navigation.TYPE_RELOAD) {
+    console.info( "This page is reloaded" );
+    location.href="/chat/"+email;
+} else {
+    console.info( "This page is not reloaded");
+}

@@ -1,9 +1,31 @@
 body,html{
     height: 100%;
     margin: 0;
-    background: #7F7FD5;
-   background: -webkit-linear-gradient(to right, #91EAE4, #86A8E7, #7F7FD5);
-    background: linear-gradient(to right, #91EAE4, #86A8E7, #7F7FD5);
+    background-color: #f3f6ff;
+    font-family: helvetica, arial, sans-serif;
+    /* background: #7F7FD5;
+    background: -webkit-linear-gradient(to right, #91EAE4, #86A8E7, #7F7FD5);
+    background: linear-gradient(to right, #91EAE4, #86A8E7, #7F7FD5); */
+}
+
+.logo{
+    background-color: #e8c3b9;
+    height: 100%;
+    border-radius: 20px;
+}
+
+.logo-style{
+    text-align: center;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+.logo-word{
+    font-family: Lato,'Helvetica Neue',Arial,Helvetica,sans-serif;
+    line-height: 1em;
+    font-weight: 800;
+    font-size: 5em;
+    display: block;
 }
 
 .chat{
@@ -13,8 +35,26 @@ body,html{
 .card{
     height: 500px;
     border-radius: 15px !important;
-    background-color: rgba(0,0,0,0.6) !important;
+    border: none;
+    /* background-color: rgba(0,0,0,0.6) !important; */
+    background-color: white;
 }
+
+.contact-circle{
+    content: attr(title);
+    display:inline-block;
+    font-size:1em;
+    width:2.5em;
+    height:2.5em;
+    line-height:2.5em;
+    text-align:center;
+    border-radius:50%;
+    background:plum;
+    vertical-align:middle;
+    margin-right:1em;
+    color:white;
+}
+
 .contacts_body{
     padding:  0.75rem 0 !important;
     overflow-y: auto;
@@ -24,7 +64,7 @@ body,html{
     overflow-y: auto;
 }
 .card-header{
-    border-radius: 15px 15px 0 0 !important;
+    /* border-radius: 15px 15px 0 0 !important; */
     border-bottom: 0 !important;
 }
 .card-header span{
@@ -32,8 +72,33 @@ body,html{
     display: inline-block;
     padding-top: 7px;
 }
+
+.create-meeting{
+    display: flex;
+    justify-content: center;
+    margin: 5px;
+    height: 50px;
+    border-radius: 10px;
+    background-color: white;
+}
+
+.create-meeting span{
+    font-size: 25px;
+    margin: auto;
+}
+
+.icon-box{
+    display: inline-block; 
+    background-color: #e3e9fd;
+    margin: 5px;
+    border-radius: 20px;
+    height: 40px;
+    width: 40px;
+    text-align: center;
+}
+
 .card-footer{
-border-radius: 0 0 15px 15px !important;
+    border-radius: 0 0 15px 15px !important;
     border-top: 0 !important;
 }
 .container{
@@ -57,31 +122,19 @@ border-radius: 0 0 15px 15px !important;
     overflow-y: auto;
     border-radius: 10px;
 }
-    .type_msg:focus{
-     box-shadow:none !important;
-   outline:0px !important;
+.type_msg:focus{
+    box-shadow:none !important;
+    outline:0px !important;
 }
-.attach_btn{
-border-radius: 15px 0 0 15px !important;
-background-color: rgba(0,0,0,0.3) !important;
-    border:0 !important;
-    color: white !important;
-    cursor: pointer;
-}
+
 .send_btn{
-border-radius: 0 15px 15px 0 !important;
-background-color: rgba(0,0,0,0.3) !important;
-    border:0 !important;
-    color: white !important;
-    cursor: pointer;
-}
-.search_btn{
     border-radius: 0 15px 15px 0 !important;
     background-color: rgba(0,0,0,0.3) !important;
     border:0 !important;
     color: white !important;
     cursor: pointer;
 }
+
 .contacts{
     list-style: none;
     padding: 0;
@@ -115,31 +168,22 @@ background-color: rgba(0,0,0,0.3) !important;
     height: 40px;
     width: 40px;
 }
-.online_icon{
-position: absolute;
-height: 15px;
-width:15px;
-background-color: #4cd137;
-border-radius: 50%;
-bottom: 0.2em;
-right: 0.4em;
-border:1.5px solid white;
-}
-.offline{
-    background-color: #c23616 !important;
-}
+
 .user_info_header{
     margin-top: auto;
     margin-bottom: auto;
+    text-align: left;
     /* margin-left: 15px; */
 }
 .user_info_header span{
     font-size: 20px;
-    color:black;
+    /* color:rgba(0,0,0,0.6) !important; */
+    color: black;
 }
 .user_info_header p{
+    margin-top: 2px;
     font-size: 10px;
-    color: rgba(255,255,255,0.6);
+    color:rgba(0,0,0,0.6) !important;
 }
     
 .user_info{
@@ -149,15 +193,16 @@ border:1.5px solid white;
 }
 .user_info span{
     font-size: 30px;
-    color:white;
+    color:black;
 }
 .user_info p{
     font-size: 10px;
-    color: rgba(255,255,255,0.6);
+    display: inline-block;
+    /* color: rgba(255,255,255,0.6); */
 }
 
 .room_join_button{
-    margin-top: 7px !important;
+    margin-top: 15px !important;
     position: absolute;
     right: 0;
     top: 0;
@@ -165,86 +210,92 @@ border:1.5px solid white;
 }
 
 .video_cam{
-margin-left: 50px;
-margin-top: 5px;
+    margin-left: 50px;
+    margin-top: 5px;
 }
+
 .video_cam span{
-color: white;
-font-size: 20px;
-cursor: pointer;
-margin-right: 20px;
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+    margin-right: 20px;
 }
 .msg_cotainer{
-margin-top: auto;
-margin-bottom: auto;
-margin-left: 10px;
-border-radius: 25px;
-background-color: #82ccdd;
-padding: 10px;
-position: relative;
+    margin-top: auto;
+    margin-bottom: auto;
+    margin-left: 10px;
+    border-radius: 25px;
+    background-color: #f36bab;
+    color: white;
+    padding: 10px;
+    position: relative;
 }
 .msg_cotainer_send{
-margin-top: auto;
-margin-bottom: auto;
-margin-right: 10px;
-border-radius: 25px;
-background-color: #78e08f;
-padding: 10px;
-position: relative;
+    margin-top: auto;
+    margin-bottom: auto;
+    margin-right: 10px;
+    border-radius: 25px;
+    background-color: #2154be;
+    color: white;
+    padding: 10px;
+    position: relative;
 }
 .msg_time{
-position: absolute;
-left: 0;
-bottom: -15px;
-color: rgba(255,255,255,0.5);
-font-size: 10px;
+    position: absolute;
+    left: 0;
+    bottom: -15px;
+    color: rgba(255,255,255,0.5);
+    font-size: 10px;
 }
 .msg_time_send{
-position: absolute;
-right:0;
-bottom: -15px;
-color: rgba(255,255,255,0.5);
-font-size: 10px;
+    position: absolute;
+    right:0;
+    bottom: -15px;
+    color: rgba(255,255,255,0.5);
+    font-size: 10px;
 }
+
 .msg_head{
-position: relative;
+    position: relative;
 }
+
 #action_menu_btn{
-position: absolute;
-right: 10px;
-top: 10px;
-color: white;
-cursor: pointer;
-font-size: 20px;
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    color: white;
+    cursor: pointer;
+    font-size: 20px;
 }
 .action_menu{
-z-index: 1;
-position: absolute;
-padding: 15px 0;
-background-color: rgba(0,0,0,0.5);
-color: white;
-border-radius: 15px;
-top: 30px;
-right: 15px;
-display: none;
+    z-index: 1;
+    position: absolute;
+    padding: 15px 0;
+    background-color: rgba(0,0,0,0.5);
+    color: white;
+    border-radius: 15px;
+    top: 30px;
+    right: 15px;
+    display: none;
 }
 .action_menu ul{
-list-style: none;
-padding: 0;
-margin: 0;
+    list-style: none;
+    padding: 0;
+    margin: 0;
 }
 .action_menu ul li{
-width: 100%;
-padding: 10px 15px;
-margin-bottom: 5px;
+    width: 100%;
+    padding: 10px 15px;
+    margin-bottom: 5px;
 }
-.action_menu ul li i{
-padding-right: 10px;
 
+.action_menu ul li i{
+    padding-right: 10px;
 }
+
 .action_menu ul li:hover{
-cursor: pointer;
-background-color: rgba(0,0,0,0.2);
+    cursor: pointer;
+    background-color: rgba(0,0,0,0.2);
 }
 
 .list-button{
@@ -270,19 +321,19 @@ background-color: rgba(0,0,0,0.2);
     overflow: auto; /* Enable scroll if needed */
     background-color: rgb(0,0,0); /* Fallback color */
     background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-  }
+}
   
   /* Modal Content/Box */
-  .modal-content {
+.modal-content {
     background-color: #fefefe;
     margin: 15% auto; /* 15% from the top and centered */
     padding: 20px;
     border: 1px solid #888;
     width: 80%; /* Could be more or less, depending on screen size */
-  }
+}
 
 @media(max-width: 576px){
 .contacts_card{
-margin-bottom: 15px !important;
+    margin-bottom: 15px !important;
 }
 }

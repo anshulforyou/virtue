@@ -129,7 +129,7 @@ function webSocketOnMessage(event, secret){
 
     var div1 = document.createElement('div');
     var div2 = document.createElement('div');
-    var div3 = document.createElement('div');
+    
     if(message['email']==email){
         div1.className ='d-flex justify-content-start mb-4';
         div2.className = 'msg_cotainer_send';

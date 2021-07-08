@@ -35,7 +35,9 @@
         <div id="video-box" style="
             grid-template-columns: repeat(1, 1fr);
             grid-template-rows: repeat(1, 1fr);
-            height: 90%;">
+            height: 85%;
+            padding-top: calc(2%);
+            ">
             <div id="inner">
                 <video id="local-video" class="video-style" autoplay playsinline></video>
                 <canvas hidden id="blur-canvas"></canvas>
@@ -49,7 +51,7 @@
                     <p>Mic</p>
                 </div>
                 <div class="button-div">
-                    <button id = "toggle-video-button" class="circular ui icon button"><i class="bi bi-camera-video"></i></button>
+                    <button id = "toggle-video-button" class="circular ui icon button"><i class="bi bi-camera-video-fill"></i></button>
                     <p>Cam</p>
                 </div>
                 <div class="button-div">
@@ -86,10 +88,10 @@
             <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
             
             <div id = "messages">
-                <ul id = "message-list"></ul>
             </div>
             
             <div class='field send-message'>
+                <p hidden id="csrf">{{csrf_token}}</p>
                 <input id = "message" maxlength="100"/><button id="send-msg-button"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right-circle-fill" viewBox="0 0 16 16">
                     <path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0zM4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H4.5z"/>
                   </svg></button>
@@ -115,13 +117,14 @@
             <div class="modal-header">
                 <h2 class="modal-title">Invite people</h2>
                 <span class="close">&times;</span>
+                <p>If you want to invite multiple people, please enter comma separated values.</p>
             </div>
             <div class="modal-body">
                 <form class="ui form success" id='invitation-form'>
                     {% csrf_token %}
                     <div class="field">
-                        <label>Email</label>
-                        <input type="email" id='email' name = "email" placeholder="Email">
+                        <label>Emails</label>
+                        <input type="name" id='email' name = "email" placeholder="Email">
                     </div>
                     <div id="modal-success" class="ui success message" hidden>
                         <div class="header">Invitation Sent!</div>
@@ -164,7 +167,7 @@
     {{ room|json_script:"roomname"}}
     <script type="text/javascript" src="{% static 'js/animation.js' %}"></script>
     {{ email|json_script:"passed"}}
-    
+    {{ name|json_script:"nameUser"}}
     <script type="text/javascript" src="{% static 'js/connect.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/screenshare.js'%}"></script>
     <script type="text/javascript" src="{% static 'js/multipleCameras.js' %}"></script>

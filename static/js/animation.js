@@ -9,6 +9,8 @@ ml4.delay = 500;
 var xd = document.getElementById('ml4');
 var container = document.getElementById('main-screen');
 
+var loc = window.location;
+
 anime.timeline({loop: false})
 .add({
     targets: '.ml4 .letters-1',
@@ -79,7 +81,7 @@ window.onclick = function(event) {
 }
 
 var roomsecret = JSON.parse(document.getElementById('roomname').textContent);
-console.log(roomname);
+// console.log(roomsecret);
 
 var invitationForm = document.getElementById('invitation-form');
 invitationForm.addEventListener('submit', function(event){
@@ -91,7 +93,7 @@ function invitePeople(){
     console.log("invite people executed")
     const XHR = new XMLHttpRequest();
     var FD = new FormData(invitationForm);
-    FD.append('room', roomname);
+    FD.append('room', roomsecret);
     for ( var pair of FD.entries()){
         console.log(pair);
     }
@@ -103,6 +105,6 @@ function invitePeople(){
     XHR.addEventListener("error", function(event){
         console.log(event);
     })
-    XHR.open("POST", "invite");
+    XHR.open("POST", "http://127.0.0.1:8000/room/invite");
     XHR.send(FD);
 }

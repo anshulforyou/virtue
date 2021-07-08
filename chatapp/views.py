@@ -26,6 +26,7 @@ def chat(request, email):
         details.append({
             "roomName":i.room.roomName,
             "secret":i.room.secret,
+            "isActive":i.room.isActive,
             "author":i.room.author.name,
             "messages":messages 
         })

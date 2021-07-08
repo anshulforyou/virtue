@@ -21,9 +21,9 @@ class VideoConsumer(AsyncWebsocketConsumer):
         await self.accept()
     
     @database_sync_to_async
-    def get_room(self, roomName, email):
-        room = rooms.objects.get_or_create(roomName = roomName)
+    def get_room(self, roomsecret, email):
         user = users.objects.get(email = email)
+        room = rooms.objects.get_or_create(secret = roomsecret)
         print(room)
         userRoomRelationship.objects.get_or_create(room=room[0], user = user)
         return

@@ -16,20 +16,20 @@ import random
 def createSecret(length):
     return ''.join(random.choices(string.ascii_uppercase + string.digits, k = length))
 
-def join_meeting(request, secret):
+def join_meeting(request, room):
     email = request.GET.get('email')
     user = users.objects.get(email = email)
     if user.name == None:
         context = {
             'email':email,
             'name':None,
-            'room':secret
+            'room':room
         }
     else:
         context = {
             'email':email,
             'name':user.name,
-            'room':secret
+            'room':room
         }
     request.session['authenticated_user']=email
     return render(request, 'videoConnect/main.html', context=context)
@@ -55,6 +55,7 @@ def create_meeting(request, email):
         'room':secret,
         'name':roomName
     }
+    request.session['authenticated_user']=email
     return render(request, 'videoConnect/main.html', context=context)
 
 def preview(request):
@@ -98,15 +99,21 @@ def invite(request):
     print("hello")
     if request.method == 'POST':
         emails = request.POST.get('email')
-        room = request.POST.get('room')
+        roomsecret = request.POST.get('room')
         emails = emails.split(",")
         print(emails)
-        print(room)
+        room = rooms.objects.get(secret = roomsecret)
         for i in emails:
+            user = users.objects.get_or_create(email=i)[0]
+            userRoomRelationship.objects.get_or_create(
+                room = room,
+                user = user,
+                inCall = False
+            )
             context = {
                 'room':room,
                 'email':request.session['authenticated_user'],
-                'link':'/?&room='+room
+                'link':'http://127.0.0.1:8000/join/'+room.secret+"?&email="+i
             }
             html_template = render_to_string('email/invite.html', context=context)
             # print(html_template)

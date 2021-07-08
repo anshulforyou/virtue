@@ -11,6 +11,7 @@ html{
 
 #main-screen{
   height: 100%;
+  background-color: #f3f6ff;
   /* display: flex;
   justify-content: center; */
 }
@@ -41,6 +42,7 @@ html{
   object-fit: cover;
   position: absolute;
   max-width: calc(70%);
+  max-height: calc(80%);
 }
 
 /* .video-style{
@@ -87,7 +89,7 @@ html{
   /* padding-top: 30px; */
   /* padding-bottom: 1%; */
   padding:10px;
-  margin-bottom: 10px;
+  margin-bottom: calc(1%);
   z-index: 100;
   border-radius: 10px;
 }
@@ -205,6 +207,27 @@ html{
 
 #message:focus{
   outline: none;
+}
+
+.msg_cotainer{
+  margin-top: auto;
+  margin-bottom: auto;
+  margin-right: 10px;
+  border-radius: 25px;
+  background-color: #f36bab;
+  color: white;
+  padding: 10px;
+  position: relative;
+}
+.msg_cotainer_send{
+  margin-top: auto;
+  margin-bottom: auto;
+  margin-left: 10px;
+  border-radius: 25px;
+  background-color: #2154be;
+  color: white;
+  padding: 10px;
+  position: relative;
 }
 
 .ml13 {
