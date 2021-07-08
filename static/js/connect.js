@@ -25,6 +25,8 @@ const devices = {
 const toggleAudioButton = document.querySelector('#toggle-audio-button');
 const toggleVideoButton = document.querySelector('#toggle-video-button');
 
+var audioTracks;
+var videoTracks;
 // console.log(navigator.mediaDevices.enumerateDevices());
 
 var localVideo = document.getElementById('local-video');
@@ -38,8 +40,8 @@ var userMedia = navigator.mediaDevices.getUserMedia(devices)
         localVideo.srcObject = localStream;
         // localVideo.muted = true; 
 
-        var audioTracks = localStream.getAudioTracks();
-        var videoTracks = localStream.getVideoTracks();
+        audioTracks = localStream.getAudioTracks();
+        videoTracks = localStream.getVideoTracks();
         // var deviceLabel = videoTracks[0]['label'];
 
         // audioTracks[0].enabled = true;
@@ -515,9 +517,9 @@ function getDataChannels(){
     return dataChannels;
 }
 
-if (performance.navigation.type == performance.navigation.TYPE_RELOAD) {
-    console.info( "This page is reloaded" );
-    location.href="/chat/"+email;
-} else {
-    console.info( "This page is not reloaded");
-}
+// if (performance.navigation.type == performance.navigation.TYPE_RELOAD) {
+//     console.info( "This page is reloaded" );
+//     location.href="/chat/"+email;
+// } else {
+//     console.info( "This page is not reloaded");
+// }

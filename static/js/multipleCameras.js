@@ -1,6 +1,6 @@
 // import { setOnTrack, video, peerIndex, username } from "./connect";
 
-var multipleCamerasButton = document.querySelector('#multiple-cameras-button')
+
 var model = undefined;
 
 faceLandmarksDetection.load(faceLandmarksDetection.SupportedPackages.mediapipeFacemesh).then(function(loadedModel){
@@ -13,7 +13,7 @@ function godEyeAnime(){
     blurBackground.hidden = false;
     textWrapperGod.innerHTML = textWrapperGod.textContent.replace(/\S/g, "<span class='letter' style='opacity:0'>$&</span>");
 
-    setTimeout(()=>{
+    // setTimeout(()=>{
         anime.timeline({loop: false})
         .add({
             targets: '.gods-eye .letter',
@@ -21,23 +21,23 @@ function godEyeAnime(){
             translateZ: 0,
             opacity: [0,1],
             easing: "easeOutExpo",
-            duration: 800,
-            // delay: (el, i) => 300 + 30 * i
+            duration: 1400,
+            delay: (el, i) => 300 + 30 * i
         }).add({
             targets: '.gods-eye .letter',
             translateY: [0,-100],
             opacity: [1,0],
             easing: "easeInExpo",
-            duration: 1000,
+            duration: 1200,
             delay: (el, i) => 100 + 30 * i
         });
-    },1000);
+    // },1000);
     textWrapperGod.hidden = false;
     setTimeout(()=>{
         blurBackground.hidden=true;
         textWrapperGod.hidden=true;
         textWrapperGod.innerHTML="God\'s eye on"
-    },5000);
+    },3500);
 }
 
 var mediaDevices = navigator.mediaDevices.enumerateDevices();
@@ -73,28 +73,34 @@ if (getUserMediaSupported()) {
     multipleCamerasButton.addEventListener('click',(e) =>{
         console.log('button clicked')
         console.log(multipleCamerasButton.firstChild);
-        if (multipleCamerasButton.innerHTML == '<i class="bi bi-eye-fill"></i>'){
-            console.log('entered')
-            if(cameras.length>1){
-                multipleCamerasButton.innerHTML = '<i class="bi bi-eye-slash-fill"></i>';
-                godEyeAnime();
-                enableCam(e);
-            }else{
-                console.log('else block executed');
-                $('#multiple-cameras-button').popover('show');
-                setTimeout(()=>{$('#multiple-cameras-button').popover('hide');}, 2000)
-            }
-        }else if(multipleCamerasButton.innerHTML == '<i class="bi bi-eye-slash-fill"></i>'){
-            multipleCamerasButton.innerHTML = '<i class="bi bi-eye-fill"></i>';
-            localVideo.srcObject = localStream;
-            var localVideoTrack2 = localStream.getVideoTracks()[0];
-            if (Object.keys(peerIndex).length>0){
-                for (let x in peerIndex){
-                    var sender = peerIndex[x][0].getSenders().find(function(s){
-                        return s.track.kind == localVideoTrack2.kind;
-                    })
-                    console.log('Found sender: ', sender);
-                    sender.replaceTrack(localVideoTrack2);
+        if(!canvas.hidden){
+            $('#multiple-cameras-button').popover('show');
+            setTimeout(()=>{$('#multiple-cameras-button').popover('hide');}, 2000)
+        }else{
+            if (multipleCamerasButton.innerHTML == '<i class="bi bi-eye-fill"></i>'){
+                console.log('entered')
+                if(cameras.length>1){
+                    multipleCamerasButton.innerHTML = '<i class="bi bi-eye-slash-fill"></i>';
+                    godEyeAnime();
+                    enableCam(e);
+                }else{
+                    console.log('else block executed');
+                    $('#multiple-cameras-button').popover('show');
+                    setTimeout(()=>{$('#multiple-cameras-button').popover('hide');}, 2000)
+                }
+            }else if(multipleCamerasButton.innerHTML == '<i class="bi bi-eye-slash-fill"></i>'){
+                multipleCamerasButton.innerHTML = '<i class="bi bi-eye-fill"></i>';
+                localVideo.srcObject = localStream;
+                var localVideoTrack2 = localStream.getVideoTracks();
+                videoTracks = localVideoTrack2;
+                if (Object.keys(peerIndex).length>0){
+                    for (let x in peerIndex){
+                        var sender = peerIndex[x][0].getSenders().find(function(s){
+                            return s.track.kind == localVideoTrack2[0].kind;
+                        })
+                        console.log('Found sender: ', sender);
+                        sender.replaceTrack(localVideoTrack2[0]);
+                    }
                 }
             }
         }
@@ -174,16 +180,17 @@ async function main(deviceLabel, t) {
             if(localVideo.srcObject!=videoEle.srcObject){
                 localVideo.srcObject = videoEle.srcObject;
                 broadcastingStream = videoEle.srcObject;
-                var localVideoTrack = videoEle.srcObject.getVideoTracks()[0];
+                var localVideoTrack = videoEle.srcObject.getVideoTracks();
                 // console.log(peerIndex);
+                videoTracks = localVideoTrack;
 
                 if (Object.keys(peerIndex).length>0){
                     for (let x in peerIndex){
                         var sender = peerIndex[x][0].getSenders().find(function(s){
-                            return s.track.kind == localVideoTrack.kind;
+                            return s.track.kind == localVideoTrack[0].kind;
                         })
                         // console.log('Found sender: ', sender);
-                        sender.replaceTrack(localVideoTrack);
+                        sender.replaceTrack(localVideoTrack[0]);
                     }
                 }
             }

@@ -166,3 +166,7 @@ function storemsg(message, secret){
     XHR.open("POST", url);
     XHR.send(FD);
 }
+
+function closeModal(){
+    roomModal.hidden = true;
+}

@@ -141,7 +141,7 @@ body,html{
 }
 .contacts li{
     width: 100% !important;
-    padding: 5px;
+    padding: 5px 8px 5px 8px;
     /* margin-bottom: 15px !important; */
 }
 .active{
