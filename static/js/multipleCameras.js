@@ -79,6 +79,8 @@ $('#multiple-cameras-button').popover({
 });
 })
 
+var popover = $('#multiple-cameras-button').data('popover');
+console.log(popover);
 function executeGodsEye(){
     multipleCamerasButton.innerHTML = '<i class="bi bi-eye-slash-fill"></i>';
     enableCam(e);
@@ -88,33 +90,32 @@ if (getUserMediaSupported()) {
     multipleCamerasButton.addEventListener('click',(e) =>{
         console.log('button clicked')
         console.log(multipleCamerasButton.firstChild);
-        if(!canvas.hidden){
-            $('#multiple-cameras-button').popover('show');
-            setTimeout(()=>{$('#multiple-cameras-button').popover('hide');}, 2000)
-        }else{
-            if (multipleCamerasButton.innerHTML == '<i class="bi bi-eye-fill"></i>'){
-                console.log('entered')
-                if(cameras.length>1){
-                    godEyeAnime(e);
-                }else{
-                    console.log('else block executed');
-                    $('#multiple-cameras-button').popover('show');
-                    searchCameras();
-                    setTimeout(()=>{$('#multiple-cameras-button').popover('hide');}, 2000)
-                }
-            }else if(multipleCamerasButton.innerHTML == '<i class="bi bi-eye-slash-fill"></i>'){
-                multipleCamerasButton.innerHTML = '<i class="bi bi-eye-fill"></i>';
-                localVideo.srcObject = localStream;
-                var localVideoTrack2 = localStream.getVideoTracks();
-                videoTracks = localVideoTrack2;
-                if (Object.keys(peerIndex).length>0){
-                    for (let x in peerIndex){
-                        var sender = peerIndex[x][0].getSenders().find(function(s){
-                            return s.track.kind == localVideoTrack2[0].kind;
-                        })
-                        console.log('Found sender: ', sender);
-                        sender.replaceTrack(localVideoTrack2[0]);
-                    }
+        if (multipleCamerasButton.innerHTML == '<i class="bi bi-eye-fill"></i>'){
+            console.log('entered')
+            if(cameras.length>1){
+                godEyeAnime(e);
+                blurBtn.disabled = true;
+                screenShareBtn.disabled = true;
+            }else{
+                console.log('else block executed');
+                $('#multiple-cameras-button').popover('show');
+                searchCameras();
+                setTimeout(()=>{$('#multiple-cameras-button').popover('hide');}, 2000)
+            }
+        }else if(multipleCamerasButton.innerHTML == '<i class="bi bi-eye-slash-fill"></i>'){
+            multipleCamerasButton.innerHTML = '<i class="bi bi-eye-fill"></i>';
+            blurBtn.disabled = false;
+            screenShareBtn.disabled = false;
+            localVideo.srcObject = localStream;
+            var localVideoTrack2 = localStream.getVideoTracks();
+            videoTracks = localVideoTrack2;
+            if (Object.keys(peerIndex).length>0){
+                for (let x in peerIndex){
+                    var sender = peerIndex[x][0].getSenders().find(function(s){
+                        return s.track.kind == localVideoTrack2[0].kind;
+                    })
+                    console.log('Found sender: ', sender);
+                    sender.replaceTrack(localVideoTrack2[0]);
                 }
             }
         }

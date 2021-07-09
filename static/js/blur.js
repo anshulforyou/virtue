@@ -1,6 +1,4 @@
-const blurBtn = document.getElementById('toggle-blur-mode');
 const canvas = document.getElementById('blur-canvas');
-var multipleCamerasButton = document.querySelector('#multiple-cameras-button');
 
 options = {
       multiplier: 0.75,
@@ -61,40 +59,38 @@ $('#toggle-blur-mode').popover({
     
 
 blurBtn.addEventListener('click', e=>{
-    if(multipleCamerasButton.innerHTML == '<i class="bi bi-eye-slash-fill"></i>'){
-        $('#toggle-blur-mode').popover('show');
-        setTimeout(()=>{$('#toggle-blur-mode').popover('hide');}, 2000)
+    if (canvas.hidden){
+        blurMode();
     }else{
-        if (canvas.hidden){
-            blurMode();
-        }else{
-            localVideo.hidden=false;
-            navigator.mediaDevices.getUserMedia(devices)
-                .then(incomingStream =>{
-                    localVideo.srcObject = incomingStream;
-                    var tempLocalTracks = incomingStream.getVideoTracks();
-                    videoTracks = tempLocalTracks;
-                    broadcastingStream = incomingStream;
-                    console.log(incomingStream);
-                    if (Object.keys(peerIndex).length>0){
-                        for (let x in peerIndex){
-                            var sender = peerIndex[x][0].getSenders().find(function(s){
-                                console.log(s);
-                                return s.track.kind == tempLocalTracks[0].kind;
-                            })
-                            console.log('Found sender: ', sender);
-                            sender.replaceTrack(tempLocalTracks[0]);
-                        }
+        localVideo.hidden=false;
+        multipleCamerasButton.disabled=false;
+        screenShareBtn.disabled = false;
+        navigator.mediaDevices.getUserMedia(devices)
+            .then(incomingStream =>{
+                localVideo.srcObject = incomingStream;
+                var tempLocalTracks = incomingStream.getVideoTracks();
+                videoTracks = tempLocalTracks;
+                broadcastingStream = incomingStream;
+                console.log(incomingStream);
+                if (Object.keys(peerIndex).length>0){
+                    for (let x in peerIndex){
+                        var sender = peerIndex[x][0].getSenders().find(function(s){
+                            console.log(s);
+                            return s.track.kind == tempLocalTracks[0].kind;
+                        })
+                        console.log('Found sender: ', sender);
+                        sender.replaceTrack(tempLocalTracks[0]);
                     }
-                })
-            canvas.hidden=true;    
-        }
+                }
+            })
+        canvas.hidden=true;    
     }
 })
 
 function executeBlur(){
+    multipleCamerasButton.disabled=true;
+    screenShareBtn.disabled = true;
     canvas.height = localVideo.height;
-    // localVideo.width = localVideo.width*0.87;
     canvas.width = localVideo.width;
     localVideo.hidden = true;
     canvas.hidden = false;

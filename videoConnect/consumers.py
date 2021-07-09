@@ -44,19 +44,19 @@ class VideoConsumer(AsyncWebsocketConsumer):
 
     @database_sync_to_async
     def delete_room(self):
-        room = rooms.objects.get(roomName = self.room_group_name)
+        room = rooms.objects.get(secret = self.room_group_name)
         room.isActive = False
         return
 
     @database_sync_to_async
     def update_relationships(self, email):
-        rel = userRoomRelationship.objects.get(room__roomName = self.room_group_name, user__email=email)
+        rel = userRoomRelationship.objects.get(room__secret = self.room_group_name, user__email=email)
         rel.inCall = False
         rel.save()
 
     @database_sync_to_async
     def get_members(self):
-        return userRoomRelationship.objects.filter(room__roomName = self.room_group_name, inCall=True).count()
+        return userRoomRelationship.objects.filter(room__secret = self.room_group_name, inCall=True).count()
 
     async def receive(self, text_data):
         incomingData = json.loads(text_data)

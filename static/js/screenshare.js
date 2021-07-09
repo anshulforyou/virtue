@@ -7,12 +7,17 @@ function closeNav() {
     document.getElementById("chat").style.width = "0";
 }
 
+var multipleCamerasButton = document.querySelector('#multiple-cameras-button');
+const blurBtn = document.getElementById('toggle-blur-mode');
+
 var displayUserScreen;
 var screenFlag = false;
 var screenShareBtn = document.getElementById('btn-share-screen');
 screenShareBtn.addEventListener('click', async () =>{
     if (!screenFlag){
         // if(!displayUserScreen){
+        blurBtn.disabled = true;
+        multipleCamerasButton.disabled = true;
         displayUserScreen = await navigator.mediaDevices.getDisplayMedia();
         localVideo.srcObject = displayUserScreen;
         var screenTracks = displayUserScreen.getTracks()[0];
@@ -32,6 +37,8 @@ screenShareBtn.addEventListener('click', async () =>{
         // screenShareBtn.innerHTML = 'Stop share';
     }
     else{
+        blurBtn.disabled = false;
+        multipleCamerasButton.disabled = false;
         screenFlag = false;
         console.log(screenFlag);
         localVideo.style.removeProperty('transform');
