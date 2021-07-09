@@ -25,7 +25,7 @@ roomForm.addEventListener('submit', function(event){
     var roomName = FD.get('roomname')
     var emails = FD.get('invite-friends')
     console.log(roomName)
-    window.location.href = loc.protocol+ loc.host+"/create/"+email+"?roomname="+roomName+"&emails="+emails
+    window.location.href = "/create/"+email+"?roomname="+roomName+"&emails="+emails
 })
 
 try{
