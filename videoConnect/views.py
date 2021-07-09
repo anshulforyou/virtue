@@ -78,13 +78,14 @@ def create_meeting(request, email):
     print(roomName)
     user = users.objects.get(email = email)
     secret = createSecret(30)
+    request.session['authenticated_user']=email
     room = rooms.objects.create(
         secret = secret,
         roomName = roomName,
         author = user,
         isActive = True
     )
-    userRoomRelationship(
+    userRoomRelationship.objects.create(
         room = room,
         user = user,
         inCall = True
@@ -95,7 +96,6 @@ def create_meeting(request, email):
         'room':secret,
         'name':roomName
     }
-    request.session['authenticated_user']=email
     return render(request, 'videoConnect/main.html', context=context)
 
 def preview(request):

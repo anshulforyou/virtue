@@ -22,6 +22,7 @@ class VideoConsumer(AsyncWebsocketConsumer):
     
     @database_sync_to_async
     def get_room(self, roomsecret, email):
+        print(email)
         user = users.objects.get(email = email)
         room = rooms.objects.get_or_create(secret = roomsecret)
         print(room)
