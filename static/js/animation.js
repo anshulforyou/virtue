@@ -105,6 +105,6 @@ function invitePeople(){
     XHR.addEventListener("error", function(event){
         console.log(event);
     })
-    XHR.open("POST", "http://127.0.0.1:8000/room/invite");
+    XHR.open("POST", loc.protocol+loc.host+ "/room/invite");
     XHR.send(FD);
 }

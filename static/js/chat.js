@@ -7,6 +7,11 @@ nameForm.addEventListener('submit', function(event){
     updateName();
 });
 
+var loc = window.location;
+
+console.log(loc.protocol)
+console.log(loc.host)
+
 roomModal = document.getElementById('roomModal')
 function create_meeting(){
     roomModal.hidden = false;
@@ -20,7 +25,7 @@ roomForm.addEventListener('submit', function(event){
     var roomName = FD.get('roomname')
     var emails = FD.get('invite-friends')
     console.log(roomName)
-    window.location.href = 'http://127.0.0.1:8000/create/'+email+"?roomname="+roomName+"&emails="+emails
+    window.location.href = loc.protocol+ loc.host+"/create/"+email+"?roomname="+roomName+"&emails="+emails
 })
 
 try{
@@ -50,7 +55,6 @@ function updateName(){
     XHR.send(FD);
 }
 
-var loc = window.location;
 var wsStart = 'ws://';
 
 if(loc.protocol == 'https:'){
