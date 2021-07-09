@@ -46,7 +46,7 @@ def join_meeting(request, room):
     return render(request, 'videoConnect/main.html', context=context)
 
 def inviteFriends(emails, userEmail, roomsecret):
-    emails = emails.split(",")
+    emails = emails.replace(" ", "").split(",")
     room = rooms.objects.get(secret = roomsecret)
     for i in emails:
         user = users.objects.get_or_create(email=i)[0]

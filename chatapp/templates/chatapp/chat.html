@@ -115,11 +115,11 @@
                         {% for x in i.messages %}
                         {% if x.email == email %}
                         <div class="d-flex justify-content-start mb-4">
-                            <div class="msg_cotainer_send">
+                            <div class="msg_cotainer_send" data-toggle="tooltip" title="{{x.email}}">
                                 {{x.message}}
                         {% else %}
                         <div class="d-flex justify-content-end mb-4">
-                            <div class="msg_cotainer">
+                            <div class="msg_cotainer" data-toggle="tooltip" data-placement="right" title="{{x.email}}">
                                 {{x.message}}
                         {% endif %}
                             </div>

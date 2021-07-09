@@ -44,6 +44,7 @@ function blurMode(){
         blurBackground.hidden=true;
         textWrapperBlur.hidden=true;
         textWrapperBlur.innerHTML='Blur Mode on'
+        executeBlur();
     },5000);
 }
 
@@ -66,31 +67,7 @@ blurBtn.addEventListener('click', e=>{
     }else{
         if (canvas.hidden){
             blurMode();
-            canvas.height = localVideo.height;
-            // localVideo.width = localVideo.width*0.87;
-            canvas.width = localVideo.width;
-            localVideo.hidden = true;
-            canvas.hidden = false;
-            var tempStream = canvas.captureStream();
-            var tempLocalTracks = tempStream.getVideoTracks();
-            // videoTracks = tempLocalTracks;
-            broadcastingStream = tempStream;
-            console.log(tempLocalTracks);
-            console.log(peerIndex);
-            if (Object.keys(peerIndex).length>0){
-                for (let x in peerIndex){
-                    var sender = peerIndex[x][0].getSenders().find(function(s){
-                        console.log(s);
-                        return s.track.kind == tempLocalTracks[0].kind;
-                    })
-                    console.log('Found sender: ', sender);
-                    sender.replaceTrack(tempLocalTracks[0]);
-                }
-            }
-            perform(net);
-    
         }else{
-            // localVideo.style.width="100%";
             localVideo.hidden=false;
             navigator.mediaDevices.getUserMedia(devices)
                 .then(incomingStream =>{
@@ -110,10 +87,88 @@ blurBtn.addEventListener('click', e=>{
                         }
                     }
                 })
-            canvas.hidden=true;
+            canvas.hidden=true;    
         }
     }
 })
+
+function executeBlur(){
+    canvas.height = localVideo.height;
+    // localVideo.width = localVideo.width*0.87;
+    canvas.width = localVideo.width;
+    localVideo.hidden = true;
+    canvas.hidden = false;
+    var tempStream = canvas.captureStream();
+    var tempLocalTracks = tempStream.getVideoTracks();
+    // videoTracks = tempLocalTracks;
+    broadcastingStream = tempStream;
+    console.log(tempLocalTracks);
+    console.log(peerIndex);
+    if (Object.keys(peerIndex).length>0){
+        for (let x in peerIndex){
+            var sender = peerIndex[x][0].getSenders().find(function(s){
+                console.log(s);
+                return s.track.kind == tempLocalTracks[0].kind;
+            })
+            console.log('Found sender: ', sender);
+            sender.replaceTrack(tempLocalTracks[0]);
+        }
+    }
+    perform(net);
+}
+
+// if(multipleCamerasButton.innerHTML == '<i class="bi bi-eye-slash-fill"></i>'){
+//     $('#toggle-blur-mode').popover('show');
+//     setTimeout(()=>{$('#toggle-blur-mode').popover('hide');}, 2000)
+// }else{
+//     if (canvas.hidden){
+//         // blurMode();
+//         canvas.height = localVideo.height;
+//         // localVideo.width = localVideo.width*0.87;
+//         canvas.width = localVideo.width;
+//         localVideo.hidden = true;
+//         canvas.hidden = false;
+//         var tempStream = canvas.captureStream();
+//         var tempLocalTracks = tempStream.getVideoTracks();
+//         // videoTracks = tempLocalTracks;
+//         broadcastingStream = tempStream;
+//         console.log(tempLocalTracks);
+//         console.log(peerIndex);
+//         if (Object.keys(peerIndex).length>0){
+//             for (let x in peerIndex){
+//                 var sender = peerIndex[x][0].getSenders().find(function(s){
+//                     console.log(s);
+//                     return s.track.kind == tempLocalTracks[0].kind;
+//                 })
+//                 console.log('Found sender: ', sender);
+//                 sender.replaceTrack(tempLocalTracks[0]);
+//             }
+//         }
+//         perform(net);
+//     }else{
+//         // localVideo.style.width="100%";
+//         localVideo.hidden=false;
+//         navigator.mediaDevices.getUserMedia(devices)
+//             .then(incomingStream =>{
+//                 localVideo.srcObject = incomingStream;
+//                 var tempLocalTracks = incomingStream.getVideoTracks();
+//                 videoTracks = tempLocalTracks;
+//                 broadcastingStream = incomingStream;
+//                 console.log(incomingStream);
+//                 if (Object.keys(peerIndex).length>0){
+//                     for (let x in peerIndex){
+//                         var sender = peerIndex[x][0].getSenders().find(function(s){
+//                             console.log(s);
+//                             return s.track.kind == tempLocalTracks[0].kind;
+//                         })
+//                         console.log('Found sender: ', sender);
+//                         sender.replaceTrack(tempLocalTracks[0]);
+//                     }
+//                 }
+//             })
+//         canvas.hidden=true;
+//     }
+// }
 
 // localVideo.onplaying = () => {
 //     canvas.height = localVideo.videoHeight;

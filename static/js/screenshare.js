@@ -8,15 +8,16 @@ function closeNav() {
 }
 
 var displayUserScreen;
-
+var screenFlag = false;
 var screenShareBtn = document.getElementById('btn-share-screen');
 screenShareBtn.addEventListener('click', async () =>{
-    if (screenShareBtn.innerHTML == 'Share Screen'){
-        if(!displayUserScreen){
-            displayUserScreen = await navigator.mediaDevices.getDisplayMedia();
-        }
+    if (!screenFlag){
+        // if(!displayUserScreen){
+        displayUserScreen = await navigator.mediaDevices.getDisplayMedia();
         localVideo.srcObject = displayUserScreen;
         var screenTracks = displayUserScreen.getTracks()[0];
+        screenFlag = true;
+        console.log(screenFlag);
         console.log(screenTracks);
         if (Object.keys(peerIndex).length>0){
             for (let x in peerIndex){
@@ -27,20 +28,25 @@ screenShareBtn.addEventListener('click', async () =>{
                 sender.replaceTrack(screenTracks);
             }
         }
-        screenShareBtn.innerHTML = 'Stop share';
+        localVideo.style.transform = "initial";
+        // screenShareBtn.innerHTML = 'Stop share';
     }
     else{
+        screenFlag = false;
+        console.log(screenFlag);
+        localVideo.style.removeProperty('transform');
+        localVideo.style.transform = "scaleX(-1);"
         if (Object.keys(peerIndex).length>0){
             for (let x in peerIndex){
                 var sender = peerIndex[x][0].getSenders().find(function(s){
                     return s.track.kind === 'video';
                 })
                 console.log('Found sender: ', sender);
-                sender.replaceTrack(stream.getVideoTracks()[0]);
+                sender.replaceTrack(localStream.getVideoTracks()[0]);
             }
         }
-        localVideo.srcObject = stream;
+        localVideo.srcObject = localStream;
         displayUserScreen.getTracks()[0].stop();
-        screenShareBtn.innerHTML = 'Share Screen'
+        screenShareBtn.innerHTML = '<i class="bi bi-display-fill"></i>'
     }
 })

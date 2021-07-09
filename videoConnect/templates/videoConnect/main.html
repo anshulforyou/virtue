@@ -83,14 +83,16 @@
             </div>
         </div>
         <div id = "chat" class='sidepanel'>
-            <h3>Chat Messages</h3>
-            <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-            
+            <div class="chat-header">
+                <h3>Chat Messages</h3>
+                <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+            </div>
+
             <div id = "messages">
                 {% for i in messages%}
                 {% if i.email == email %}
                 <div class="d-flex justify-content-start mb-4">
-                    <div class="msg_cotainer_send">
+                    <div class="msg_cotainer_send" data-toggle="tooltip" title="{{x.email}}">
                         {{i.message}}
                     </div>
                 </div>

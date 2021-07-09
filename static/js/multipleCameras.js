@@ -7,9 +7,11 @@ faceLandmarksDetection.load(faceLandmarksDetection.SupportedPackages.mediapipeFa
     model = loadedModel;
     multipleCamerasButton.hidden = false;
 })
+
 var blurBackground = document.querySelector('.blur-background')
 var textWrapperGod = document.querySelector('.gods-eye');
-function godEyeAnime(){
+
+function godEyeAnime(e){
     blurBackground.hidden = false;
     textWrapperGod.innerHTML = textWrapperGod.textContent.replace(/\S/g, "<span class='letter' style='opacity:0'>$&</span>");
 
@@ -36,22 +38,30 @@ function godEyeAnime(){
     setTimeout(()=>{
         blurBackground.hidden=true;
         textWrapperGod.hidden=true;
-        textWrapperGod.innerHTML="God\'s eye on"
+        textWrapperGod.innerHTML="God\'s eye on";
+        // executeGodsEye();
+        multipleCamerasButton.innerHTML = '<i class="bi bi-eye-slash-fill"></i>';
+        enableCam(e);
     },3500);
 }
 
-var mediaDevices = navigator.mediaDevices.enumerateDevices();
 var cameras = [];
-mediaDevices.then(function(result){
-    for (let i=0;i<result.length;i++){
-        // console.log(devices[i]);
-        if (result[i]['kind'] == "videoinput"){
-            cameras.push(result[i]);
-        }
-    }
-})
 
-console.log(cameras);
+function searchCameras(){
+    var mediaDevices = navigator.mediaDevices.enumerateDevices();
+    cameras = [];
+    mediaDevices.then(function(result){
+        for (let i=0;i<result.length;i++){
+            // console.log(result[i]);
+            if (result[i]['kind'] == "videoinput"){
+                cameras.push(result[i]);
+            }
+        }
+    })
+    console.log(cameras);
+}
+
+searchCameras();
 
 function getUserMediaSupported() {
     return !!(navigator.mediaDevices &&
@@ -69,6 +79,11 @@ $('#multiple-cameras-button').popover({
 });
 })
 
+function executeGodsEye(){
+    multipleCamerasButton.innerHTML = '<i class="bi bi-eye-slash-fill"></i>';
+    enableCam(e);
+}
+
 if (getUserMediaSupported()) {
     multipleCamerasButton.addEventListener('click',(e) =>{
         console.log('button clicked')
@@ -80,12 +95,11 @@ if (getUserMediaSupported()) {
             if (multipleCamerasButton.innerHTML == '<i class="bi bi-eye-fill"></i>'){
                 console.log('entered')
                 if(cameras.length>1){
-                    multipleCamerasButton.innerHTML = '<i class="bi bi-eye-slash-fill"></i>';
-                    godEyeAnime();
-                    enableCam(e);
+                    godEyeAnime(e);
                 }else{
                     console.log('else block executed');
                     $('#multiple-cameras-button').popover('show');
+                    searchCameras();
                     setTimeout(()=>{$('#multiple-cameras-button').popover('hide');}, 2000)
                 }
             }else if(multipleCamerasButton.innerHTML == '<i class="bi bi-eye-slash-fill"></i>'){

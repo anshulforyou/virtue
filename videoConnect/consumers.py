@@ -56,7 +56,7 @@ class VideoConsumer(AsyncWebsocketConsumer):
 
     @database_sync_to_async
     def get_members(self):
-        return userRoomRelationship.objects.filter(room__roomName = self.room_group_name).count()
+        return userRoomRelationship.objects.filter(room__roomName = self.room_group_name, inCall=True).count()
 
     async def receive(self, text_data):
         incomingData = json.loads(text_data)

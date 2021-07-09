@@ -93,6 +93,8 @@ function connect(secret){
     for (var x=0; x<all_chats.length ; x++){
         all_chats[x].hidden = true;
     }
+    chatButton = document.getElementById(secret);
+    chatButton.className += " active";
     list_item = document.getElementById(secret+"-name");
     list_item.active = true;
     chat_box = document.getElementById(secret+"-chat");
