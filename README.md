@@ -39,5 +39,8 @@ The message sent by send_sdp function in consumer.py is what received by websock
     $ sudo service nginx restart
     $ sudo supervisorctl reload
 
-Error log of daphne
+# To restart daphne server
+    $ sudo systemctl daemon-reload
+
+# Error log of daphne
     sudo journalctl -u daphne.service

@@ -11,7 +11,7 @@ class VideoConsumer(AsyncWebsocketConsumer):
         # self.room_group_name = 'room101'
         self.room_group_name = self.scope['url_route']['kwargs']['room']
         print(self.room_group_name)
-        await self.get_room(self.room_group_name, self.scope['session']['authenticated_user'])
+        # await self.get_room(self.room_group_name, self.scope['session']['authenticated_user'])
 
         await self.channel_layer.group_add(
             self.room_group_name,
@@ -24,9 +24,9 @@ class VideoConsumer(AsyncWebsocketConsumer):
     def get_room(self, roomsecret, email):
         print(email)
         user = users.objects.get(email = email)
-        room = rooms.objects.get_or_create(secret = roomsecret)
+        room = rooms.objects.get(secret = roomsecret)
         print(room)
-        userRoomRelationship.objects.get_or_create(room=room[0], user = user)
+        # userRoomRelationship.objects.get(room=room, user = user)
         return
 
     async def disconnect(self, close_code):
