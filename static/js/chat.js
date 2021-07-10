@@ -61,7 +61,7 @@ if(loc.protocol == 'https:'){
     wsStart = 'wss://';
 }
 
-var endPoint = wsStart + loc.host+':8001'+'/chat';
+var endPoint = wsStart + loc.host+'/chat';
 var peerIndex = {}
 console.log(endPoint);
 
@@ -98,9 +98,9 @@ function connect(secret){
         all_chats[x].hidden = true;
     }
     chatButton = document.getElementById(secret);
-    chatButton.className += " active";
+    // chatButton.className += " active";
     list_item = document.getElementById(secret+"-name");
-    list_item.active = true;
+    // list_item.active = true;
     chat_box = document.getElementById(secret+"-chat");
     chat_box.hidden = false;
     sendBtn = document.getElementById(secret+'-send_btn');

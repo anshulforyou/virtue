@@ -97,6 +97,30 @@ body,html{
     text-align: center;
 }
 
+.icon-box2{
+    /* display: inline-block;  */
+    background-color: #e3e9fd;
+    margin: auto;
+    border-radius: 40px;
+    height: 80px;
+    width: 80px;
+    text-align: center;
+}
+
+.align-chat{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    height: 100%;
+}
+.new-chat{
+    display: grid;
+    height: 30%;
+    width: 30%;
+    /* justify-content: center; */
+}
+
 .card-footer{
     border-radius: 0 0 15px 15px !important;
     border-top: 0 !important;
@@ -144,9 +168,14 @@ body,html{
     padding: 5px 8px 5px 8px;
     /* margin-bottom: 15px !important; */
 }
-.active{
+/* .active{
+    background-color: rgba(0,0,0,0.3);
+} */
+
+.list-button :focus{
     background-color: rgba(0,0,0,0.3);
 }
+
 .user_img{
     height: 70px;
     width: 70px;
@@ -173,6 +202,7 @@ body,html{
     margin-top: auto;
     margin-bottom: auto;
     text-align: left;
+    overflow: hidden;
     /* margin-left: 15px; */
 }
 .user_info_header span{

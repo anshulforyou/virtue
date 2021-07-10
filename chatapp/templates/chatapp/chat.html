@@ -86,6 +86,7 @@
             </div>
             </div>
             <div class="col-7 chat">
+                {% if details|length > 1 %}
                 {% for i in details %}
                 <div id='{{i.secret}}-chat' hidden class="card chat-card">
                     <div class="card-header msg_head">
@@ -141,6 +142,21 @@
                     </div>
                 </div>
                 {% endfor %}
+                {% else %}
+                <div class="card chat-card">
+                    <div class="align-chat" onclick="create_meeting()">
+                    <div class="new-chat">
+                        <div class="icon-box2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" style="margin-top: 20px;" class="bi bi-plus-lg" viewBox="0 0 16 16">
+                                <path d="M8 0a1 1 0 0 1 1 1v6h6a1 1 0 1 1 0 2H9v6a1 1 0 1 1-2 0V9H1a1 1 0 0 1 0-2h6V1a1 1 0 0 1 1-1z"/>
+                            </svg>
+                        </div>
+                        <p style="margin: 5px;">No rooms yet</p>
+                        <p style="font-size: larger;">Create a new room!</p>
+                    </div>
+                    </div>
+                </div>
+                {% endif %}
             </div>
             </div>
         </div>
