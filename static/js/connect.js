@@ -190,25 +190,11 @@ function createOfferer(peerEmail, receiver_channel_name){
     peer.addEventListener('iceconnectionstatechange', () => {     //When peer leaves the room
         var iceConnectionState = peer.iceConnectionState;
         if (iceConnectionState === 'failed' || iceConnectionState === 'disconnected' || iceConnectionState === 'closed'){
-            if (iceConnectionState == 'failed'){
-                var flagDisconnect = checkStatePermanent('failed');
-                if (flagDisconnect){
-                    peer.restartIce();
-                }
+            delete peerIndex[peerEmail];
+            if(iceConnectionState != 'closed'){
+                peer.close();
             }
-            if (iceConnectionState == 'disconnected'){
-                var flagDisconnect = checkStatePermanent('disconnected', peer);
-                if (flagDisconnect){
-                    peer.close();
-                    removeVideo(remoteVideo);
-                }
-            }
-            if (iceConnectionState == 'closed')removeVideo(remoteVideo);
-            // delete peerIndex[peerEmail];
-            // if(iceConnectionState != 'closed'){
-            //     peer.close();
-            // }
-            // removeVideo(remoteVideo);
+            removeVideo(remoteVideo);
         }
 
     });
@@ -228,75 +214,6 @@ function createOfferer(peerEmail, receiver_channel_name){
         .then(() => {
             console.log('Local description set successful')
         })
-}
-
-const customdelay = ms => new Promise(res => setTimeout(res, ms));
-
-
-async function checkStatePermanent (iceState) {
-    videoReceivedBytetCount = 0;
-    audioReceivedByteCount = 0;
-
-    let firstFlag = await isPermanentDisconnect();
-
-    await customdelay(2000);
-
-    let secondFlag = await isPermanentDisconnect(); //Call this func again after 2 seconds to check whether data is still coming in.
-
-    if(secondFlag){ //If permanent disconnect then we hangup i.e no audio/video is fllowing
-        if (iceState == 'disconnected'){
-            return true; //Hangup instead of closevideo() because we want to record call end in db
-        }
-    }
-    if(!secondFlag){//If temp failure then restart ice i.e audio/video is still flowing
-         if(iceState == 'failed') {
-            return true;
-        }
-    }
-};
-
-var videoReceivedBytetCount = 0;
-var audioReceivedByteCount = 0; 
-
-
-async function isPermanentDisconnect (){
-    var isPermanentDisconnectFlag = false;
-    var videoIsAlive = false;
-    var audioIsAlive = false;
-
-    await myPeerConnection.getStats(null).then(stats => {
-        stats.forEach(report => {
-            if(report.type === 'inbound-rtp' && (report.kind === 'audio' || report.kind  === 'video')){ //check for inbound data only
-                if(report.kind  === 'audio'){
-                    //Here we must compare previous data count with current
-                    if(report.bytesReceived > audioReceivedByteCount){
-                        // If current count is greater than previous then that means data is flowing to other peer. So this disconnected or failed ICE state is temporary
-                        audioIsAlive = true;
-                    } else {
-                        audioIsAlive = false;
-                        
-                    }
-                    audioReceivedByteCount = report.bytesReceived;
-                }
-                if(report.kind  === 'video'){
-                    if(report.bytesReceived > videoReceivedBytetCount){
-                        // If current count is greater than previous then that means data is flowing to other peer. So this disconnected or failed ICE state is temporary
-                        videoIsAlive = true;
-                    } else{
-                        videoIsAlive = false;
-                    }
-                    videoReceivedBytetCount = report.bytesReceived;
-                }
-                if(audioIsAlive || videoIsAlive){ //either audio or video is being recieved.
-                    isPermanentDisconnectFlag = false; //Disconnected is temp
-                } else {
-                    isPermanentDisconnectFlag = true;
-                }
-            }
-        })
-    });
-
-    return isPermanentDisconnectFlag;
 }
 
 function createReceiver(offer, peerEmail, receiver_channel_name){
