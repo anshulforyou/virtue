@@ -8,7 +8,7 @@ if(loc.protocol == 'https:'){
     wsStart = 'wss://';
 }
 
-var endPoint = wsStart + loc.host+":8001" +"/room/"+roomsecret+'/';
+var endPoint = wsStart + loc.host +"/room/"+roomsecret+'/';
 var peerIndex = {}
 
 console.log('endPoint: ', endPoint);
@@ -137,7 +137,6 @@ function webSocketManager(event){
         setOnTrack(peer, temp);
         peer.setRemoteDescription(answer);
         return;
-
     }
 }
 
@@ -159,15 +158,16 @@ disconnect.addEventListener('click', () => {
 var servers = {
     config : {
         iceServers:[
-            // {urls:'stun:stun.l.google.com:19302'},
-            {urls: 'stun:stun.12connect.com:3478'},
-            {urls: 'turn:65.2.87.14:3478?transport=tcp', credential:'anshul@123', username:'virtue'}
+            {"urls":'stun:stun.l.google.com:19302'},
+            // {urls: 'stun:stun.12connect.com:3478'},
+            {'urls': 'turn:65.2.87.14:3478?transport=tcp', 'credential':'anshul@123', 'username':'virtue'}
         ]
     }
 }
 
 function createOfferer(peerEmail, receiver_channel_name){
     var peer = new RTCPeerConnection(servers);
+    console.log(peer);
     addLocalInputs(peer);
 
     var channelFormed = peer.createDataChannel('channel');
@@ -191,11 +191,24 @@ function createOfferer(peerEmail, receiver_channel_name){
     peer.addEventListener('iceconnectionstatechange', () => {     //When peer leaves the room
         var iceConnectionState = peer.iceConnectionState;
         if (iceConnectionState === 'failed' || iceConnectionState === 'disconnected' || iceConnectionState === 'closed'){
-            delete peerIndex[peerEmail];
-            if(iceConnectionState != 'closed'){
-                peer.close();
+            if (iceConnectionState == 'failed'){
+                var isPer = checkStatePermanent('failed', peer);
+                if(isPer){
+                    peer.restartIce();
+                }
             }
-            removeVideo(remoteVideo);
+            if (iceConnectionState == 'disconnected'){
+                var isPer = checkStatePermanent('disconnected', peer);
+                if(isPer){
+                    delete peerIndex[peerEmail];
+                    peer.close();
+                    removeVideo(remoteVideo);
+                }    
+            }
+            if(iceConnectionState == 'closed'){
+                delete peerIndex[peerEmail];
+                removeVideo(remoteVideo);
+            }
         }
 
     });
@@ -246,11 +259,30 @@ function createReceiver(offer, peerEmail, receiver_channel_name){
     peer.addEventListener('iceconnectionstatechange', () => {
         var iceConnectionState = peer.iceConnectionState;
         if (iceConnectionState === 'failed' || iceConnectionState === 'disconnected' || iceConnectionState === 'closed'){
-            delete peerIndex[peerEmail];
-            if(iceConnectionState != 'closed'){
-                peer.close();
+            if (iceConnectionState == 'failed'){
+                var isPer = checkStatePermanent('failed', peer);
+                if(isPer){
+                    peer.restartIce();
+                }
             }
-            removeVideo(remoteVideo);
+            if (iceConnectionState == 'disconnected'){
+                var isPer = checkStatePermanent('disconnected', peer);
+                if(isPer){
+                    delete peerIndex[peerEmail];
+                    peer.close();
+                    removeVideo(remoteVideo);
+                }    
+            }
+            if(iceConnectionState == 'closed'){
+                delete peerIndex[peerEmail];
+                removeVideo(remoteVideo);
+            }
+
+            // delete peerIndex[peerEmail];
+            // if(iceConnectionState != 'closed'){
+            //     peer.close();
+            // }
+            // removeVideo(remoteVideo);
         }
 
     });
@@ -274,6 +306,76 @@ function createReceiver(offer, peerEmail, receiver_channel_name){
             console.log('Answer Created');
             peer.setLocalDescription(a);
         })
+}
+
+const customdelay = ms => new Promise(res => setTimeout(res, ms));
+
+
+async function checkStatePermanent (iceState, peer) {
+    videoReceivedBytetCount = 0;
+    audioReceivedByteCount = 0;
+
+    let firstFlag = await isPermanentDisconnect(peer);
+
+    await customdelay(2000);
+
+    let secondFlag = await isPermanentDisconnect(peer); //Call this func again after 2 seconds to check whether data is still coming in.
+
+    if(secondFlag){ //If permanent disconnect then we hangup i.e no audio/video is fllowing
+        if (iceState == 'disconnected'){
+            return true; //Hangup instead of closevideo() because we want to record call end in db
+        }
+    }
+    if(!secondFlag){//If temp failure then restart ice i.e audio/video is still flowing
+         if(iceState == 'failed') {
+            return true;
+        }
+    }
+};
+
+var videoReceivedBytetCount = 0;
+var audioReceivedByteCount = 0; 
+
+
+async function isPermanentDisconnect (peer){
+    var isPermanentDisconnectFlag = false;
+    var videoIsAlive = false;
+    var audioIsAlive = false;
+
+    await peer.getStats(null).then(stats => {
+        stats.forEach(report => {
+            if(report.type === 'inbound-rtp' && (report.kind === 'audio' || report.kind  === 'video')){ //check for inbound data only
+                console.log(videoReceivedBytetCount);
+                if(report.kind  === 'audio'){
+                    //Here we must compare previous data count with current
+                    if(report.bytesReceived > audioReceivedByteCount){
+                        // If current count is greater than previous then that means data is flowing to other peer. So this disconnected or failed ICE state is temporary
+                        audioIsAlive = true;
+                    } else {
+                        audioIsAlive = false;
+                        
+                    }
+                    audioReceivedByteCount = report.bytesReceived;
+                }
+                if(report.kind  === 'video'){
+                    if(report.bytesReceived > videoReceivedBytetCount){
+                        // If current count is greater than previous then that means data is flowing to other peer. So this disconnected or failed ICE state is temporary
+                        videoIsAlive = true;
+                    } else{
+                        videoIsAlive = false;
+                    }
+                    videoReceivedBytetCount = report.bytesReceived;
+                }
+                if(audioIsAlive || videoIsAlive){ //either audio or video is being recieved.
+                    isPermanentDisconnectFlag = false; //Disconnected is temp
+                } else {
+                    isPermanentDisconnectFlag = true;
+                }
+            }
+        })
+    });
+
+    return isPermanentDisconnectFlag;
 }
 
 console.log(peerIndex);
