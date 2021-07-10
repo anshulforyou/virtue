@@ -105,6 +105,6 @@ function invitePeople(){
     XHR.addEventListener("error", function(event){
         console.log(event);
     })
-    XHR.open("POST", loc.protocol+loc.host+ "/room/invite");
+    XHR.open("POST", "https://virtue.tk/room/invite");
     XHR.send(FD);
 }
