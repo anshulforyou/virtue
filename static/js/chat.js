@@ -61,7 +61,7 @@ if(loc.protocol == 'https:'){
     wsStart = 'wss://';
 }
 
-var endPoint = wsStart + loc.host+'/chat';
+var endPoint = wsStart + loc.host+ ":8001" +'/chat';
 var peerIndex = {}
 console.log(endPoint);
 
