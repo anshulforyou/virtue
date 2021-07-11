@@ -331,7 +331,7 @@ function sendMsgOnClick(){
     messageList.appendChild(div1);
 
     var dataChannels = getDataChannels();
-    message = nameUser+": "+message;
+    // message = nameUser+": "+message;
     for (i in dataChannels){
         dataChannels[i].send(message);
     }
