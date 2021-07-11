@@ -86,7 +86,7 @@
             </div>
             </div>
             <div class="col-7 chat">
-                {% if details|length > 1 %}
+                {% if details|length > 0 %}
                 {% for i in details %}
                 <div id='{{i.secret}}-chat' hidden class="card chat-card">
                     <div class="card-header msg_head">

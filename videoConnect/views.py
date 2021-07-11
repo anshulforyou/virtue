@@ -60,7 +60,7 @@ def inviteFriends(emails, userEmail, roomsecret):
             context = {
                 'room':room,
                 'email':userEmail,
-                'link':'http://127.0.0.1:8000/join/'+room.secret+"?&email="+i
+                'link':'https://virtue.tk/join/'+room.secret+"?&email="+i
             }
             html_template = render_to_string('email/invite.html', context=context)
             # print(html_template)
