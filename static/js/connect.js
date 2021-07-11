@@ -300,6 +300,7 @@ var messageList = document.getElementById('messages');
 function channelOnMessage(event){
     var message = event.data;
     var div1 = document.createElement('div');
+    var div2 = document.createElement('div');
     div1.className ='d-flex justify-content-end mb-4';
     div2.className = 'msg_cotainer';
     div2.innerHTML = message;
