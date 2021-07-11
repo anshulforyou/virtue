@@ -305,6 +305,7 @@ function channelOnMessage(event){
     div2.className = 'msg_cotainer';
     div2.innerHTML = message;
     div1.appendChild(div2);
+    messageList.appendChild(div2);
     // var li = document.createElement('li');
     // li.appendChild(document.createTextNode(message));
     // messageList.appendChild(li);
