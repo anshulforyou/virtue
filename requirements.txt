@@ -22,6 +22,7 @@ pyasn1==0.4.8
 pyasn1-modules==0.2.8
 pycparser==2.20
 pyOpenSSL==20.0.1
+python-decouple==3.4
 pytz
 service-identity==21.1.0
 six==1.16.0

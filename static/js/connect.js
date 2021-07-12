@@ -434,7 +434,12 @@ function decideLayout(n){
             rows = 2;
             columns = 2;
             extras = 4-n;
-        }else if(n<=9){
+        }else if(n<=6 && n>4){
+            rows = 2;
+            columns = 3;
+            extras = 6-n;
+        }
+        else if(n<=9){
             rows=3;
             columns=3;
             extras = 9-n;
