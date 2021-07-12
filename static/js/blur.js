@@ -83,7 +83,7 @@ blurBtn.addEventListener('click', e=>{
                     }
                 }
             })
-        canvas.hidden=true;    
+        canvas.hidden=true;
     }
 })
 
