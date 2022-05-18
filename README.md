@@ -38,6 +38,9 @@ Virtue is made in django on the backend side and HTML, CSS and Javascript on the
 
 # Error log of daphne
     sudo journalctl -u daphne.service
+    
+# Video demo of the project
+    https://youtu.be/41kHOH46oRA
 
 # References
     - https://blog.tensorflow.org/2019/11/updated-bodypix-2.html
