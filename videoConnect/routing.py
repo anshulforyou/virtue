@@ -1,5 +1,5 @@
 from django.urls import re_path, path
-from django.conf.urls import url
+# from django.conf.urls import url
 
 from . import consumers as videoCon
 from chatapp import consumers as chatCon

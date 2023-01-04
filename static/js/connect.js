@@ -83,7 +83,13 @@ var userMedia = navigator.mediaDevices.getUserMedia(devices)
             toggleVideoButton.innerHTML = "<i class='bi bi-camera-video-fill'></i>";
         });
 
-        webSocket = new WebSocket(endPoint);
+        try{
+            webSocket = new WebSocket(endPoint);
+        }
+        catch(error){
+            console.log('Error in creating websocket', error);
+        }
+        
         console.log('here');
         console.log(webSocket);
 

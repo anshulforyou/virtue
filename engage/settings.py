@@ -24,9 +24,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ['www.virtue.tk', 'virtue.tk','65.2.87.14', '127.0.0.1', 'ba0aba448cc0.ngrok.io']
+ALLOWED_HOSTS = ['www.virtue.tk', 'virtue.tk','175.41.210.179', '127.0.0.1', 'ba0aba448cc0.ngrok.io', 'localhost']
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "smtp.gmail.com"
@@ -39,6 +39,7 @@ EMAIL_HOST_PASSWORD = config('PASSWORD')
 # Application definition
 
 INSTALLED_APPS = [
+    'daphne',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
